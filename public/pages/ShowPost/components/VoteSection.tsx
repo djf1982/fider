@@ -1,6 +1,8 @@
-import React, { useState } from "react"
+import "./VoteSection.scss"
+
+import React, { useState, useRef } from "react"
 import { Post, PostStatus } from "@fider/models"
-import { actions } from "@fider/services"
+import { actions, classSet } from "@fider/services"
 import { Button, Icon, SignInModal } from "@fider/components"
 import { useFider } from "@fider/hooks"
 import IconThumbsUp from "@fider/assets/images/heroicons-thumbsup.svg"
@@ -19,6 +21,9 @@ export const VoteSection = (props: VoteSectionProps) => {
   const [votes, setVotes] = useState(props.votes)
   const [hasVoted, setHasVoted] = useState(props.post.hasVoted)
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [popAnimation, setPopAnimation] = useState<{ value: string; key: number } | null>(null)
+  const popKeyRef = useRef(0)
 
   const voteOrUndo = async () => {
     if (!fider.session.isAuthenticated) {
@@ -26,12 +31,40 @@ export const VoteSection = (props: VoteSectionProps) => {
       return
     }
 
-    const action = hasVoted ? actions.removeVote : actions.addVote
+    // Optimistic update with animation
+    const willVote = !hasVoted
+    const newVotes = willVote ? votes + 1 : votes - 1
+
+    // Trigger animations
+    setIsAnimating(true)
+    popKeyRef.current += 1
+    setPopAnimation({
+      value: willVote ? "+1" : "-1",
+      key: popKeyRef.current,
+    })
+
+    // Optimistically update UI
+    setVotes(newVotes)
+    setHasVoted(willVote)
+
+    // Clear animation states
+    setTimeout(() => {
+      setIsAnimating(false)
+    }, 200)
+    setTimeout(() => {
+      setPopAnimation(null)
+    }, 500)
+
+    // Make actual API call
+    const action = willVote ? actions.addVote : actions.removeVote
     const response = await action(props.post.number)
-    if (response.ok) {
-      setVotes(hasVoted ? votes - 1 : votes + 1)
-      setHasVoted(!hasVoted)
-      props.onDataChanged?.() // Notify parent that data changed
+
+    if (!response.ok) {
+      // Revert on failure
+      setVotes(votes)
+      setHasVoted(hasVoted)
+    } else {
+      props.onDataChanged?.()
     }
   }
 
@@ -43,20 +76,31 @@ export const VoteSection = (props: VoteSectionProps) => {
   const buttonText = hasVoted ? <Trans id="action.voted">Voted!</Trans> : <Trans id="action.vote">Vote for this idea</Trans>
   const icon = hasVoted ? IconCheck : IconThumbsUp
 
+  const buttonClasses = classSet({
+    "c-vote-section__button": true,
+    "c-vote-section__button--animating": isAnimating,
+    "c-vote-section__button--voted": hasVoted,
+  })
+
   return (
     <>
       <SignInModal isOpen={isSignInModalOpen} onClose={hideModal} />
-      <VStack spacing={4}>
+      <VStack spacing={4} className="c-vote-section">
         <div className="align-self-start">
-          <Button variant="primary" onClick={voteOrUndo} disabled={isDisabled} style={{ minWidth: "180px" }}>
+          <Button variant="primary" onClick={voteOrUndo} disabled={isDisabled} className={buttonClasses} style={{ minWidth: "180px" }}>
             <HStack spacing={2} justify="center" className="w-full">
-              <Icon sprite={icon} /> <span>{buttonText}</span>
+              <Icon sprite={icon} className="c-vote-section__icon" /> <span>{buttonText}</span>
             </HStack>
           </Button>
         </div>
-        <HStack align="center" spacing={2}>
-          <span className="text-semibold text-2xl" style={{ fontSize: "32px", minHeight: "48px" }}>
+        <HStack align="center" spacing={2} className="c-vote-section__count-wrapper">
+          <span className="c-vote-section__count text-semibold text-2xl" style={{ fontSize: "32px", minHeight: "48px" }}>
             {votes}
+            {popAnimation && (
+              <span key={popAnimation.key} className="c-vote-section__pop">
+                {popAnimation.value}
+              </span>
+            )}
           </span>
           <span className="text-semibold text-lg">{votes === 1 ? <Trans id="label.vote">Vote</Trans> : <Trans id="label.votes">Votes</Trans>}</span>
         </HStack>

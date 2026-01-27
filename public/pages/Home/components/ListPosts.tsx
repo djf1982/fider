@@ -1,6 +1,7 @@
 import React from "react"
 import { Post, Tag, CurrentUser } from "@fider/models"
-import { ShowTag, Markdown, Icon, ResponseLozenge } from "@fider/components"
+import { ShowTag, Markdown, Icon, ResponseLozenge, EmptyState } from "@fider/components"
+import { i18n } from "@lingui/core"
 import IconChatAlt2 from "@fider/assets/images/heroicons-chat-alt-2.svg"
 import { HStack, VStack } from "@fider/components/layout"
 import { useFider } from "@fider/hooks"
@@ -112,7 +113,13 @@ export const ListPosts = (props: ListPostsProps) => {
   }
 
   if (props.posts.length === 0) {
-    return <p className="text-center">{props.emptyText}</p>
+    return (
+      <EmptyState
+        illustration="search"
+        title={i18n._({ id: "home.listposts.empty.title", message: "No results found" })}
+        description={props.emptyText}
+      />
+    )
   }
 
   return (

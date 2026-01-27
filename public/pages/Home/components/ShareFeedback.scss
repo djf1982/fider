@@ -35,6 +35,65 @@
     flex: 1;
     overflow-y: auto;
   }
+
+  // Success state styles
+  &__success {
+    animation: successFadeIn 0.4s ease-out;
+    padding: spacing(8) spacing(6);
+
+    @include media("md") {
+      padding: spacing(12) spacing(8);
+    }
+  }
+
+  &__success-icon {
+    animation: bounceIn 0.6s ease-out;
+  }
+
+  &__celebration-emoji,
+  &__moderation-emoji {
+    font-size: 64px;
+    display: block;
+    line-height: 1;
+
+    @include media("md") {
+      font-size: 80px;
+    }
+  }
+
+  &__success-post-title {
+    font-size: 18px;
+    font-weight: get("font.weight.semibold");
+    color: var(--colors-gray-800);
+    font-style: italic;
+    max-width: 400px;
+    margin: 0 auto;
+    word-break: break-word;
+
+    @include media("md") {
+      font-size: 20px;
+    }
+  }
+
+  &__success-actions {
+    margin-top: spacing(2);
+    flex-wrap: wrap;
+  }
+
+  &__back-link {
+    background: none;
+    border: none;
+    color: var(--colors-primary-base);
+    font-size: 14px;
+    cursor: pointer;
+    padding: spacing(2);
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--colors-primary-600);
+      text-decoration: underline;
+    }
+  }
 }
 
 .c-share-feedback-form {
@@ -49,15 +108,52 @@
 
 .animate-fade-in {
   animation: fadeIn 0.5s ease-in-out;
+}
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes successFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Respect reduced motion preference
+@media (prefers-reduced-motion: reduce) {
+  .c-share-feedback__success,
+  .c-share-feedback__success-icon,
+  .animate-fade-in {
+    animation: none;
   }
 }

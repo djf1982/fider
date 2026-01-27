@@ -1,0 +1,75 @@
+@import "~@fider/assets/styles/variables.scss";
+
+.c-empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: spacing(8) spacing(4);
+  text-align: center;
+
+  &__content {
+    max-width: 320px;
+    align-items: center;
+  }
+
+  &__illustration {
+    width: 100px;
+    height: 100px;
+    margin-bottom: spacing(2);
+
+    @include media("md") {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+  &__bg {
+    color: var(--colors-gray-200);
+
+    @include dark-mode {
+      color: var(--colors-gray-300);
+    }
+  }
+
+  &__primary {
+    color: var(--colors-gray-500);
+
+    @include dark-mode {
+      color: var(--colors-gray-500);
+    }
+  }
+
+  &__secondary {
+    color: var(--colors-gray-400);
+
+    @include dark-mode {
+      color: var(--colors-gray-400);
+    }
+  }
+
+  &__accent {
+    color: var(--colors-primary-base);
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: get("font.weight.semibold");
+    color: var(--colors-gray-800);
+    margin: 0;
+
+    @include media("md") {
+      font-size: 20px;
+    }
+  }
+
+  &__description {
+    font-size: 14px;
+    color: var(--colors-gray-600);
+    margin: 0;
+    line-height: 1.5;
+
+    @include media("md") {
+      font-size: 15px;
+    }
+  }
+}

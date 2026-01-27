@@ -3,7 +3,7 @@ import "./PostsContainer.scss"
 import React from "react"
 
 import { Post, Tag, CurrentUser } from "@fider/models"
-import { Loader, Input } from "@fider/components"
+import { Loader, Input, PostSkeleton } from "@fider/components"
 import { actions, navigator, querystring } from "@fider/services"
 import IconSearch from "@fider/assets/images/heroicons-search.svg"
 import IconX from "@fider/assets/images/heroicons-x.svg"
@@ -199,7 +199,8 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
             emptyText={i18n._({ id: "home.postscontainer.label.noresults", message: "No results matched your search, try something different." })}
             onPostClick={this.props.onPostClick}
           />
-          {this.state.loading && <Loader />}
+          {this.state.loading && !this.state.posts && <PostSkeleton count={5} />}
+          {this.state.loading && this.state.posts && <Loader />}
           {showMoreLink && (
             <div className="my-4 text-center">
               <a href={showMoreLink} className="text-primary-base text-medium hover:underline" onClick={this.showMore}>
