@@ -56,6 +56,7 @@
   "home.postfilter.option.myposts": "Minhas postagens",
   "home.postfilter.option.myvotes": "Meus Votos",
   "home.postfilter.option.notags": "Sem etiqueta",
+  "home.postfilter.option.notvoted": "Not Voted",
   "home.postfilter.option.recent": "Recentes",
   "home.postfilter.option.trending": "Popular",
   "home.postscontainer.label.noresults": "Nenhum resultado corresponde à sua busca, tente algo diferente.",

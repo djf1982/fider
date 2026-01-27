@@ -56,6 +56,7 @@
   "home.postfilter.option.myposts": "Мои сообщения",
   "home.postfilter.option.myvotes": "Мои голоса",
   "home.postfilter.option.notags": "Без тегов",
+  "home.postfilter.option.notvoted": "Not Voted",
   "home.postfilter.option.recent": "Недавние",
   "home.postfilter.option.trending": "В тренде",
   "home.postscontainer.label.noresults": "Не удалось ничего найти. Попробуйте поискать что-то другое.",

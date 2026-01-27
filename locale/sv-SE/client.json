@@ -56,6 +56,7 @@
   "home.postfilter.option.myposts": "Mina inlägg",
   "home.postfilter.option.myvotes": "Mina röster",
   "home.postfilter.option.notags": "Otaggad",
+  "home.postfilter.option.notvoted": "Not Voted",
   "home.postfilter.option.recent": "Senaste",
   "home.postfilter.option.trending": "Trendar",
   "home.postscontainer.label.noresults": "Inga resultat matchar din sökning, prova något annat.",

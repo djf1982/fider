@@ -202,6 +202,7 @@
   "home.postfilter.label.status": "상태",
   "home.postfilter.option.myposts": "내 게시물",
   "home.postfilter.option.notags": "태그 없음",
+  "home.postfilter.option.notvoted": "Not Voted",
   "linkmodal.insert": "링크 삽입",
   "linkmodal.text.label": "표시할 텍스트",
   "linkmodal.text.placeholder": "링크 텍스트 입력",

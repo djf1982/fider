@@ -28,6 +28,10 @@ func Index() web.HandlerFunc {
 			searchPosts.MyVotesOnly = myVotesOnly
 		}
 
+		if notVotedOnly, err := c.QueryParamAsBool("notvoted"); err == nil {
+			searchPosts.NotVotedOnly = notVotedOnly
+		}
+
 		if noTagsOnly, err := c.QueryParamAsBool("notags"); err == nil {
 			searchPosts.NoTagsOnly = noTagsOnly
 		}

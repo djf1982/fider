@@ -56,6 +56,7 @@
   "home.postfilter.option.myposts": "我的帖子",
   "home.postfilter.option.myvotes": "我的投票",
   "home.postfilter.option.notags": "未标记",
+  "home.postfilter.option.notvoted": "Not Voted",
   "home.postfilter.option.recent": "最近",
   "home.postfilter.option.trending": "趋势",
   "home.postscontainer.label.noresults": "没有与您的搜索匹配的结果，请尝试其他搜索.",

@@ -56,6 +56,7 @@
   "home.postfilter.option.myposts": "Moje posty",
   "home.postfilter.option.myvotes": "Moje Głosy",
   "home.postfilter.option.notags": "Nieoznaczone",
+  "home.postfilter.option.notvoted": "Not Voted",
   "home.postfilter.option.recent": "Niedawne",
   "home.postfilter.option.trending": "Popularne",
   "home.postscontainer.label.noresults": "Brak wyników pasujących do Twojego wyszukiwania, spróbuj czegoś innego.",

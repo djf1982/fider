@@ -56,6 +56,7 @@
   "home.postfilter.option.myposts": "Mijn berichten",
   "home.postfilter.option.myvotes": "Mijn stemmen",
   "home.postfilter.option.notags": "Niet getagd",
+  "home.postfilter.option.notvoted": "Not Voted",
   "home.postfilter.option.recent": "Recent",
   "home.postfilter.option.trending": "Trending",
   "home.postscontainer.label.noresults": "Er komen geen resultaten overeen met je zoekopdracht, probeer iets anders.",

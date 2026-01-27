@@ -202,6 +202,7 @@
   "home.postfilter.label.status": "තත්ත්වය",
   "home.postfilter.option.myposts": "මගේ සටහන්",
   "home.postfilter.option.notags": "ටැග් නොකළ",
+  "home.postfilter.option.notvoted": "Not Voted",
   "linkmodal.insert": "සබැඳිය ඇතුළු කරන්න",
   "linkmodal.text.label": "පෙන්වීමට පෙළ",
   "linkmodal.text.placeholder": "සබැඳි පෙළ ඇතුළත් කරන්න",

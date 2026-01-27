@@ -34,6 +34,7 @@ export interface FilterState {
   tags: string[]
   statuses: string[]
   myVotes: boolean
+  notVoted: boolean
   myPosts: boolean
   noTags: boolean
 }
@@ -53,6 +54,7 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
         tags: querystring.getArray("tags"),
         statuses: querystring.getArray("statuses"),
         myVotes: querystring.get("myvotes") === "true",
+        notVoted: querystring.get("notvoted") === "true",
         myPosts: querystring.get("myposts") === "true",
         noTags: querystring.get("notags") === "true",
       },
@@ -68,6 +70,7 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
           statuses: this.state.filterState.statuses,
           tags: this.state.filterState.tags,
           myvotes: this.state.filterState.myVotes ? "true" : undefined,
+          notvoted: this.state.filterState.notVoted ? "true" : undefined,
           myposts: this.state.filterState.myPosts ? "true" : undefined,
           notags: this.state.filterState.noTags ? "true" : undefined,
           query,
@@ -83,6 +86,7 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
         this.state.filterState.tags,
         this.state.filterState.statuses,
         this.state.filterState.myVotes,
+        this.state.filterState.notVoted,
         this.state.filterState.myPosts,
         this.state.filterState.noTags,
         reset
@@ -98,6 +102,7 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
     tags: string[],
     statuses: string[],
     myVotes: boolean,
+    notVoted: boolean,
     myPosts: boolean,
     noTags: boolean,
     reset: boolean
@@ -115,7 +120,7 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
         moderation = "pending"
       }
 
-      actions.searchPosts({ query, view: view, limit, tags, statuses: actualStatuses, myVotes, myPosts, noTags, moderation }).then((response) => {
+      actions.searchPosts({ query, view: view, limit, tags, statuses: actualStatuses, myVotes, notVoted, myPosts, noTags, moderation }).then((response) => {
         if (response.ok && this.state.loading) {
           this.setState({ loading: false, posts: response.data })
         }

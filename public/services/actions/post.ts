@@ -15,6 +15,7 @@ export interface SearchPostsParams {
   limit?: number
   tags?: string[]
   myVotes?: boolean
+  notVoted?: boolean
   noTags?: boolean
   myPosts?: boolean
   statuses?: string[]
@@ -32,6 +33,9 @@ export const searchPosts = async (params: SearchPostsParams): Promise<Result<Pos
   })
   if (params.myVotes) {
     qsParams += `&myvotes=true`
+  }
+  if (params.notVoted) {
+    qsParams += `&notvoted=true`
   }
   if (params.noTags) {
     qsParams += `&notags=true`

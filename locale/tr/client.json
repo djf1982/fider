@@ -56,6 +56,7 @@
   "home.postfilter.option.myposts": "Yazılarım",
   "home.postfilter.option.myvotes": "Oyladıklarım",
   "home.postfilter.option.notags": "Etiketsiz",
+  "home.postfilter.option.notvoted": "Not Voted",
   "home.postfilter.option.recent": "En Son",
   "home.postfilter.option.trending": "Öne Çıkanlar",
   "home.postscontainer.label.noresults": "Aramanız bir sonuç vermedi, başka bir aramayı deneyin.",

@@ -40,6 +40,7 @@ type SearchPosts struct {
 	Statuses         []enum.PostStatus
 	Tags             []string
 	MyVotesOnly      bool
+	NotVotedOnly     bool
 	NoTagsOnly       bool
 	MyPostsOnly      bool
 	ModerationFilter string // "pending", "approved", or empty (all)

@@ -202,6 +202,7 @@
   "home.postfilter.label.status": "Postavení",
   "home.postfilter.option.myposts": "Moje příspěvky",
   "home.postfilter.option.notags": "Neoznačeno",
+  "home.postfilter.option.notvoted": "Not Voted",
   "linkmodal.insert": "Vložit odkaz",
   "linkmodal.text.label": "Text k zobrazení",
   "linkmodal.text.placeholder": "Zadejte text odkazu",

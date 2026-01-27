@@ -54,6 +54,10 @@ func getViewData(query query.SearchPosts) (string, []enum.PostStatus, string) {
 		condition = "AND has_voted = true"
 	}
 
+	if query.NotVotedOnly {
+		condition = "AND has_voted = false"
+	}
+
 	switch query.View {
 	case "recent":
 		sort = "id"

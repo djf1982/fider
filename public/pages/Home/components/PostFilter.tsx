@@ -9,7 +9,7 @@ import { FilterState } from "./PostsContainer"
 
 import "./PostFilter.scss"
 
-type FilterType = "tag" | "status" | "myVotes" | "noTags" | "myPosts"
+type FilterType = "tag" | "status" | "myVotes" | "notVoted" | "noTags" | "myPosts"
 
 interface OptionItem {
   value: string | boolean
@@ -41,6 +41,9 @@ const FilterStateToFilterItems = (filterState: FilterState): FilterItem[] => {
   if (filterState.myVotes) {
     filterItems.push({ type: "myVotes", value: true })
   }
+  if (filterState.notVoted) {
+    filterItems.push({ type: "notVoted", value: true })
+  }
   if (filterState.noTags) {
     filterItems.push({ type: "noTags", value: true })
   }
@@ -51,7 +54,7 @@ const FilterStateToFilterItems = (filterState: FilterState): FilterItem[] => {
 }
 
 const FilterItemsToFilterState = (filterItems: FilterItem[]): FilterState => {
-  const filterState: FilterState = { tags: [], statuses: [], myVotes: false, noTags: false, myPosts: false }
+  const filterState: FilterState = { tags: [], statuses: [], myVotes: false, notVoted: false, noTags: false, myPosts: false }
   filterItems.forEach((i) => {
     if (i.type === "tag") {
       filterState.tags.push(i.value as string)
@@ -59,6 +62,8 @@ const FilterItemsToFilterState = (filterItems: FilterItem[]): FilterState => {
       filterState.statuses.push(i.value as string)
     } else if (i.type === "myVotes") {
       filterState.myVotes = true
+    } else if (i.type === "notVoted") {
+      filterState.notVoted = true
     } else if (i.type === "noTags") {
       filterState.noTags = true
     } else if (i.type === "myPosts") {
@@ -87,6 +92,7 @@ export const PostFilter = (props: PostFilterProps) => {
 
   if (fider.session.isAuthenticated) {
     options.push({ value: true, label: i18n._({ id: "home.postfilter.option.myvotes", message: "My Votes" }), type: "myVotes" })
+    options.push({ value: true, label: i18n._({ id: "home.postfilter.option.notvoted", message: "Not Voted" }), type: "notVoted" })
     options.push({ value: true, label: i18n._({ id: "home.postfilter.option.myposts", message: "My Posts" }), type: "myPosts" })
   }
 
@@ -175,7 +181,7 @@ export const PostFilter = (props: PostFilterProps) => {
           placeholder={i18n._({ id: "home.filter.search.label", message: "Search in filters..." })}
         />
 
-        <FilterGroupSection title={i18n._({ id: "home.postfilter.label.myactivity", message: "My activity" })} type={["myVotes", "myPosts"]} />
+        <FilterGroupSection title={i18n._({ id: "home.postfilter.label.myactivity", message: "My activity" })} type={["myVotes", "notVoted", "myPosts"]} />
 
         <FilterGroupSection title={i18n._({ id: "home.postfilter.label.status", message: "Status" })} type={["status"]} />
 
