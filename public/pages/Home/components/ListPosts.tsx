@@ -18,6 +18,7 @@ const ListPostItem = (props: { post: Post; user?: CurrentUser; tags: Tag[]; onPo
   const fider = useFider()
   const isModerationEnabled = fider.session.tenant.isModerationEnabled
   const isPending = isModerationEnabled && !props.post.isApproved
+  const isBug = props.post.tags.some((tag) => tag.toLowerCase() === "bug")
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (props.onPostClick) {
@@ -31,7 +32,10 @@ const ListPostItem = (props: { post: Post; user?: CurrentUser; tags: Tag[]; onPo
       <VStack className="c-posts-container__post w-full" spacing={4}>
         <HStack justify="between" align="start">
           <HStack spacing={2} align="start" className="w-full">
-            <h3 className="c-posts-container__post-title text-break">{props.post.title}</h3>
+            <h3 className="c-posts-container__post-title text-break">
+              {isBug && <span title="Bug">🐛 </span>}
+              {props.post.title}
+            </h3>
             {isPending && (
               <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded flex-shrink-0">
                 <Trans id="post.pending">pending</Trans>
@@ -69,6 +73,7 @@ const MinimalListPostItem = (props: { post: Post; tags: Tag[]; onPostClick?: (po
   const fider = useFider()
   const isModerationEnabled = fider.session.tenant.isModerationEnabled
   const isPending = isModerationEnabled && !props.post.isApproved
+  const isBug = props.post.tags.some((tag) => tag.toLowerCase() === "bug")
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (props.onPostClick) {
@@ -82,6 +87,7 @@ const MinimalListPostItem = (props: { post: Post; tags: Tag[]; onPostClick?: (po
       <HStack className="w-full" justify="between" align="start">
         <HStack spacing={2} align="start" justify="between" className="w-full">
           <a className="text-link" href={`/posts/${props.post.number}/${props.post.slug}`} onClick={handleClick}>
+            {isBug && <span title="Bug">🐛 </span>}
             {props.post.title}
           </a>
           {isPending && <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">pending</span>}
