@@ -29,7 +29,7 @@ FROM --platform=${TARGETPLATFORM:-linux/amd64} node:22-bookworm AS ui-builder
 WORKDIR /ui
 
 COPY package.json package-lock.json ./
-RUN npm ci --maxsockets 1
+RUN npm install --maxsockets 1
 
 COPY . .
 RUN make build-ssr
