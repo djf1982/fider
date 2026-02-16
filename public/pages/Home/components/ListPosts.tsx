@@ -1,6 +1,6 @@
 import React from "react"
 import { Post, Tag, CurrentUser } from "@fider/models"
-import { ShowTag, Markdown, Icon, ResponseLozenge, EmptyState } from "@fider/components"
+import { ShowTag, Markdown, Icon, ResponseLozenge, EmptyState, VoteCounter } from "@fider/components"
 import { i18n } from "@lingui/core"
 import IconChatAlt2 from "@fider/assets/images/heroicons-chat-alt-2.svg"
 import { HStack, VStack } from "@fider/components/layout"
@@ -28,44 +28,52 @@ const ListPostItem = (props: { post: Post; user?: CurrentUser; tags: Tag[]; onPo
     }
   }
 
+  const handleVoteClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
   return (
     <a href={`/posts/${props.post.number}/${props.post.slug}`} className="c-posts-container__post-link" onClick={handleClick}>
-      <VStack className="c-posts-container__post w-full" spacing={4}>
-        <HStack justify="between" align="start">
-          <HStack spacing={2} align="start" className="w-full">
-            <h3 className="c-posts-container__post-title text-break">
-              {isBug && <span title="Bug">🐛 </span>}
-              {props.post.title}
-            </h3>
-            {isPending && (
-              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded flex-shrink-0">
-                <Trans id="post.pending">pending</Trans>
-              </span>
+      <HStack className="c-posts-container__post w-full" spacing={4} align="start">
+        <div className="c-posts-container__post-vote flex-shrink-0" onClick={handleVoteClick}>
+          <VoteCounter post={props.post} />
+        </div>
+        <VStack className="w-full" spacing={4}>
+          <HStack justify="between" align="start">
+            <HStack spacing={2} align="start" className="w-full">
+              <h3 className="c-posts-container__post-title text-break">
+                {isBug && <span title="Bug">🐛 </span>}
+                {props.post.title}
+              </h3>
+              {isPending && (
+                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded flex-shrink-0">
+                  <Trans id="post.pending">pending</Trans>
+                </span>
+              )}
+            </HStack>
+            {props.post.commentsCount > 0 && (
+              <HStack spacing={1} className="c-posts-container__post-comments flex-shrink-0">
+                <span>{props.post.commentsCount}</span>
+                <Icon sprite={IconChatAlt2} className="h-5 w-5" />
+              </HStack>
             )}
           </HStack>
-          {props.post.commentsCount > 0 && (
-            <HStack spacing={1} className="c-posts-container__post-comments flex-shrink-0">
-              <span>{props.post.commentsCount}</span>
-              <Icon sprite={IconChatAlt2} className="h-5 w-5" />
+          <Markdown className="c-posts-container__postdescription" maxLength={300} text={props.post.description} style="plainText" />
+          {props.tags.length >= 1 && (
+            <HStack spacing={0} className="gap-2 flex-wrap">
+              {props.tags.map((tag) => (
+                <ShowTag key={tag.id} tag={tag} />
+              ))}
             </HStack>
           )}
-        </HStack>
-        <Markdown className="c-posts-container__postdescription" maxLength={300} text={props.post.description} style="plainText" />
-        {props.tags.length >= 1 && (
-          <HStack spacing={0} className="gap-2 flex-wrap">
-            {props.tags.map((tag) => (
-              <ShowTag key={tag.id} tag={tag} />
-            ))}
-          </HStack>
-        )}
-        <HStack justify="between" align="center">
-          <div className="c-posts-container__post-votes">
-            <span className="text-semibold text-2xl">{props.post.votesCount}</span>{" "}
-            <span className="text-gray-700">{props.post.votesCount === 1 ? <Trans id="label.vote">Vote</Trans> : <Trans id="label.votes">Votes</Trans>}</span>
-          </div>
-          {props.post.status !== "open" && <ResponseLozenge status={props.post.status} response={props.post.response} size={"small"} />}
-        </HStack>
-      </VStack>
+          {props.post.status !== "open" && (
+            <div>
+              <ResponseLozenge status={props.post.status} response={props.post.response} size={"small"} />
+            </div>
+          )}
+        </VStack>
+      </HStack>
     </a>
   )
 }
@@ -113,13 +121,7 @@ export const ListPosts = (props: ListPostsProps) => {
   }
 
   if (props.posts.length === 0) {
-    return (
-      <EmptyState
-        illustration="search"
-        title={i18n._({ id: "home.listposts.empty.title", message: "No results found" })}
-        description={props.emptyText}
-      />
-    )
+    return <EmptyState illustration="search" title={i18n._({ id: "home.listposts.empty.title", message: "No results found" })} description={props.emptyText} />
   }
 
   return (

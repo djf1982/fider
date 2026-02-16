@@ -88,10 +88,8 @@
     line-height: 1.6;
   }
 
-  &__post-votes {
-    display: flex;
-    align-items: baseline;
-    gap: spacing(2);
+  &__post-vote {
+    padding-top: spacing(1);
   }
 
   &__post-minimal {
