@@ -19,7 +19,7 @@ type Post struct {
 	CreatedAt      time.Time      `db:"created_at"`
 	Search         []byte         `db:"search"`
 	User           *User          `db:"user"`
-	HasVoted       bool           `db:"has_voted"`
+	VoteType       dbx.NullInt    `db:"vote_type"`
 	VotesCount     int            `db:"votes_count"`
 	CommentsCount  int            `db:"comments_count"`
 	RecentVotes    int            `db:"recent_votes_count"`
@@ -45,7 +45,8 @@ func (i *Post) ToModel(ctx context.Context) *entity.Post {
 		Description:   i.Description,
 		CreatedAt:     i.CreatedAt,
 		User:          i.User.ToModel(ctx),
-		HasVoted:      i.HasVoted,
+		VoteType:      int(i.VoteType.Int64),
+		HasVoted:      i.VoteType.Valid && i.VoteType.Int64 != 0,
 		VotesCount:    i.VotesCount,
 		CommentsCount: i.CommentsCount,
 		Status:        enum.PostStatus(i.Status),

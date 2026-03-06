@@ -19,9 +19,14 @@ func addVote(ctx context.Context, c *cmd.AddVote) error {
 			return nil
 		}
 
+		voteType := c.VoteType
+		if voteType == 0 {
+			voteType = 1
+		}
+
 		_, err := trx.Execute(
-			`INSERT INTO post_votes (tenant_id, user_id, post_id, created_at) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING`,
-			tenant.ID, c.User.ID, c.Post.ID, time.Now(),
+			`INSERT INTO post_votes (tenant_id, user_id, post_id, created_at, vote_type) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (user_id, post_id) DO UPDATE SET vote_type = $5, created_at = $4`,
+			tenant.ID, c.User.ID, c.Post.ID, time.Now(), voteType,
 		)
 
 		if err != nil {
@@ -62,8 +67,9 @@ func listPostVotes(ctx context.Context, q *query.ListPostVotes) error {
 
 		votes := []*dbEntities.Vote{}
 		err := trx.Select(&votes, `
-		SELECT 
-			pv.created_at, 
+		SELECT
+			pv.created_at,
+			pv.vote_type,
 			u.id AS user_id,
 			u.name AS user_name,
 			`+emailColumn+` AS user_email,

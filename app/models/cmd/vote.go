@@ -5,8 +5,9 @@ import (
 )
 
 type AddVote struct {
-	Post *entity.Post
-	User *entity.User
+	Post     *entity.Post
+	User     *entity.User
+	VoteType int
 }
 
 type RemoveVote struct {

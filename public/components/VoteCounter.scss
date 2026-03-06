@@ -1,111 +1,93 @@
 @use "~@fider/assets/styles/variables.scss" as *;
 
 .c-vote-counter {
-  &__button {
-    width: sizing(14);
-    height: sizing(14);
-    cursor: pointer;
-    text-align: center;
-    margin: 0 auto;
-    padding: spacing(3) 0;
-    color: var(--colors-primary-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: spacing(1);
+  width: sizing(14);
+
+  &__up,
+  &__down {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: spacing(2);
-    border-radius: 16px;
+    width: sizing(10);
+    height: sizing(8);
+    cursor: pointer;
+    border-radius: 8px;
+    border: 2px solid var(--colors-gray-200);
+    background-color: var(--colors-gray-50);
+    color: var(--colors-gray-500);
     transition: all 0.2s ease;
-    background-color: var(--colors-blue-50);
-    border: 2px solid var(--colors-blue-100);
 
     @include dark-mode {
-      background-color: var(--colors-blue-900);
-      border-color: var(--colors-blue-800);
-      color: var(--colors-blue-300);
+      background-color: var(--colors-gray-800);
+      border-color: var(--colors-gray-700);
+      color: var(--colors-gray-400);
     }
 
-    &:hover {
-      background-color: var(--colors-blue-100);
+    &:hover:not(:disabled) {
       border-color: var(--colors-primary-base);
       color: var(--colors-primary-base);
+      background-color: var(--colors-blue-50);
 
       @include dark-mode {
-        background-color: var(--colors-blue-800);
+        background-color: var(--colors-blue-900);
         border-color: var(--colors-blue-500);
-        color: var(--colors-blue-200);
-      }
-
-      .c-vote-counter__icon {
-        color: var(--colors-primary-base);
-        transform: translateY(-1px);
-
-        @include dark-mode {
-          color: var(--colors-blue-200);
-        }
+        color: var(--colors-blue-300);
       }
     }
 
-    &--voted {
-      padding: spacing(3) 0;
-      gap: spacing(2);
+    &--active {
       font-weight: get("font.weight.bold");
-      background-color: var(--colors-blue-100);
-      color: var(--colors-primary-base);
-      border-color: var(--colors-primary-base);
-
-      @include dark-mode {
-        background-color: var(--colors-blue-800);
-        color: var(--colors-blue-200);
-        border-color: var(--colors-blue-500);
-      }
-
-      .c-vote-counter__icon {
-        color: var(--colors-primary-base);
-
-        @include dark-mode {
-          color: var(--colors-blue-200);
-        }
-      }
-
-      .c-vote-counter__count {
-        font-weight: get("font.weight.bold");
-      }
-
-      &:hover {
-        background-color: var(--colors-blue-200);
-        border-color: var(--colors-primary-base);
-
-        @include dark-mode {
-          background-color: var(--colors-blue-700);
-          border-color: var(--colors-blue-400);
-        }
-      }
     }
 
     &--disabled {
-      padding: spacing(3) 0;
-      gap: spacing(2);
       @include disabled();
     }
+  }
 
-    &--large {
-      width: sizing(18);
-      height: sizing(20);
-      padding: spacing(5) 0;
-      gap: spacing(2);
-      border-radius: 20px;
+  &__up--active {
+    background-color: var(--colors-blue-100);
+    border-color: var(--colors-primary-base);
+    color: var(--colors-primary-base);
 
-      .c-vote-counter__icon {
-        width: 28px;
-        height: 28px;
-        stroke-width: 2.5;
+    @include dark-mode {
+      background-color: var(--colors-blue-800);
+      border-color: var(--colors-blue-500);
+      color: var(--colors-blue-200);
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--colors-blue-200);
+      border-color: var(--colors-primary-base);
+
+      @include dark-mode {
+        background-color: var(--colors-blue-700);
+        border-color: var(--colors-blue-400);
       }
+    }
+  }
 
-      .c-vote-counter__count {
-        font-size: 24px;
-        font-weight: get("font.weight.bold");
-        line-height: 1;
+  &__down--active {
+    background-color: var(--colors-red-50);
+    border-color: var(--colors-red-500);
+    color: var(--colors-red-500);
+
+    @include dark-mode {
+      background-color: var(--colors-red-900);
+      border-color: var(--colors-red-400);
+      color: var(--colors-red-300);
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--colors-red-100);
+      border-color: var(--colors-red-500);
+
+      @include dark-mode {
+        background-color: var(--colors-red-800);
+        border-color: var(--colors-red-300);
       }
     }
   }
@@ -113,18 +95,39 @@
   &__icon {
     width: 18px;
     height: 18px;
-    color: var(--colors-primary-base);
     transition: all 0.2s ease;
     flex-shrink: 0;
-
-    @include dark-mode {
-      color: var(--colors-blue-300);
-    }
   }
 
   &__count {
     font-size: get("font.size.sm");
     font-weight: get("font.weight.semibold");
     line-height: 1;
+    color: var(--colors-gray-700);
+
+    @include dark-mode {
+      color: var(--colors-gray-300);
+    }
+  }
+
+  &--large {
+    width: sizing(18);
+
+    .c-vote-counter__up,
+    .c-vote-counter__down {
+      width: sizing(14);
+      height: sizing(10);
+      border-radius: 12px;
+    }
+
+    .c-vote-counter__icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .c-vote-counter__count {
+      font-size: 20px;
+      font-weight: get("font.weight.bold");
+    }
   }
 }

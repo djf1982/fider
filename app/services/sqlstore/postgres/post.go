@@ -54,8 +54,8 @@ var (
 													agg_votes AS (
 															SELECT
 															post_id,
-																	COUNT(CASE WHEN post_votes.created_at > CURRENT_DATE - INTERVAL '30 days'  THEN 1 END) as recent,
-																	COUNT(*) as all
+																	SUM(CASE WHEN post_votes.created_at > CURRENT_DATE - INTERVAL '30 days' THEN vote_type ELSE 0 END) as recent,
+																	SUM(vote_type) as all
 															FROM post_votes
 															INNER JOIN posts
 															ON posts.id = post_votes.post_id
@@ -96,7 +96,7 @@ var (
 																d.slug AS original_slug,
 																d.status AS original_status,
 																COALESCE(agg_t.tags, ARRAY[]::text[]) AS tags,
-																COALESCE(%s, false) AS has_voted,
+																%s AS vote_type,
 																p.is_approved
 													FROM posts p
 													INNER JOIN users u
@@ -174,14 +174,18 @@ func markPostAsDuplicate(ctx context.Context, c *cmd.MarkPostAsDuplicate) error 
 			respondedAt = c.Post.Response.RespondedAt
 		}
 
-		var users []*dbEntities.User
-		err := trx.Select(&users, "SELECT user_id AS id FROM post_votes WHERE post_id = $1 AND tenant_id = $2", c.Post.ID, tenant.ID)
+		type voterInfo struct {
+			UserID   int `db:"user_id"`
+			VoteType int `db:"vote_type"`
+		}
+		var voters []*voterInfo
+		err := trx.Select(&voters, "SELECT user_id, vote_type FROM post_votes WHERE post_id = $1 AND tenant_id = $2", c.Post.ID, tenant.ID)
 		if err != nil {
 			return errors.Wrap(err, "failed to get votes of post with id '%d'", c.Post.ID)
 		}
 
-		for _, u := range users {
-			err := bus.Dispatch(ctx, &cmd.AddVote{Post: c.Original, User: u.ToModel(ctx)})
+		for _, v := range voters {
+			err := bus.Dispatch(ctx, &cmd.AddVote{Post: c.Original, User: &entity.User{ID: v.UserID}, VoteType: v.VoteType})
 			if err != nil {
 				return err
 			}
@@ -525,7 +529,7 @@ func buildPostQuery(user *entity.User, filter string, moderationFilter string) s
 	}
 	hasVotedSubQuery := "null"
 	if user != nil {
-		hasVotedSubQuery = fmt.Sprintf("(SELECT true FROM post_votes WHERE post_id = p.id AND user_id = %d)", user.ID)
+		hasVotedSubQuery = fmt.Sprintf("(SELECT vote_type FROM post_votes WHERE post_id = p.id AND user_id = %d)", user.ID)
 	}
 
 	// Add approval filtering based on moderation filter and user permissions
@@ -563,7 +567,7 @@ func buildSinglePostQuery(user *entity.User, filter string) string {
 	}
 	hasVotedSubQuery := "null"
 	if user != nil {
-		hasVotedSubQuery = fmt.Sprintf("(SELECT true FROM post_votes WHERE post_id = p.id AND user_id = %d)", user.ID)
+		hasVotedSubQuery = fmt.Sprintf("(SELECT vote_type FROM post_votes WHERE post_id = p.id AND user_id = %d)", user.ID)
 	}
 
 	// Approval filtering for single post views

@@ -28,6 +28,7 @@ beforeEach(() => {
       avatarURL: "/static/avatars/letter/5/John",
     },
     hasVoted: false,
+    voteType: 0,
     response: null,
     votesCount: 5,
     commentsCount: 2,
@@ -37,8 +38,9 @@ beforeEach(() => {
 })
 
 describe("<VoteCounter />", () => {
-  test("when hasVoted === true", () => {
+  test("when upvoted", () => {
     post.hasVoted = true
+    post.voteType = 1
     post.votesCount = 9
 
     const { container } = render(
@@ -46,25 +48,40 @@ describe("<VoteCounter />", () => {
         <VoteCounter post={post} />
       </FiderContext.Provider>
     )
-    const button = container.querySelector("button")
 
-    expect(button).toHaveTextContent("9")
-    expect(button).toHaveClass("c-vote-counter__button--voted")
-    expect(button).not.toHaveClass("c-vote-counter__button--disabled")
+    expect(container.querySelector(".c-vote-counter__count")).toHaveTextContent("9")
+    expect(container.querySelector(".c-vote-counter__up")).toHaveClass("c-vote-counter__up--active")
+    expect(container.querySelector(".c-vote-counter__down")).not.toHaveClass("c-vote-counter__down--active")
   })
 
-  test("when hasVoted === false", () => {
+  test("when downvoted", () => {
+    post.hasVoted = true
+    post.voteType = -1
+    post.votesCount = 3
+
+    const { container } = render(
+      <FiderContext.Provider value={fiderMock.authenticated()}>
+        <VoteCounter post={post} />
+      </FiderContext.Provider>
+    )
+
+    expect(container.querySelector(".c-vote-counter__count")).toHaveTextContent("3")
+    expect(container.querySelector(".c-vote-counter__up")).not.toHaveClass("c-vote-counter__up--active")
+    expect(container.querySelector(".c-vote-counter__down")).toHaveClass("c-vote-counter__down--active")
+  })
+
+  test("when not voted", () => {
     post.hasVoted = false
+    post.voteType = 0
     post.votesCount = 2
     const { container } = render(
       <FiderContext.Provider value={fiderMock.authenticated()}>
         <VoteCounter post={post} />
       </FiderContext.Provider>
     )
-    const button = container.querySelector("button")
-    expect(button).toHaveTextContent("2")
-    expect(button).not.toHaveClass("c-vote-counter__button--voted")
-    expect(button).not.toHaveClass("c-vote-counter__button--disabled")
+    expect(container.querySelector(".c-vote-counter__count")).toHaveTextContent("2")
+    expect(container.querySelector(".c-vote-counter__up")).not.toHaveClass("c-vote-counter__up--active")
+    expect(container.querySelector(".c-vote-counter__down")).not.toHaveClass("c-vote-counter__down--active")
   })
 
   test("when post is closed", () => {
@@ -74,13 +91,11 @@ describe("<VoteCounter />", () => {
         <VoteCounter post={post} />
       </FiderContext.Provider>
     )
-    const button = container.querySelector("button")
-    expect(button).toHaveTextContent("5")
-    expect(button).toHaveClass("c-vote-counter__button--disabled")
-    expect(button).not.toHaveClass("c-vote-counter__button--voted")
+    expect(container.querySelector(".c-vote-counter__up")).toHaveClass("c-vote-counter__up--disabled")
+    expect(container.querySelector(".c-vote-counter__down")).toHaveClass("c-vote-counter__down--disabled")
   })
 
-  test("click when unauthenticated", async () => {
+  test("click upvote when unauthenticated", async () => {
     const mock = httpMock.alwaysOk()
 
     const { container } = render(
@@ -88,15 +103,14 @@ describe("<VoteCounter />", () => {
         <VoteCounter post={post} />
       </FiderContext.Provider>
     )
-    const button = container.querySelector("button") || fail("button not found")
-    fireEvent.click(button)
+    const upButton = container.querySelector(".c-vote-counter__up") || fail("up button not found")
+    fireEvent.click(upButton)
 
     expect(screen.queryByTestId("modal")).toBeInTheDocument()
     expect(mock.post).toHaveBeenCalledTimes(0)
-    expect(mock.delete).toHaveBeenCalledTimes(0)
   })
 
-  test("click when authenticated and hasVoted === false", async () => {
+  test("click upvote when authenticated and not voted", async () => {
     const mock = httpMock.alwaysOk()
 
     const { container } = render(
@@ -105,20 +119,16 @@ describe("<VoteCounter />", () => {
       </FiderContext.Provider>
     )
 
-    const button = container.querySelector("button") || fail("button not found")
-    expect(button).toHaveTextContent("5")
+    const upButton = container.querySelector(".c-vote-counter__up") || fail("up button not found")
     await act(async () => {
-      fireEvent.click(button)
+      fireEvent.click(upButton)
     })
 
-    expect(mock.post).toHaveBeenCalledWith("/api/v1/posts/10/votes")
+    expect(mock.post).toHaveBeenCalledWith("/api/v1/posts/10/votes/toggle", { voteType: 1 })
     expect(mock.post).toHaveBeenCalledTimes(1)
-    expect(button).toHaveTextContent("6")
   })
 
-  test("click when authenticated and hasVoted === true", async () => {
-    post.hasVoted = true
-
+  test("click downvote when authenticated and not voted", async () => {
     const mock = httpMock.alwaysOk()
 
     const { container } = render(
@@ -127,14 +137,12 @@ describe("<VoteCounter />", () => {
       </FiderContext.Provider>
     )
 
-    const button = container.querySelector("button") || fail("button not found")
-    expect(button).toHaveTextContent("5")
+    const downButton = container.querySelector(".c-vote-counter__down") || fail("down button not found")
     await act(async () => {
-      fireEvent.click(button)
+      fireEvent.click(downButton)
     })
 
-    expect(mock.delete).toHaveBeenCalledWith("/api/v1/posts/10/votes")
-    expect(mock.delete).toHaveBeenCalledTimes(1)
-    expect(button).toHaveTextContent("4")
+    expect(mock.post).toHaveBeenCalledWith("/api/v1/posts/10/votes/toggle", { voteType: -1 })
+    expect(mock.post).toHaveBeenCalledTimes(1)
   })
 })

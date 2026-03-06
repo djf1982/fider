@@ -10,6 +10,7 @@ export interface Post {
   status: string
   user: User
   hasVoted: boolean
+  voteType: number
   response: PostResponse | null
   votesCount: number
   commentsCount: number
@@ -80,6 +81,7 @@ export interface Tag {
 
 export interface Vote {
   createdAt: Date
+  voteType: number
   user: {
     id: number
     name: string

@@ -106,7 +106,7 @@ const MinimalListPostItem = (props: { post: Post; tags: Tag[]; onPostClick?: (po
             <ResponseLozenge status={props.post.status} response={props.post.response} size={"micro"} />
           </div>
         ) : (
-          <span className="text-gray-700 text-sm">+{props.post.votesCount}</span>
+          <span className="text-gray-700 text-sm">{props.post.votesCount >= 0 ? `+${props.post.votesCount}` : props.post.votesCount}</span>
         )}
       </HStack>
     </HStack>

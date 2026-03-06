@@ -16,4 +16,5 @@ type VoteUser struct {
 type Vote struct {
 	User      *VoteUser `json:"user"`
 	CreatedAt time.Time `json:"createdAt"`
+	VoteType  int       `json:"voteType"`
 }

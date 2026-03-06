@@ -51,11 +51,11 @@ func getViewData(query query.SearchPosts) (string, []enum.PostStatus, string) {
 	}
 
 	if query.MyVotesOnly {
-		condition = "AND has_voted = true"
+		condition = "AND vote_type IS NOT NULL"
 	}
 
 	if query.NotVotedOnly {
-		condition = "AND has_voted = false"
+		condition = "AND vote_type IS NULL"
 	}
 
 	switch query.View {
@@ -67,7 +67,7 @@ func getViewData(query query.SearchPosts) (string, []enum.PostStatus, string) {
 		sort = "comments_count"
 	case "my-votes":
 		// Deprecated: You can instead filter on my votes only for more flexibility than using this view.
-		condition = "AND has_voted = true"
+		condition = "AND vote_type IS NOT NULL"
 		sort = "id"
 	case "planned":
 		// Deprecated: Use status filters instead

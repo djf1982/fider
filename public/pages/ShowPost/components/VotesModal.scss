@@ -18,4 +18,15 @@
     padding-right: spacing(4);
     flex-shrink: 0;
   }
+
+  &__vote-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--colors-primary-base);
+
+    &--down {
+      color: var(--colors-red-500);
+    }
+  }
 }

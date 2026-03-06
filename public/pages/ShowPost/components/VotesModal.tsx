@@ -2,11 +2,13 @@ import "./VotesModal.scss"
 
 import React, { useEffect, useState } from "react"
 import { Post, Vote } from "@fider/models"
-import { Modal, Button, Loader, Avatar, UserName, Moment, Input } from "@fider/components"
+import { Modal, Button, Loader, Avatar, UserName, Moment, Input, Icon } from "@fider/components"
 import { actions, classSet } from "@fider/services"
 import { useFider } from "@fider/hooks"
 import IconSearch from "@fider/assets/images/heroicons-search.svg"
 import IconX from "@fider/assets/images/heroicons-x.svg"
+import IconThumbsUp from "@fider/assets/images/heroicons-thumbsup.svg"
+import IconThumbsDown from "@fider/assets/images/heroicons-thumbsdown.svg"
 import { HStack, VStack } from "@fider/components/layout"
 import { i18n } from "@lingui/core"
 import { Trans } from "@lingui/react/macro"
@@ -84,9 +86,18 @@ export const VotesModal: React.FC<VotesModalProps> = (props) => {
                       <span className="text-muted text-sm">{x.user.email}</span>
                     </VStack>
                   </HStack>
-                  <span className="text-muted text-sm c-votes-modal__date">
-                    <Moment locale={fider.currentLocale} date={x.createdAt} />
-                  </span>
+                  <HStack spacing={2} align="center">
+                    <span className="text-muted text-sm c-votes-modal__date">
+                      <Moment locale={fider.currentLocale} date={x.createdAt} />
+                    </span>
+                    <Icon
+                      sprite={x.voteType === -1 ? IconThumbsDown : IconThumbsUp}
+                      className={classSet({
+                        "c-votes-modal__vote-icon": true,
+                        "c-votes-modal__vote-icon--down": x.voteType === -1,
+                      })}
+                    />
+                  </HStack>
                 </HStack>
               ))}
               {filteredVotes.length === 0 && (

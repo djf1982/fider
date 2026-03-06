@@ -84,7 +84,7 @@ func CreatePost() web.HandlerFunc {
 		}
 
 		setAttachments := &cmd.SetAttachments{Post: newPost.Result, Attachments: action.Attachments}
-		addVote := &cmd.AddVote{Post: newPost.Result, User: c.User()}
+		addVote := &cmd.AddVote{Post: newPost.Result, User: c.User(), VoteType: 1}
 		if err = bus.Dispatch(c, setAttachments, addVote); err != nil {
 			return c.Failure(err)
 		}
@@ -412,7 +412,7 @@ func DeleteComment() web.HandlerFunc {
 func AddVote() web.HandlerFunc {
 	return func(c *web.Context) error {
 		err := addOrRemove(c, func(post *entity.Post, user *entity.User) bus.Msg {
-			return &cmd.AddVote{Post: post, User: user}
+			return &cmd.AddVote{Post: post, User: user, VoteType: 1}
 		})
 
 		if err == nil {
@@ -448,33 +448,44 @@ func ToggleVote() web.HandlerFunc {
 			return c.NotFound()
 		}
 
+		// Parse requested vote type from body (default: 1 for upvote)
+		input := struct {
+			VoteType int `json:"voteType"`
+		}{VoteType: 1}
+		_ = c.Bind(&input)
+		if input.VoteType != 1 && input.VoteType != -1 {
+			input.VoteType = 1
+		}
+
 		listVotes := &query.ListPostVotes{PostID: getPost.Result.ID}
 		if err := bus.Dispatch(c, listVotes); err != nil {
 			return c.Failure(err)
 		}
 
-		hasVoted := false
+		currentVoteType := 0
 		for _, vote := range listVotes.Result {
 			if vote.User.ID == c.User().ID {
-				hasVoted = true
+				currentVoteType = vote.VoteType
 				break
 			}
 		}
 
-		if hasVoted {
+		if currentVoteType == input.VoteType {
+			// Same vote type - toggle off (remove vote)
 			err := bus.Dispatch(c, &cmd.RemoveVote{Post: getPost.Result, User: c.User()})
 			if err != nil {
 				return c.Failure(err)
 			}
-			return c.Ok(web.Map{"voted": false})
+			return c.Ok(web.Map{"voted": false, "voteType": 0})
 		}
 
-		err = bus.Dispatch(c, &cmd.AddVote{Post: getPost.Result, User: c.User()})
+		// Different or no vote - set the requested vote type
+		err = bus.Dispatch(c, &cmd.AddVote{Post: getPost.Result, User: c.User(), VoteType: input.VoteType})
 		if err != nil {
 			return c.Failure(err)
 		}
 		metrics.TotalVotes.Inc()
-		return c.Ok(web.Map{"voted": true})
+		return c.Ok(web.Map{"voted": true, "voteType": input.VoteType})
 	}
 }
 

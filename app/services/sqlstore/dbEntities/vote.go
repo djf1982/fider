@@ -17,11 +17,13 @@ type Vote struct {
 		AvatarBlobKey string `db:"avatar_bkey"`
 	} `db:"user"`
 	CreatedAt time.Time `db:"created_at"`
+	VoteType  int       `db:"vote_type"`
 }
 
 func (v *Vote) ToModel(ctx context.Context) *entity.Vote {
 	vote := &entity.Vote{
 		CreatedAt: v.CreatedAt,
+		VoteType:  v.VoteType,
 		User: &entity.VoteUser{
 			ID:        v.User.ID,
 			Name:      v.User.Name,

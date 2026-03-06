@@ -6,6 +6,7 @@ import { actions, classSet } from "@fider/services"
 import { Icon, SignInModal } from "@fider/components"
 import { useFider } from "@fider/hooks"
 import ChevronUp from "@fider/assets/images/chevron-up.svg"
+import ChevronDown from "@fider/assets/images/chevron-down.svg"
 
 export interface VoteCounterProps {
   post: Post
@@ -15,22 +16,24 @@ export interface VoteCounterProps {
 export const VoteCounter = (props: VoteCounterProps) => {
   const fider = useFider()
   const { size = "default" } = props
-  const [hasVoted, setHasVoted] = useState(props.post.hasVoted)
+  const [voteType, setVoteType] = useState(props.post.voteType || (props.post.hasVoted ? 1 : 0))
   const [votesCount, setVotesCount] = useState(props.post.votesCount)
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
 
-  const voteOrUndo = async () => {
+  const handleVote = async (requestedType: 1 | -1) => {
     if (!fider.session.isAuthenticated) {
       setIsSignInModalOpen(true)
       return
     }
 
-    const action = hasVoted ? actions.removeVote : actions.addVote
-
-    const response = await action(props.post.number)
+    const response = await actions.toggleVote(props.post.number, requestedType)
     if (response.ok) {
-      setVotesCount(votesCount + (hasVoted ? -1 : 1))
-      setHasVoted(!hasVoted)
+      const newVoteType = response.data.voteType
+      // Calculate count change: old contribution removed, new contribution added
+      const oldContribution = voteType
+      const newContribution = newVoteType
+      setVotesCount(votesCount - oldContribution + newContribution)
+      setVoteType(newVoteType)
     }
   }
 
@@ -39,31 +42,35 @@ export const VoteCounter = (props: VoteCounterProps) => {
   const status = PostStatus.Get(props.post.status)
   const isDisabled = status.closed || fider.isReadOnly
 
-  const className = classSet({
-    "c-vote-counter__button": true,
-    "c-vote-counter__button--voted": !status.closed && hasVoted,
-    "c-vote-counter__button--disabled": isDisabled,
-    "c-vote-counter__button--large": size === "large",
+  const containerClass = classSet({
+    "c-vote-counter": true,
+    "c-vote-counter--large": size === "large",
   })
 
-  const vote = (
-    <button className={className} onClick={voteOrUndo}>
-      {!hasVoted && <Icon sprite={ChevronUp} className="c-vote-counter__icon" />}
-      <span className="c-vote-counter__count">{votesCount}</span>
-    </button>
-  )
+  const upClass = classSet({
+    "c-vote-counter__up": true,
+    "c-vote-counter__up--active": voteType === 1,
+    "c-vote-counter__up--disabled": isDisabled,
+  })
 
-  const disabled = (
-    <button className={className}>
-      {!hasVoted && <Icon sprite={ChevronUp} className="c-vote-counter__icon" />}
-      <span className="c-vote-counter__count">{votesCount}</span>
-    </button>
-  )
+  const downClass = classSet({
+    "c-vote-counter__down": true,
+    "c-vote-counter__down--active": voteType === -1,
+    "c-vote-counter__down--disabled": isDisabled,
+  })
 
   return (
     <>
       <SignInModal isOpen={isSignInModalOpen} onClose={hideModal} />
-      <div className="c-vote-counter">{isDisabled ? disabled : vote}</div>
+      <div className={containerClass}>
+        <button className={upClass} onClick={() => !isDisabled && handleVote(1)} disabled={isDisabled}>
+          <Icon sprite={ChevronUp} className="c-vote-counter__icon" />
+        </button>
+        <span className="c-vote-counter__count">{votesCount}</span>
+        <button className={downClass} onClick={() => !isDisabled && handleVote(-1)} disabled={isDisabled}>
+          <Icon sprite={ChevronDown} className="c-vote-counter__icon" />
+        </button>
+      </div>
     </>
   )
 }
