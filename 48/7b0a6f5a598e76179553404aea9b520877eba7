@@ -1,0 +1,19 @@
+public/pages/Home/Home.page.scss
+  s_8d3c373819477f::t_f3e91ebdd95978 75-78,82-84,88-92,94,97-98,102-103,105,108,114-115,117-119
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "487b0a6f5a598e76179553404aea9b520877eba7",
+  "prompts": {},
+  "sessions": {
+    "s_8d3c373819477f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f215779d-8121-4b40-9140-bc061005f34b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
