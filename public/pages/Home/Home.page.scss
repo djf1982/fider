@@ -29,14 +29,15 @@
     }
 
     &__welcome-title {
+      font-family: $font-display;
       font-size: 32px;
-      font-weight: get("font.weight.xbold");
-      line-height: 1.2;
+      font-weight: get("font.weight.medium");
+      line-height: 1.1;
       color: var(--colors-gray-900);
-      letter-spacing: -0.5px;
+      letter-spacing: -0.015em;
 
       @include media("lg") {
-        font-size: 36px;
+        font-size: 40px;
       }
     }
 
@@ -56,21 +57,23 @@
       padding: spacing(5);
       background-color: var(--colors-white);
       border: 1px solid var(--colors-gray-200);
-      border-radius: get("border.radius.xlarge");
-      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+      border-radius: get("border.radius.large");
+      box-shadow: none;
       cursor: pointer;
-      transition: box-shadow 0.2s ease-in-out;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       font-size: get("font.size.lg");
       font-weight: get("font.weight.medium");
       color: var(--colors-gray-700);
       text-align: left;
 
       @include dark-mode {
-        background-color: var(--colors-gray-200);
+        background-color: var(--colors-gray-100);
       }
 
       &:hover {
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        transform: translateY(-1px);
+        border-color: var(--colors-gray-300);
+        box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06);
       }
 
       &:focus {

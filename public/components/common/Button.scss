@@ -34,25 +34,30 @@
   &--secondary {
     color: var(--colors-gray-900);
     background-color: var(--colors-white);
-    border: 1px solid var(--colors-gray-300);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--colors-gray-200);
+    box-shadow: none;
 
     &:hover {
       background-color: var(--colors-gray-50);
-      border-color: var(--colors-gray-400);
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+      border-color: var(--colors-gray-300);
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06);
     }
   }
 
+  // ScoutWorks dark CTA: ink-900 surface (matches the marketing site's
+  // default <Button> variant). Note: --colors-gray-900 is ink-900 after
+  // the palette remap; --colors-primary-base is reserved for links and
+  // smaller cobalt accents.
   &--primary {
     color: var(--colors-white);
-    background-color: var(--colors-primary-base);
-    border: 1px solid var(--colors-primary-base);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    background-color: var(--colors-gray-900);
+    border: 1px solid var(--colors-gray-900);
+    box-shadow: none;
 
     &:hover {
-      background-color: var(--colors-primary-dark);
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+      background-color: var(--colors-gray-800);
+      border-color: var(--colors-gray-800);
+      box-shadow: 0 2px 6px -2px rgba(15, 23, 42, 0.15);
     }
   }
 

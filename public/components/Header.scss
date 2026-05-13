@@ -1,8 +1,25 @@
 #c-header {
+  border-bottom: 1px solid var(--colors-gray-200);
+
   .c-header__container {
     @media (min-width: 1024px) {
       position: relative;
     }
+  }
+
+  .c-header__logo-link {
+    color: var(--colors-gray-900);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--colors-primary-base);
+    }
+  }
+
+  .c-header__wordmark {
+    display: inline-block;
+    height: 22px;
+    width: auto;
   }
 
   .c-header__moderation {
