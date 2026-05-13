@@ -1,0 +1,31 @@
+public/assets/styles/variables/_text.scss
+  s_8d3c373819477f::t_3942b4b4bcc662 1-6,8,14
+public/assets/styles/utility/text.scss
+  s_8d3c373819477f::t_7b8be725095749 13,16-18,22,25-26,34,36-38,42,46,50,54
+public/index.tsx
+  s_8d3c373819477f::t_35b7a09ea386d3 1-7
+public/assets/styles/reset.scss
+  s_8d3c373819477f::t_33cbc481caae82 71-72,74
+public/assets/styles/variables/_colors.scss
+  s_8d3c373819477f::t_c718b1985edfb0 1-11,14-25,52-62,77-79,82
+public/assets/styles/variables/_dark-colors.scss
+  s_8d3c373819477f::t_1db10da5624e25 1-5,8-17,29,41,44-53,65,68-70,72-73
+public/assets/styles/variables.scss
+  s_8d3c373819477f::t_9c71569541fc87 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "5c0c94f0c28267f06cb6753c8bda2685ded72a75",
+  "prompts": {},
+  "sessions": {
+    "s_8d3c373819477f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f215779d-8121-4b40-9140-bc061005f34b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
