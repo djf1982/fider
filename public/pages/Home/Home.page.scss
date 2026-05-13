@@ -72,25 +72,24 @@
       grid-column: span 2 / span 2;
     }
 
-    // Dark CTA — the marketing site's primary button pattern.
-    // The previous hairline-card treatment was indistinguishable from the
-    // post cards below; ink-900 + white text makes the affordance
-    // unambiguous.
+    // Dark CTA living inside the welcome card. Centered label + plus icon,
+    // pill-rounded corners, and a soft shadow so it reads as the obvious
+    // primary action — not as a search box or wide banner.
     &__add-idea-btn {
       width: 100%;
-      margin-bottom: spacing(6);
-      padding: spacing(4) spacing(5);
+      padding: spacing(2) spacing(5);
+      min-height: 44px;
       background-color: var(--colors-gray-900);
       border: 1px solid var(--colors-gray-900);
-      border-radius: get("border.radius.large");
-      box-shadow: none;
+      border-radius: 999px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
       cursor: pointer;
       transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease, transform 0.2s ease;
       font-family: $font-base;
       font-size: get("font.size.base");
       font-weight: get("font.weight.semibold");
       color: var(--colors-white);
-      text-align: left;
+      text-align: center;
       letter-spacing: -0.005em;
 
       @include dark-mode {
@@ -102,7 +101,7 @@
         background-color: var(--colors-gray-800);
         border-color: var(--colors-gray-800);
         transform: translateY(-1px);
-        box-shadow: 0 6px 16px -4px rgba(15, 23, 42, 0.22);
+        box-shadow: 0 8px 18px -6px rgba(15, 23, 42, 0.28);
       }
 
       &:focus-visible {
@@ -111,11 +110,9 @@
       }
     }
 
-    // White-filled plus glyph on the dark CTA — reads as a button affordance,
-    // not a decorative IconBadge.
     &__add-idea-icon {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       color: var(--colors-white);
       flex-shrink: 0;
     }
