@@ -5,35 +5,39 @@
   width: calc(100% - spacing(4));
 }
 
+// Filter / sort chips — monochrome pill style per WEBSITE-STYLE-GUIDE §2.5.
 .c-post-filter-btn,
 .c-post-sort-btn {
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  height: 40px;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  box-shadow: none;
+  height: 32px;
   color: var(--colors-gray-700);
-  font-weight: get("font.weight.semibold");
+  font-weight: get("font.weight.medium");
   font-size: get("font.size.xs");
   border: 1px solid var(--colors-gray-200);
   text-transform: uppercase;
-  background-color: var(--colors-white);
+  letter-spacing: 0.06em;
+  background-color: var(--colors-gray-50);
   padding-inline: spacing(3) spacing(2);
-  border-radius: sizing(2);
+  border-radius: get("border.radius.full");
 
   @include dark-mode {
-    background-color: var(--colors-gray-300);
+    background-color: var(--colors-gray-200);
     color: var(--colors-gray-800);
-    border-color: var(--colors-gray-400);
+    border-color: var(--colors-gray-300);
   }
 
   &:hover {
     background-color: var(--colors-white);
-    border-color: var(--colors-gray-300);
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    border-color: var(--colors-primary-base);
+    color: var(--colors-primary-dark);
   }
 }
 
-// Override parent dropdown handle focus to apply to children
+// Active state (when filters are applied) — handled by parent component
+// adding inline styles; the chip stays monochrome to keep the toolbar calm.
+
 .c-dropdown__handle:focus:not(.no-focus) {
   border-color: transparent !important;
   box-shadow: none !important;
@@ -41,6 +45,6 @@
   .c-post-filter-btn,
   .c-post-sort-btn {
     border-color: var(--colors-primary-base) !important;
-    box-shadow: 0 0 0 3px rgba(45, 87, 237, 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
   }
 }

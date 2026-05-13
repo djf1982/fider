@@ -1,10 +1,12 @@
 @import "~@fider/assets/styles/variables.scss";
 
 .c-share-feedback {
-  background-color: var(--colors-gray-200);
+  // Cool paper surface (matches the body bg) so the fullscreen takeover
+  // doesn't read as a stark grey slab when the form is short.
+  background-color: var(--colors-gray-100);
 
   @include dark-mode {
-    background-color: var(--colors-gray-100);
+    background-color: var(--colors-gray-50);
   }
 
   @include dark-mode {
@@ -21,19 +23,28 @@
     background-color: var(--colors-white);
 
     @include dark-mode {
-      background-color: var(--colors-gray-200);
+      background-color: var(--colors-gray-100);
     }
 
-    padding: spacing(6);
+    border: 1px solid var(--colors-gray-200);
+    padding: spacing(7);
     border-radius: get("border.radius.large");
     max-width: 720px;
     margin: 0 auto spacing(4);
     flex-shrink: 0;
+    box-shadow: 0 4px 20px -8px rgba(15, 23, 42, 0.08);
   }
 
+  // Anchor the editor card vertically so it doesn't sit lonely at the top
+  // of a tall fullscreen takeover (screenshot 2 issue).
   .c-modal-content {
     flex: 1;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: spacing(6);
+    padding-bottom: spacing(10);
   }
 
   // Success state styles

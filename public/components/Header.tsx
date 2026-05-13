@@ -44,7 +44,7 @@ export const Header = (props: HeaderProps) => {
     <div id="c-header" className="bg-white" {...(props.hasInert && { inert: "true" })}>
       <SignInModal isOpen={isSignInModalOpen} onClose={hideSignInModal} />
       <RSSModal isOpen={isRSSModalOpen} onClose={hideRSSModal} url={`${fider.settings.baseURL}/feed/global.atom`} />
-      <HStack className="c-menu p-4 w-full">
+      <HStack className="c-menu py-3 px-4 w-full">
         <div className="container c-header__container">
           <div className="flex flex-wrap flex-items-center gap-2">
             <div className="flex flex-x flex-items-center justify-between w-full">

@@ -1,33 +1,49 @@
 @use "~@fider/assets/styles/variables.scss" as *;
 
+// Monochrome tag chip — uppercase tracked, hairline border, ink dot.
+// The tag-solid SVG is re-coloured via CSS to ink-400 so admin-configured
+// tag colours stop fighting the editorial palette.
 .c-tag {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  font-size: 13px;
-  color: var(--colors-gray-900);
-  background-color: var(--colors-gray-200);
-  font-weight: 500;
-  border-radius: 5px;
-  // line-height: 18px;
-  padding: 6px 10px;
-  border: 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--colors-gray-600);
+  background-color: var(--colors-gray-50);
+  border: 1px solid var(--colors-gray-200);
+  font-weight: get("font.weight.medium");
+  border-radius: get("border.radius.full");
+  padding: 4px 10px;
+
+  // Override the inline style={{ color: '#xxxxxx' }} from ShowTag.tsx.
+  svg {
+    color: var(--colors-gray-400) !important;
+    width: 14px !important;
+    height: 14px !important;
+  }
 
   &[href] {
-    opacity: 0.9;
-    transition: opacity 0.1s;
+    transition: border-color 0.15s ease, color 0.15s ease;
 
     &:hover {
-      opacity: 1;
+      border-color: var(--colors-primary-base);
+      color: var(--colors-primary-dark);
+
+      svg {
+        color: var(--colors-primary-base) !important;
+      }
     }
   }
 
   span {
     margin-inline-end: 7px;
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     display: inline-block;
+    background-color: var(--colors-gray-400);
   }
 
   &--circular {

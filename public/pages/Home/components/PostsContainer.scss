@@ -1,38 +1,39 @@
 @use "~@fider/assets/styles/variables.scss" as *;
 
 .c-posts-container {
+  // Unified toolbar: filter chips on the left, search on the right,
+  // separated by a hairline divider below — matches the marketing site rhythm.
   &__header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    row-gap: spacing(4);
+    display: flex;
+    flex-direction: column;
+    gap: spacing(3);
     margin-bottom: spacing(6);
+    padding-bottom: spacing(4);
+    border-bottom: 1px solid var(--colors-gray-200);
+
+    @include media("md") {
+      flex-direction: row;
+      align-items: center;
+      gap: spacing(4);
+    }
   }
 
   &__filter-col {
-    grid-column: 1 / -1;
     display: flex;
     flex-direction: row;
-    & > * + * {
-      margin-inline-start: 0;
-    }
-
-    @include media("md") {
-      grid-column: span 3 / span 3;
-      flex-direction: row;
-      & > * + * {
-        margin-inline-start: spacing(1);
-      }
-    }
+    flex-wrap: wrap;
+    gap: spacing(2);
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   &__search-col {
-    grid-column: 4;
-    &:first-child {
-      grid-column: 1 / -1;
-    }
+    width: 100%;
 
-    @include media("sm") {
-      grid-column: 1 / -1;
+    @include media("md") {
+      width: 280px;
+      flex-shrink: 0;
     }
   }
 
@@ -66,13 +67,15 @@
     }
   }
 
+  // Sans-serif semibold for card titles per WEBSITE-STYLE-GUIDE §2.2.
+  // Newsreader is reserved for page heroes and pull-quotes, not card grids.
   &__post-title {
-    font-family: $font-display;
+    font-family: $font-base;
     font-size: get("font.size.lg");
-    font-weight: get("font.weight.medium");
+    font-weight: get("font.weight.semibold");
     color: var(--colors-gray-900);
-    line-height: 1.3;
-    letter-spacing: -0.005em;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
     transition: color 0.2s ease-in-out;
 
     .c-posts-container__post-link:hover & {
@@ -88,13 +91,16 @@
   }
 
   &__postdescription {
-    color: var(--colors-gray-800);
+    color: var(--colors-gray-700);
     font-size: get("font.size.base");
     line-height: 1.6;
+    margin-top: spacing(2);
   }
 
+  // Breathing room around the up/down/count column.
   &__post-vote {
     padding-top: spacing(1);
+    padding-right: spacing(2);
   }
 
   &__post-minimal {

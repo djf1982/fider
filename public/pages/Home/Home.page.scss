@@ -22,22 +22,49 @@
   }
 
   .p-home {
+    // Wrap the welcome blurb in an "about this board" card so it balances
+    // the right-hand post feed instead of floating in the gutter.
     &__welcome-col {
+      background-color: var(--colors-white);
+      border: 1px solid var(--colors-gray-200);
+      border-radius: get("border.radius.large");
+      padding: spacing(6);
+      align-self: start;
+
+      @include dark-mode {
+        background-color: var(--colors-gray-100);
+      }
+
       @include media("lg") {
-        padding-right: spacing(4);
+        margin-right: spacing(4);
       }
     }
 
     &__welcome-title {
       font-family: $font-display;
-      font-size: 32px;
+      font-size: 22px;
       font-weight: get("font.weight.medium");
-      line-height: 1.1;
+      line-height: 1.15;
       color: var(--colors-gray-900);
       letter-spacing: -0.015em;
 
       @include media("lg") {
-        font-size: 40px;
+        font-size: 26px;
+      }
+    }
+
+    // Tighten markdown body inside the welcome card.
+    &__welcome-body {
+      color: var(--colors-gray-600);
+      font-size: 15px;
+      line-height: 1.6;
+
+      h1, h2, h3 {
+        font-family: $font-display;
+        font-weight: get("font.weight.medium");
+        font-size: 18px;
+        letter-spacing: -0.01em;
+        margin-bottom: spacing(2);
       }
     }
 
@@ -82,11 +109,18 @@
       }
     }
 
+    // Wrap the + glyph in a hairline ring (IconBadge-style) so the CTA
+    // matches the marketing site's "compose"-style affordances.
     &__add-idea-icon {
-      width: 40px;
-      height: 40px;
-      color: var(--colors-primary-base);
+      width: 28px;
+      height: 28px;
+      color: var(--colors-gray-700);
       flex-shrink: 0;
+      padding: 4px;
+      border: 1px solid var(--colors-gray-200);
+      border-radius: get("border.radius.full");
+      background-color: var(--colors-white);
+      box-sizing: content-box;
     }
   }
 }

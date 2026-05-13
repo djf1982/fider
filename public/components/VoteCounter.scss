@@ -16,15 +16,15 @@
     height: sizing(8);
     cursor: pointer;
     border-radius: 8px;
-    border: 2px solid var(--colors-gray-200);
-    background-color: var(--colors-gray-50);
+    border: 1px solid var(--colors-gray-200);
+    background-color: var(--colors-white);
     color: var(--colors-gray-500);
-    transition: all 0.2s ease;
+    transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
 
     @include dark-mode {
-      background-color: var(--colors-gray-800);
-      border-color: var(--colors-gray-700);
-      color: var(--colors-gray-400);
+      background-color: var(--colors-gray-100);
+      border-color: var(--colors-gray-300);
+      color: var(--colors-gray-500);
     }
 
     &:hover:not(:disabled) {
@@ -33,7 +33,7 @@
       background-color: var(--colors-blue-50);
 
       @include dark-mode {
-        background-color: var(--colors-blue-900);
+        background-color: var(--colors-gray-50);
         border-color: var(--colors-blue-500);
         color: var(--colors-blue-300);
       }

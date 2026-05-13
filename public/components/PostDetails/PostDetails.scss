@@ -20,26 +20,30 @@
   &__post-card {
     background-color: var(--colors-white);
     @include dark-mode {
-      background-color: var(--colors-gray-200);
+      background-color: var(--colors-gray-100);
     }
-    border-radius: get("border.radius.xlarge");
+    border: 1px solid var(--colors-gray-200);
+    border-radius: get("border.radius.large");
     padding: spacing(7);
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    transition: box-shadow 0.2s ease-in-out;
+    box-shadow: none;
+    transition: border-color 0.2s ease;
   }
 
+  // Editorial page-hero title — Newsreader at medium weight.
   &__title {
-    font-size: 20px;
-    font-weight: get("font.weight.xbold");
-    line-height: 1.2;
+    font-family: $font-display;
+    font-size: 24px;
+    font-weight: get("font.weight.medium");
+    line-height: 1.1;
+    letter-spacing: -0.015em;
     color: var(--colors-gray-900);
 
     @include media("md") {
-      font-size: 32px;
+      font-size: 36px;
     }
 
     @include media("lg") {
-      font-size: 36px;
+      font-size: 44px;
     }
   }
 
@@ -64,7 +68,7 @@
   }
 
   &__actions {
-    border-top: 5px solid var(--colors-blue-500);
+    border-top: 1px solid var(--colors-gray-200);
     padding-top: spacing(4);
     margin-top: spacing(8);
 
@@ -86,17 +90,19 @@
     margin-bottom: spacing(2);
   }
 
+  // Monochrome count pill — same treatment as the marketing site card meta.
   &__discussion-count {
     width: 25px;
     height: 25px;
     margin-left: spacing(4);
     border-radius: 9999px;
     text-align: center;
-    background-color: var(--colors-blue-100);
-    color: var(--colors-blue-400);
+    background-color: var(--colors-gray-100);
+    color: var(--colors-gray-700);
+    font-weight: get("font.weight.semibold");
     @include dark-mode {
-      background-color: var(--colors-blue-500);
-      color: var(--colors-blue-800);
+      background-color: var(--colors-gray-200);
+      color: var(--colors-gray-800);
     }
   }
 
@@ -130,11 +136,12 @@
     > .card {
       background-color: var(--colors-white);
       @include dark-mode {
-        background-color: var(--colors-gray-200);
+        background-color: var(--colors-gray-100);
       }
-      border-radius: get("border.radius.xlarge");
+      border: 1px solid var(--colors-gray-200);
+      border-radius: get("border.radius.large");
       padding: spacing(6);
-      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+      box-shadow: none;
     }
 
     &__follow-button--follow,
@@ -165,27 +172,29 @@
   flex-grow: 1;
   background-color: var(--colors-white);
   @include dark-mode {
-    background-color: var(--colors-gray-200);
+    background-color: var(--colors-gray-100);
   }
-  border-radius: get("border.radius.xlarge");
+  border: 1px solid var(--colors-gray-200);
+  border-radius: get("border.radius.large");
   padding: spacing(6);
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  box-shadow: none;
 }
 
 .c-response-details {
   &__card {
     flex-grow: 1;
-    background-color: var(--colors-blue-50);
+    background-color: var(--colors-gray-100);
     @include dark-mode {
       background-color: var(--colors-gray-200);
     }
-    border-radius: get("border.radius.xlarge");
+    border: 1px solid var(--colors-gray-200);
+    border-radius: get("border.radius.large");
     padding: spacing(6);
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    box-shadow: none;
   }
 
   &__content {
-    color: var(--colors-gray-800);
+    color: var(--colors-gray-700);
     line-height: 1.6;
   }
 }

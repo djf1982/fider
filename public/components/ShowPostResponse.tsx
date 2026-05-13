@@ -60,22 +60,26 @@ export const ResponseDetails = (props: PostResponseProps): JSX.Element | null =>
   )
 }
 
+// Monochrome status lozenge. Completed / Declined keep a subtle hue
+// because they're terminal states that benefit from being scannable;
+// the rest are ink-on-paper so admin-coloured tags carry the only
+// colour signal in the post list.
 const getLozengeProps = (status: PostStatus): { icon: SpriteSymbol; bg: string; color: string; border: string } => {
   switch (status) {
     case PostStatus.Declined:
-      return { icon: HeroIconThumbsDown, bg: "bg-red-100", color: "text-red-800", border: "border-red-300" }
-    case PostStatus.Duplicate:
-      return { icon: HeroIconDuplicate, bg: "bg-yellow-100", color: "text-yellow-800", border: "border-yellow-400" }
+      return { icon: HeroIconThumbsDown, bg: "bg-red-50", color: "text-red-700", border: "border-red-200" }
     case PostStatus.Completed:
-      return { icon: HeroIconCheck, bg: "bg-green-100", color: "text-green-800", border: "border-green-400" }
+      return { icon: HeroIconCheck, bg: "bg-green-50", color: "text-green-700", border: "border-green-200" }
+    case PostStatus.Duplicate:
+      return { icon: HeroIconDuplicate, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
     case PostStatus.Planned:
-      return { icon: HeroIconThumbsUp, bg: "bg-blue-100", color: "text-blue-700", border: "border-blue-400" }
+      return { icon: HeroIconThumbsUp, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
     case PostStatus.Started:
-      return { icon: HeroIconSparkles, bg: "bg-blue-100", color: "text-blue-700", border: "border-blue-400" }
+      return { icon: HeroIconSparkles, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
     case PostStatus.Open:
-      return { icon: HeroIconLightBulb, bg: "bg-blue-100", color: "text-blue-700", border: "border-blue-400" }
+      return { icon: HeroIconLightBulb, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
     default:
-      return { icon: HeroIconSparkles, bg: "bg-blue-100", color: "text-blue-700", border: "border-blue-400" }
+      return { icon: HeroIconSparkles, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
   }
 }
 
