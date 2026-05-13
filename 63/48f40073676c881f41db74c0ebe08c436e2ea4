@@ -1,0 +1,51 @@
+public/components/common/Modal.scss
+  s_8d3c373819477f::t_b7fc55945aa0e8 103,110,112,114-118,121-122
+  s_8d3c373819477f::t_1ed85b40c5ecf8 17,19-21,31,34
+public/components/VoteCounter.scss
+  s_8d3c373819477f::t_ab23544a6a9fed 19-20,22,25-27,36
+public/pages/Home/Home.page.scss
+  s_8d3c373819477f::t_727bedbf843d27 45,47,52-67
+  s_8d3c373819477f::t_89b6b3a31542c7 112-113,115-117,119-123
+  s_8d3c373819477f::t_c4a4d2c701458c 25-26,28-37,39
+public/pages/Home/Home.page.tsx
+  s_8d3c373819477f::t_6fee506ccc6b44 226-227
+public/components/Header.tsx
+  s_8d3c373819477f::t_bc6c0c6490baa9 47
+public/pages/ShowPost/components/VotesPanel.scss
+  s_8d3c373819477f::t_bc1392cece5c5e 28,32-34,39-42,45,52-53,58-59,65,69
+public/components/PostDetails/PostDetails.scss
+  s_8d3c373819477f::t_33622bf236e031 139,141-142,144
+  s_8d3c373819477f::t_8c8fecf0fc1a3d 175,177-178,180
+  s_8d3c373819477f::t_0dc5f362ceab3b 186,190-191,193,197
+  s_8d3c373819477f::t_c0289e7114c7ec 93,100-102,104-105
+  s_8d3c373819477f::t_9098488e34f0c1 23,25-26,28-29,32,34-38,42,46
+  s_8d3c373819477f::t_d90c5eaa786a0d 71
+public/components/ShowTag.scss
+  s_8d3c373819477f::t_a0b5be38560e4d 3-5,10-25,28,31-36,42-43,46
+public/pages/Home/components/ShareFeedback.scss
+  s_8d3c373819477f::t_06d690db28265c 4-6,9,26,29-30,35,38-39,43-47
+public/pages/Home/components/PostsContainer.scss
+  s_8d3c373819477f::t_c2c31509f33985 70-71,73,75,77-78
+  s_8d3c373819477f::t_b25f1db8f2a6b3 94,97,100,103
+  s_8d3c373819477f::t_6b67f23b4dd69b 4-5,7-9,11-18,24-28,32,34-36
+public/components/ShowPostResponse.tsx
+  s_8d3c373819477f::t_9fd002995d709c 63-66,70,72-74,76,78,80,82
+public/pages/Home/components/PostFilter.scss
+  s_8d3c373819477f::t_674d9a92ef9b80 8,12-14,16,20-21,23,26,28,33-34,38-40,48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "6348f40073676c881f41db74c0ebe08c436e2ea4",
+  "prompts": {},
+  "sessions": {
+    "s_8d3c373819477f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f215779d-8121-4b40-9140-bc061005f34b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
