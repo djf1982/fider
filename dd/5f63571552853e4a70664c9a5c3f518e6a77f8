@@ -1,0 +1,23 @@
+public/pages/Home/Home.page.scss
+  s_db859780bb535d::t_b08bda2b340ab6 75-77,80-81,84-85,92,104,114-115
+public/pages/Home/Home.page.tsx
+  s_db859780bb535d::t_887535023c50a7 200,202-207
+  s_db859780bb535d::t_8bb294d5ff3be6 201
+  s_db859780bb535d::t_2530e8c8094922 193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "dd5f63571552853e4a70664c9a5c3f518e6a77f8",
+  "prompts": {},
+  "sessions": {
+    "s_db859780bb535d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0ee21280-69bc-43b4-9d49-a21a12a537ef",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
