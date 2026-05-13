@@ -1,0 +1,27 @@
+public/components/PostDetails/PostDetails.tsx
+  s_8d3c373819477f::t_804a4417864934 13
+public/components/Header.tsx
+  s_8d3c373819477f::t_4a4e63fc568001 2
+public/pages/Home/Home.page.tsx
+  s_8d3c373819477f::t_c6fc398e6a327a 8
+public/pages/ShowPost/ShowPost.page.tsx
+  s_8d3c373819477f::t_6cb18940340ee5 6
+views/base.html
+  s_8d3c373819477f::t_9afb34b8a5ad52 53-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "b6a9397a8b7e1bd2839dffacf21ba3d55ee82296",
+  "prompts": {},
+  "sessions": {
+    "s_8d3c373819477f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f215779d-8121-4b40-9140-bc061005f34b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
