@@ -108,15 +108,6 @@
       }
     }
 
-    &__powered-by-mobile {
-      display: block;
-      margin-top: spacing(6);
-
-      @include media("lg") {
-        display: none;
-      }
-    }
-
     &__action-col {
       display: flex;
       flex-direction: column;
