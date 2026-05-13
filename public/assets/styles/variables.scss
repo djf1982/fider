@@ -1,12 +1,5 @@
-@use "~inter-ui/default" with (
-  $inter-font-display: swap,
-  $inter-font-path: "~inter-ui/web"
-);
-
-@use "~inter-ui/variable" with (
-  $inter-font-display: swap,
-  $inter-font-path: "~inter-ui/variable"
-);
+// Fonts are imported in public/index.tsx via @fontsource-variable/* packages
+// (Hanken Grotesk + Newsreader). Inter is no longer used.
 
 @import "variables/_functions";
 @import "variables/_colors";
@@ -18,9 +11,6 @@
 
 /* @include get-theme("dark"); */
 $colors: $dark-colors;
-
-@include default.all;
-@include variable.all;
 
 $all: (
   colors: $colors,

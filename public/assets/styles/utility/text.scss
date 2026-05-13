@@ -10,16 +10,20 @@ pre:last-child {
 }
 
 .text-large {
+  font-family: $font-display;
   font-size: get("font.size.2xl");
   color: var(--colors-gray-900);
-  font-weight: get("font.weight.bold");
-  letter-spacing: -1px;
+  font-weight: get("font.weight.medium");
+  letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 
 .text-display2 {
+  font-family: $font-display;
   font-size: get("font.size.xl");
   font-weight: get("font.weight.medium");
-  letter-spacing: -1px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
 .header-emphasis {
@@ -27,20 +31,27 @@ pre:last-child {
 }
 
 .text-display {
+  font-family: $font-display;
   font-size: get("font.size.3xl");
-  font-weight: get("font.weight.xbold");
+  font-weight: get("font.weight.medium");
+  letter-spacing: -0.015em;
+  line-height: 1.1;
 }
 
 .text-header {
+  font-family: $font-display;
   font-size: get("font.size.xl");
   color: var(--colors-gray-900);
   font-weight: get("font.weight.medium");
+  letter-spacing: -0.01em;
 }
 
 .text-title {
+  font-family: $font-display;
   font-size: get("font.size.lg");
   color: var(--colors-gray-900);
   font-weight: get("font.weight.medium");
+  letter-spacing: -0.005em;
 }
 
 .text-subtitle {

@@ -4,6 +4,8 @@
   "repository": "https://github.com/getfider/fider",
   "private": true,
   "dependencies": {
+    "@fontsource-variable/hanken-grotesk": "^5.2.8",
+    "@fontsource-variable/newsreader": "^5.2.10",
     "@lingui/format-json": "^5.1.2",
     "@lingui/react": "^5.1.2",
     "@tiptap/extension-image": "^2.22.3",

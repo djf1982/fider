@@ -1,15 +1,28 @@
+// ScoutWorks editorial palette.
+// Keys are preserved (gray / blue / primary / etc.) so every existing
+// utility class (`text-gray-700`, `bg-blue-500`, `border-gray-200`) and
+// every consumer of `var(--colors-gray-N)` reskins automatically.
+//
+// gray -> paper / ink ramp (cool blue-grey surfaces + cool slate text)
+// blue -> cobalt (confident editorial brand blue)
+// primary -> cobalt (used by .c-button--primary, text-link, etc.)
+//
+// See WEBSITE-STYLE-GUIDE.md in scoutworks_website for the source of truth.
+
 $light-colors: (
   "gray": (
-    "100": #fcfafa,
-    "200": #eeebeb,
-    "300": #e0dcdd,
-    "400": #d2cdcf,
-    "500": #c4bec0,
-    "600": #9d9598,
-    "700": #756e71,
-    "800": #4e474b,
-    "900": #262225,
-    "50": #f9fafb,
+    // light end -> paper
+    "50":  #F8FAFC, // paper-50 (page background)
+    "100": #F1F5F9, // paper-100 (section surface)
+    "200": #E2E8F0, // paper-200 / ink-200 hairline border
+    "300": #CBD5E1, // ink-300 hover border
+    // dark end -> ink
+    "400": #94A3B8, // ink-400 (meta / micro)
+    "500": #64748B, // ink-500 (muted body)
+    "600": #475569, // ink-600
+    "700": #334155, // ink-700 (default body text)
+    "800": #1E293B, // ink-800
+    "900": #0F172A, // ink-900 (strongest text / dark CTA)
   ),
   "green": (
     "900": #14532d,
@@ -20,7 +33,6 @@ $light-colors: (
     "400": #4ade80,
     "300": #86efac,
     "200": #bbf7d0,
-
     "100": #dcfce7,
     "50": #f0fdf4,
   ),
@@ -37,16 +49,17 @@ $light-colors: (
     "50": #fffbeb,
   ),
   "blue": (
-    "100": #f2f2ff,
-    "200": #c2c4ff,
-    "300": #909bfd,
-    "400": #5e76f7,
-    "500": #2d57ed,
-    "600": #0f3ebb,
-    "700": #03308a,
-    "800": #002358,
-    "900": #001126,
-    "50": #f0f9ff,
+    // Cobalt ramp. Light → dark.
+    "50":  #EFF6FF,
+    "100": #DBEAFE,
+    "200": #BFDBFE,
+    "300": #93C5FD,
+    "400": #60A5FA,
+    "500": #2563EB, // ScoutWorks cobalt-500 (brand)
+    "600": #1D4ED8, // cobalt-600 (link / CTA text on light)
+    "700": #1E40AF, // cobalt-700 (link hover)
+    "800": #1E3A8A,
+    "900": #172554,
   ),
   "red": (
     "900": #7f1d1d,
@@ -61,10 +74,10 @@ $light-colors: (
     "50": #fef2f2,
   ),
   "primary": (
-    "light": var(--primary-color-light, #c2c4ff),
-    "base": var(--primary-color, #2d57ed),
-    "dark": var(--primary-color-dark, #03308a),
+    "light": var(--primary-color-light, #93B4FB),
+    "base":  var(--primary-color,        #2563EB),
+    "dark":  var(--primary-color-dark,   #1E40AF),
   ),
   "white": #fff,
-  "black": #262225,
+  "black": #0F172A,
 );

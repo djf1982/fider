@@ -1,3 +1,10 @@
+// ScoutWorks editorial fonts. Self-hosted (CSP-safe).
+// `index.css` gives us the standard wght axis; `opsz.css` adds the optical-
+// size axis so display headlines pick up the editorial form.
+import "@fontsource-variable/hanken-grotesk/index.css"
+import "@fontsource-variable/newsreader/index.css"
+import "@fontsource-variable/newsreader/opsz.css"
+
 import "@fider/assets/styles/index.scss"
 
 import React, { Suspense } from "react"
