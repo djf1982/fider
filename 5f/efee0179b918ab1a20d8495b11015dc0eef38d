@@ -1,0 +1,19 @@
+app/models/entity/linear.go
+  s_e69ae83b491859::t_a64554459becbc 33-35,43-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "5fefee0179b918ab1a20d8495b11015dc0eef38d",
+  "prompts": {},
+  "sessions": {
+    "s_e69ae83b491859": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da42c5bb-0156-4af5-8102-02dff6988f8d",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
