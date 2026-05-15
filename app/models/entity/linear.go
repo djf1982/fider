@@ -30,9 +30,9 @@ type LinearIntegration struct {
 	ID            int                 `json:"id" db:"id"`
 	TenantID      int                 `json:"-" db:"tenant_id"`
 	APIKey        string              `json:"-" db:"api_key"`
-	TeamID        string              `json:"team_id" db:"team_id"`
-	IsEnabled     bool                `json:"is_enabled" db:"is_enabled"`
-	StatusMapping LinearStatusMapping `json:"status_mapping" db:"status_mapping"`
+	TeamID        string              `json:"teamId" db:"team_id"`
+	IsEnabled     bool                `json:"isEnabled" db:"is_enabled"`
+	StatusMapping LinearStatusMapping `json:"statusMapping" db:"status_mapping"`
 	WebhookSecret string              `json:"-" db:"webhook_secret"`
 }
 
@@ -40,8 +40,8 @@ type LinearIntegration struct {
 type PostLinearIssue struct {
 	ID                    int    `json:"id" db:"id"`
 	TenantID              int    `json:"-" db:"tenant_id"`
-	PostID                int    `json:"post_id" db:"post_id"`
-	LinearIssueID         string `json:"linear_issue_id" db:"linear_issue_id"`
-	LinearIssueIdentifier string `json:"linear_issue_identifier" db:"linear_issue_identifier"`
-	LinearIssueURL        string `json:"linear_issue_url" db:"linear_issue_url"`
+	PostID                int    `json:"postID" db:"post_id"`
+	LinearIssueID         string `json:"linearIssueID" db:"linear_issue_id"`
+	LinearIssueIdentifier string `json:"linearIssueIdentifier" db:"linear_issue_identifier"`
+	LinearIssueURL        string `json:"linearIssueURL" db:"linear_issue_url"`
 }
