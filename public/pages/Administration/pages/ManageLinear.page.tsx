@@ -34,9 +34,10 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
   const [teamId, setTeamId] = useState<string>(existing?.teamId || "")
   const [isEnabled, setIsEnabled] = useState<boolean>(existing?.isEnabled || false)
   const [webhookSecret, setWebhookSecret] = useState<string>("")
-  const [rows, setRows] = useState<StatusMappingRow[]>(
-    toRows(existing?.statusMapping).length > 0 ? toRows(existing.statusMapping) : [{ linearStateId: "", fiderStatus: "started" }]
-  )
+  const [rows, setRows] = useState<StatusMappingRow[]>(() => {
+    const initial = toRows(existing?.statusMapping)
+    return initial.length > 0 ? initial : [{ linearStateId: "", fiderStatus: "started" }]
+  })
   const [error, setError] = useState<Failure | undefined>(undefined)
 
   const updateRow = (index: number, patch: Partial<StatusMappingRow>) => {
