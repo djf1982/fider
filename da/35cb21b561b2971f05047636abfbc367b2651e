@@ -1,0 +1,62 @@
+app/services/sqlstore/postgres/linear.go
+  s_67a9f274f5d7d9::t_4638645f641608 1-208
+app/handlers/apiv1/post.go
+  s_67a9f274f5d7d9::t_c3eb7eb75c61e5 340
+  s_67a9f274f5d7d9::t_0185cd0652cc41 102
+app/cmd/server.go
+  s_67a9f274f5d7d9::t_74befbe737f123 27
+app/tasks/linear.go
+  s_67a9f274f5d7d9::t_d2af2ec88a2528 1-30
+app/models/cmd/linear.go
+  s_67a9f274f5d7d9::t_e332f0f71d6113 1-44
+app/handlers/webhooks/linear.go
+  s_67a9f274f5d7d9::t_81c4fbffabea70 1-117
+public/services/actions/index.ts
+  s_67a9f274f5d7d9::t_2a2af695391a8a 9
+app/actions/linear.go
+  s_67a9f274f5d7d9::t_34656b12428890 1-24,29-46
+  s_67a9f274f5d7d9::t_bf8181a04697d0 25-28
+migrations/202605151200_add_linear_integration.sql
+  s_67a9f274f5d7d9::t_6bd1d60a6e0cc9 1-32
+app/models/query/linear.go
+  s_67a9f274f5d7d9::t_28e51a013ca564 1-31
+public/pages/Administration/components/SideMenu.tsx
+  s_67a9f274f5d7d9::t_a23882ce0aac03 54
+app/cmd/routes.go
+  s_67a9f274f5d7d9::t_229130a43fc85a 78
+  s_67a9f274f5d7d9::t_be2a66cf7e839c 181-183
+public/services/actions/linear.ts
+  s_67a9f274f5d7d9::t_cab271cbbb70fd 1-17
+app/handlers/linear.go
+  s_67a9f274f5d7d9::t_c09c541428826e 1-53,70,72-74,76-92
+  s_67a9f274f5d7d9::t_6905cc1c21136a 54-69,71,75
+app/models/entity/linear.go
+  s_67a9f274f5d7d9::t_64e7dc9896d0ba 1-47
+app/services/linear/linear.go
+  s_67a9f274f5d7d9::t_1e24a9aa1b93e6 91
+  s_67a9f274f5d7d9::t_a96461d10df3c3 141-142
+  s_67a9f274f5d7d9::t_56a20c24648013 99
+  s_67a9f274f5d7d9::t_081e16739558c1 1-90,92-98,100-140,143-231
+app/services/sqlstore/postgres/postgres.go
+  s_67a9f274f5d7d9::t_902c7781774e24 132-139
+public/pages/Administration/pages/ManageLinear.page.tsx
+  s_67a9f274f5d7d9::t_ea5873b0028f06 88
+  s_67a9f274f5d7d9::t_523434c92cd65c 110
+  s_67a9f274f5d7d9::t_7c85b8de887704 1-87,89-109,111-181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "da35cb21b561b2971f05047636abfbc367b2651e",
+  "prompts": {},
+  "sessions": {
+    "s_67a9f274f5d7d9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2ddcc284-dd1d-442d-9c18-346abd649e49",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
