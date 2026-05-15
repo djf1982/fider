@@ -1,0 +1,21 @@
+app/handlers/webhooks/linear.go
+  s_e69ae83b491859::t_7dac4dae206d58 128-143
+  s_e69ae83b491859::t_59e268b6f00f04 8
+  s_e69ae83b491859::t_d153200bd6f7ca 102-110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "84cd02e303583930ca6740501987e0ed68315ab9",
+  "prompts": {},
+  "sessions": {
+    "s_e69ae83b491859": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da42c5bb-0156-4af5-8102-02dff6988f8d",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
