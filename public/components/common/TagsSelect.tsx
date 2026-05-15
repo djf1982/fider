@@ -123,7 +123,7 @@ export const TagsSelect = (props: TagsSelectProps) => {
     <div className="c-tags-select__container" ref={dropdownRef} onKeyDown={handleEsc} onClick={props.canEdit && !isEditing ? onSubtitleClick : undefined}>
       <div className="c-tags-select__selected-container">
         {props.selected.length === 0 && props.canEdit && (
-          <Button className="text-gray-600" variant={"link"} size={"no-padding"} onClick={onSubtitleClick}>
+          <Button className="text-gray-400" variant={"link"} size={"no-padding"} onClick={onSubtitleClick}>
             <Trans id="label.addtags">Add tags...</Trans>
           </Button>
         )}
