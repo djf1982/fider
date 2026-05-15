@@ -3,6 +3,7 @@ import { http, Result } from "@fider/services"
 export interface LinearIntegrationData {
   apiKey: string
   teamId: string
+  labelID: string
   isEnabled: boolean
   statusMapping: { [linearStateId: string]: string }
   webhookSecret: string

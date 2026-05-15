@@ -16,6 +16,7 @@ type dbLinearIntegration struct {
 	TenantID      int                        `db:"tenant_id"`
 	APIKey        string                     `db:"api_key"`
 	TeamID        string                     `db:"team_id"`
+	LabelID       string                     `db:"label_id"`
 	IsEnabled     bool                       `db:"is_enabled"`
 	StatusMapping entity.LinearStatusMapping `db:"status_mapping"`
 	WebhookSecret string                     `db:"webhook_secret"`
@@ -31,6 +32,7 @@ func (m *dbLinearIntegration) toModel() *entity.LinearIntegration {
 		TenantID:      m.TenantID,
 		APIKey:        m.APIKey,
 		TeamID:        m.TeamID,
+		LabelID:       m.LabelID,
 		IsEnabled:     m.IsEnabled,
 		StatusMapping: mapping,
 		WebhookSecret: m.WebhookSecret,
@@ -64,7 +66,7 @@ func getLinearIntegration(ctx context.Context, q *query.GetLinearIntegration) er
 		}
 		row := &dbLinearIntegration{}
 		err := trx.Get(row, `
-			SELECT id, tenant_id, api_key, team_id, is_enabled, status_mapping, webhook_secret
+			SELECT id, tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret
 			FROM tenant_linear_integrations
 			WHERE tenant_id = $1
 		`, tenant.ID)
@@ -86,7 +88,7 @@ func getLinearIntegrationByWebhookSecret(ctx context.Context, q *query.GetLinear
 	}
 	row := &dbLinearIntegration{}
 	err := trx.Get(row, `
-		SELECT id, tenant_id, api_key, team_id, is_enabled, status_mapping, webhook_secret
+		SELECT id, tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret
 		FROM tenant_linear_integrations
 		WHERE webhook_secret = $1
 	`, q.WebhookSecret)
@@ -108,17 +110,18 @@ func saveLinearIntegration(ctx context.Context, c *cmd.SaveLinearIntegration) er
 		}
 		_, err := trx.Execute(`
 			INSERT INTO tenant_linear_integrations
-				(tenant_id, api_key, team_id, is_enabled, status_mapping, webhook_secret, created_at, updated_at)
-			VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+				(tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret, created_at, updated_at)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
 			ON CONFLICT (tenant_id)
 			DO UPDATE SET
 				api_key = EXCLUDED.api_key,
 				team_id = EXCLUDED.team_id,
+				label_id = EXCLUDED.label_id,
 				is_enabled = EXCLUDED.is_enabled,
 				status_mapping = EXCLUDED.status_mapping,
 				webhook_secret = EXCLUDED.webhook_secret,
 				updated_at = NOW()
-		`, tenant.ID, c.APIKey, c.TeamID, c.IsEnabled, mapping, c.WebhookSecret)
+		`, tenant.ID, c.APIKey, c.TeamID, c.LabelID, c.IsEnabled, mapping, c.WebhookSecret)
 		if err != nil {
 			return errors.Wrap(err, "failed to save linear integration")
 		}

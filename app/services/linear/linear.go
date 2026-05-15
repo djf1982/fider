@@ -107,8 +107,8 @@ func doGraphQL(ctx context.Context, apiKey string, req graphqlRequest, out inter
 }
 
 const issueCreateMutation = `
-mutation IssueCreate($teamId: String!, $title: String!, $description: String!) {
-  issueCreate(input: { teamId: $teamId, title: $title, description: $description }) {
+mutation IssueCreate($teamId: String!, $title: String!, $description: String!, $labelIds: [String!]) {
+  issueCreate(input: { teamId: $teamId, title: $title, description: $description, labelIds: $labelIds }) {
     success
     issue { id identifier url }
   }
@@ -141,14 +141,19 @@ func syncPostToLinear(ctx context.Context, c *cmd.SyncPostToLinear) error {
 	postURL := web.BaseURL(ctx) + fmt.Sprintf("/posts/%d/%s", c.Post.Number, c.Post.Slug)
 	description := fmt.Sprintf("%s\n\n---\nFider post: %s", c.Post.Description, postURL)
 
+	variables := map[string]interface{}{
+		"teamId":      integration.Result.TeamID,
+		"title":       c.Post.Title,
+		"description": description,
+	}
+	if integration.Result.LabelID != "" {
+		variables["labelIds"] = []string{integration.Result.LabelID}
+	}
+
 	out := &issueCreateData{}
 	err := doGraphQL(ctx, integration.Result.APIKey, graphqlRequest{
-		Query: issueCreateMutation,
-		Variables: map[string]interface{}{
-			"teamId":      integration.Result.TeamID,
-			"title":       c.Post.Title,
-			"description": description,
-		},
+		Query:     issueCreateMutation,
+		Variables: variables,
 	}, out)
 	if err != nil {
 		return err

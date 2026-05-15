@@ -9,6 +9,7 @@ import (
 type SaveLinearIntegration struct {
 	APIKey        string
 	TeamID        string
+	LabelID       string
 	IsEnabled     bool
 	StatusMapping entity.LinearStatusMapping
 	WebhookSecret string

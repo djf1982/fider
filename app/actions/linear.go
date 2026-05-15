@@ -11,6 +11,7 @@ import (
 type SaveLinearIntegration struct {
 	APIKey        string                     `json:"apiKey"`
 	TeamID        string                     `json:"teamId"`
+	LabelID       string                     `json:"labelID"`
 	IsEnabled     bool                       `json:"isEnabled"`
 	StatusMapping entity.LinearStatusMapping `json:"statusMapping"`
 	WebhookSecret string                     `json:"webhookSecret"`
@@ -32,6 +33,9 @@ func (a *SaveLinearIntegration) Validate(_ context.Context, _ *entity.User) *val
 	}
 	if len(a.TeamID) > 100 {
 		result.AddFieldFailure("teamId", "Team ID is too long.")
+	}
+	if len(a.LabelID) > 100 {
+		result.AddFieldFailure("labelID", "Label ID is too long.")
 	}
 	if len(a.WebhookSecret) > 200 {
 		result.AddFieldFailure("webhookSecret", "Webhook secret is too long.")

@@ -31,6 +31,7 @@ type LinearIntegration struct {
 	TenantID      int                 `json:"-" db:"tenant_id"`
 	APIKey        string              `json:"-" db:"api_key"`
 	TeamID        string              `json:"teamId" db:"team_id"`
+	LabelID       string              `json:"labelID" db:"label_id"`
 	IsEnabled     bool                `json:"isEnabled" db:"is_enabled"`
 	StatusMapping LinearStatusMapping `json:"statusMapping" db:"status_mapping"`
 	WebhookSecret string              `json:"-" db:"webhook_secret"`

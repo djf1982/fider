@@ -70,6 +70,7 @@ func SaveLinearIntegration() web.HandlerFunc {
 		if err := bus.Dispatch(c, &cmd.SaveLinearIntegration{
 			APIKey:        apiKey,
 			TeamID:        action.TeamID,
+			LabelID:       action.LabelID,
 			IsEnabled:     action.IsEnabled,
 			StatusMapping: mapping,
 			WebhookSecret: webhookSecret,

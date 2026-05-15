@@ -8,6 +8,7 @@ import { VStack } from "@fider/components/layout"
 interface LinearIntegration {
   id?: number
   teamId: string
+  labelID: string
   isEnabled: boolean
   statusMapping: { [linearStateId: string]: string }
 }
@@ -32,6 +33,7 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
   const existing = props.integration
   const [apiKey, setApiKey] = useState<string>("")
   const [teamId, setTeamId] = useState<string>(existing?.teamId || "")
+  const [labelID, setLabelID] = useState<string>(existing?.labelID || "")
   const [isEnabled, setIsEnabled] = useState<boolean>(existing?.isEnabled || false)
   const [webhookSecret, setWebhookSecret] = useState<string>("")
   const [rows, setRows] = useState<StatusMappingRow[]>(() => {
@@ -58,6 +60,7 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
     const result = await actions.saveLinearIntegration({
       apiKey,
       teamId,
+      labelID,
       isEnabled,
       statusMapping,
       webhookSecret,
@@ -109,6 +112,13 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
           <Input field="teamId" label="Linear Team ID" value={teamId} onChange={setTeamId} placeholder="e.g. a1b2c3d4-e5f6-...">
             <p className="text-muted mt-1">
               The UUID of the Linear team where new issues should be created. Find it in your Linear team&apos;s URL or via the Linear API.
+            </p>
+          </Input>
+
+          <Input field="labelID" label="Default Linear Label ID" value={labelID} onChange={setLabelID} placeholder="Optional — e.g. a1b2c3d4-e5f6-...">
+            <p className="text-muted mt-1">
+              Optional. If set, every new Linear issue created from a Fider idea will be tagged with this label. Provide the UUID of an existing label in your
+              Linear workspace.
             </p>
           </Input>
 
