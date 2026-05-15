@@ -5,6 +5,7 @@ import (
 
 	"github.com/getfider/fider/app/models/cmd"
 	"github.com/getfider/fider/app/models/dto"
+	"github.com/getfider/fider/app/models/entity"
 	"github.com/getfider/fider/app/models/enum"
 	"github.com/getfider/fider/app/models/query"
 	"github.com/getfider/fider/app/pkg/bus"
@@ -98,6 +99,15 @@ func IncomingLinearWebhook() web.HandlerFunc {
 			return c.Ok(web.Map{})
 		}
 
+		// Webhook requests have no authenticated user; setPostResponse writes
+		// response_user_id and requires one. Attribute the change to any tenant
+		// administrator so the audit trail and UI rendering stay consistent.
+		actor := firstAdministrator(c)
+		if actor == nil {
+			return c.Failure(errors.New("no administrator available to attribute Linear status change"))
+		}
+		c.SetUser(actor)
+
 		setResponse := &cmd.SetPostResponse{
 			Post:   getPost.Result,
 			Status: newStatus,
@@ -114,4 +124,20 @@ func IncomingLinearWebhook() web.HandlerFunc {
 
 		return c.Ok(web.Map{})
 	}
+}
+
+// firstAdministrator returns any active administrator for the current tenant,
+// or nil if none exist. Used to attribute system-initiated status changes
+// (e.g. Linear webhook) to a real user so audit metadata is never NULL.
+func firstAdministrator(c *web.Context) *entity.User {
+	all := &query.GetAllUsers{}
+	if err := bus.Dispatch(c, all); err != nil {
+		return nil
+	}
+	for _, u := range all.Result {
+		if u.Role == enum.RoleAdministrator && u.Status == enum.UserActive {
+			return u
+		}
+	}
+	return nil
 }
