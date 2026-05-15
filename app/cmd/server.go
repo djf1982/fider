@@ -24,6 +24,7 @@ import (
 	_ "github.com/getfider/fider/app/services/email/mailgun"
 	_ "github.com/getfider/fider/app/services/email/smtp"
 	_ "github.com/getfider/fider/app/services/httpclient"
+	_ "github.com/getfider/fider/app/services/linear"
 	_ "github.com/getfider/fider/app/services/log/console"
 	_ "github.com/getfider/fider/app/services/log/file"
 	_ "github.com/getfider/fider/app/services/log/sql"

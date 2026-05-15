@@ -99,6 +99,7 @@ func CreatePost() web.HandlerFunc {
 		}
 
 		c.Enqueue(tasks.NotifyAboutNewPost(newPost.Result))
+		c.Enqueue(tasks.SyncNewPostToLinear(newPost.Result))
 
 		metrics.TotalPosts.Inc()
 		return c.Ok(web.Map{
@@ -336,6 +337,7 @@ func PostComment() web.HandlerFunc {
 		}
 
 		c.Enqueue(tasks.NotifyAboutNewComment(addNewComment.Result, getPost.Result))
+		c.Enqueue(tasks.SyncNewCommentToLinear(getPost.Result, addNewComment.Result))
 
 		metrics.TotalComments.Inc()
 		return c.Ok(web.Map{

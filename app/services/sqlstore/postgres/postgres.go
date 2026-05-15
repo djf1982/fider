@@ -129,6 +129,14 @@ func (s Service) Init() {
 	bus.AddHandler(getTenantProviderStatus)
 	bus.AddHandler(setTenantProviderStatus)
 
+	bus.AddHandler(getLinearIntegration)
+	bus.AddHandler(getLinearIntegrationByWebhookSecret)
+	bus.AddHandler(saveLinearIntegration)
+	bus.AddHandler(deleteLinearIntegration)
+	bus.AddHandler(saveLinearIssueMapping)
+	bus.AddHandler(getLinearIssueForPost)
+	bus.AddHandler(getPostByLinearIssueID)
+
 	bus.AddHandler(getWebhook)
 	bus.AddHandler(listAllWebhooks)
 	bus.AddHandler(listAllWebhooksByType)

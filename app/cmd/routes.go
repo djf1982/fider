@@ -75,6 +75,7 @@ func routes(r *web.Engine) *web.Engine {
 	stripeWh := r.Group()
 	{
 		stripeWh.Post("/webhooks/stripe", webhooks.IncomingStripeWebhook())
+		stripeWh.Post("/webhooks/linear", webhooks.IncomingLinearWebhook())
 	}
 
 	r.Use(middlewares.CSRF())
@@ -177,6 +178,9 @@ func routes(r *web.Engine) *web.Engine {
 		ui.Get("/admin/export/posts.csv", handlers.ExportPostsToCSV())
 		ui.Get("/admin/export/backup.zip", handlers.ExportBackupZip())
 		ui.Get("/admin/webhooks", handlers.ManageWebhooks())
+		ui.Get("/admin/linear", handlers.ManageLinear())
+		ui.Post("/_api/admin/linear", handlers.SaveLinearIntegration())
+		ui.Delete("/_api/admin/linear", handlers.DeleteLinearIntegration())
 		ui.Post("/_api/admin/webhook", handlers.CreateWebhook())
 		ui.Put("/_api/admin/webhook/:id", handlers.UpdateWebhook())
 		ui.Delete("/_api/admin/webhook/:id", handlers.DeleteWebhook())
