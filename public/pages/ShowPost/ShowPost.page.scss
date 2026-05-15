@@ -19,6 +19,19 @@
     }
   }
 
+  .p-show-post__back-link {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: spacing(4);
+    color: var(--colors-gray-600);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--colors-gray-900);
+      text-decoration: none;
+    }
+  }
+
   .p-show-post {
     &__main-col {
       display: flex;

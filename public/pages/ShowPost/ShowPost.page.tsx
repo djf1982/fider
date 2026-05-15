@@ -3,8 +3,11 @@ import "./ShowPost.page.scss"
 import React from "react"
 
 import { Comment, Post, Tag, Vote } from "@fider/models"
-import { Header } from "@fider/components"
+import { Header, Icon } from "@fider/components"
 import { PostDetails } from "@fider/components/PostDetails"
+import { HStack } from "@fider/components/layout"
+import { Trans } from "@lingui/react/macro"
+import IconArrowLeft from "@fider/assets/images/heroicons-arrowleft.svg"
 
 interface ShowPostPageProps {
   post: Post
@@ -20,6 +23,14 @@ export default function ShowPostPage(props: ShowPostPageProps) {
     <>
       <Header />
       <div id="p-show-post" className="page container">
+        <a href="/" className="p-show-post__back-link">
+          <HStack spacing={2} align="center">
+            <Icon sprite={IconArrowLeft} className="h-4 text-gray-500" />
+            <span className="text-sm text-gray-600">
+              <Trans id="postdetails.backtoall">Back to all suggestions</Trans>
+            </span>
+          </HStack>
+        </a>
         <PostDetails
           postNumber={props.post.number}
           initialPost={props.post}
