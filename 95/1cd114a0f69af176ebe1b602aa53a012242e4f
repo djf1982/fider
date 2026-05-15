@@ -1,0 +1,24 @@
+public/components/common/form/Input.scss
+  s_cd5eeb41889ce2::t_8066d3eace9cab 31
+public/components/common/form/CommentEditor.scss
+  s_cd5eeb41889ce2::t_0781b322c6f361 155
+  s_cd5eeb41889ce2::t_4005833d46043b 103
+public/components/common/TagsSelect.tsx
+  s_cd5eeb41889ce2::t_89c9db42a8852c 126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "951cd114a0f69af176ebe1b602aa53a012242e4f",
+  "prompts": {},
+  "sessions": {
+    "s_cd5eeb41889ce2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "751ef9be-1b1e-4b13-8d00-2329cc20f71c",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
