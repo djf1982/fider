@@ -1,0 +1,43 @@
+app/services/sqlstore/postgres/linear.go
+  s_e69ae83b491859::t_c08ea317b32ca1 113-114,119,124
+  s_e69ae83b491859::t_a39fb379c2b6f0 19,35
+  s_e69ae83b491859::t_1f6d25c9ec3720 69
+  s_e69ae83b491859::t_4ae33cc4662f40 91
+app/actions/linear.go
+  s_e69ae83b491859::t_fca484ad8c8b9f 14
+  s_e69ae83b491859::t_8d398864e88152 37-39
+public/services/actions/linear.ts
+  s_e69ae83b491859::t_5b51227c81d17b 6
+app/models/cmd/linear.go
+  s_e69ae83b491859::t_a383388e376eac 12
+app/services/linear/linear.go
+  s_e69ae83b491859::t_3aa83a37b7f740 110-111
+  s_e69ae83b491859::t_46a0d4edd5acc5 144-152,155-156
+app/handlers/linear.go
+  s_e69ae83b491859::t_dc1c6576f6808d 73
+migrations/202605151700_add_linear_label_id.sql
+  s_e69ae83b491859::t_108e58423bc690 1-2
+app/models/entity/linear.go
+  s_e69ae83b491859::t_dc44004b9e1ac0 34
+public/pages/Administration/pages/ManageLinear.page.tsx
+  s_e69ae83b491859::t_a47b6da785f302 36
+  s_e69ae83b491859::t_bb233e8ea649da 118-124
+  s_e69ae83b491859::t_2504d008c1cf79 11
+  s_e69ae83b491859::t_53299b51762300 63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "98dd62ee73e1d5ae4cee1598287dd957bc32e3a5",
+  "prompts": {},
+  "sessions": {
+    "s_e69ae83b491859": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da42c5bb-0156-4af5-8102-02dff6988f8d",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
