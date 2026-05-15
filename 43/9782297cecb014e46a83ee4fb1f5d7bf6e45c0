@@ -1,0 +1,22 @@
+public/pages/ShowPost/ShowPost.page.scss
+  s_59298ef0bdbb36::t_96224b19ca64b8 28,32,34
+  s_59298ef0bdbb36::t_20d621e645e1a0 22-27,29-31,33
+public/pages/ShowPost/ShowPost.page.tsx
+  s_59298ef0bdbb36::t_aeeb4e4f9cd764 6,8-10,26-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "439782297cecb014e46a83ee4fb1f5d7bf6e45c0",
+  "prompts": {},
+  "sessions": {
+    "s_59298ef0bdbb36": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4db74f1-d77e-485f-87e7-27aa78161537",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
