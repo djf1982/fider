@@ -1,0 +1,19 @@
+public/components/Header.tsx
+  s_aa6c5f8d8d80e3::t_0977fba7829085 51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "0ec2cc03120a5ff3f78a7f46333cf8857cb55310",
+  "prompts": {},
+  "sessions": {
+    "s_aa6c5f8d8d80e3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2d0ef3b4-98ba-4fe2-a36b-305c540dbdc2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
