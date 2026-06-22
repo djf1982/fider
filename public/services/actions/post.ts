@@ -130,8 +130,34 @@ interface CreatePostResponse {
   isApproved: boolean
 }
 
-export const createPost = async (title: string, description: string, attachments: ImageUpload[], tags: string[]): Promise<Result<CreatePostResponse>> => {
-  return http.post<CreatePostResponse>(`/api/v1/posts`, { title, description, attachments, tags }).then(http.event("post", "create"))
+export type PostImportance = "" | "nice-to-have" | "important" | "critical"
+
+export interface StructuredFeedbackFields {
+  problem: string
+  idealOutcome?: string
+  workaround?: string
+  suggestedSolution?: string
+  importance?: PostImportance
+}
+
+export const createPost = async (
+  title: string,
+  attachments: ImageUpload[],
+  tags: string[],
+  fields: StructuredFeedbackFields
+): Promise<Result<CreatePostResponse>> => {
+  return http
+    .post<CreatePostResponse>(`/api/v1/posts`, {
+      title,
+      attachments,
+      tags,
+      problem: fields.problem,
+      idealOutcome: fields.idealOutcome || "",
+      workaround: fields.workaround || "",
+      suggestedSolution: fields.suggestedSolution || "",
+      importance: fields.importance || "",
+    })
+    .then(http.event("post", "create"))
 }
 
 export const updatePost = async (postNumber: number, title: string, description: string, attachments: ImageUpload[]): Promise<Result> => {

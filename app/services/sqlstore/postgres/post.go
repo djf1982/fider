@@ -68,6 +68,11 @@ var (
 																p.title,
 																p.slug,
 																p.description,
+																p.problem,
+																p.ideal_outcome,
+																p.workaround,
+																p.suggested_solution,
+																p.importance,
 																p.created_at,
 																p.search,
 																COALESCE(agg_s.all, 0) as votes_count,
@@ -237,17 +242,78 @@ func countPostPerStatus(ctx context.Context, q *query.CountPostPerStatus) error 
 	})
 }
 
+// nullableString returns nil for empty/whitespace strings so optional columns store NULL.
+func nullableString(s string) interface{} {
+	if strings.TrimSpace(s) == "" {
+		return nil
+	}
+	return s
+}
+
+// composePostDescription builds a Markdown body from the structured feature-request fields.
+// Empty optional fields are omitted. Kept in English (stored content, not view-time).
+func composePostDescription(c *cmd.AddNewPost) string {
+	var b strings.Builder
+
+	section := func(heading, body string) {
+		if strings.TrimSpace(body) == "" {
+			return
+		}
+		if b.Len() > 0 {
+			b.WriteString("\n\n")
+		}
+		b.WriteString("**")
+		b.WriteString(heading)
+		b.WriteString("**\n\n")
+		b.WriteString(strings.TrimSpace(body))
+	}
+
+	section("The problem", c.Problem)
+	section("Ideal outcome", c.IdealOutcome)
+	if c.Importance != enum.PostImportanceUnset {
+		section("Importance", importanceLabel(c.Importance))
+	}
+	section("Current workaround", c.Workaround)
+	section("Suggested solution", c.Suggestion)
+
+	return b.String()
+}
+
+func importanceLabel(i enum.PostImportance) string {
+	switch i {
+	case enum.PostImportanceNiceToHave:
+		return "Nice to have"
+	case enum.PostImportanceImportant:
+		return "Important"
+	case enum.PostImportanceCritical:
+		return "Critical"
+	default:
+		return ""
+	}
+}
+
 func addNewPost(ctx context.Context, c *cmd.AddNewPost) error {
 	return using(ctx, func(trx *dbx.Trx, tenant *entity.Tenant, user *entity.User) error {
 		isApproved := !tenant.IsModerationEnabled || !user.RequiresModeration()
 		var id int
+
+		// When structured fields are provided, compose the human-readable description from
+		// them so display, search, Linear sync and notifications keep working unchanged.
+		// Legacy/API callers that only pass Description fall back to it as-is.
+		if strings.TrimSpace(c.Problem) != "" {
+			c.Description = composePostDescription(c)
+		}
+
 		// Detect language using lingua-go
 		lang := detectPostLanguage(c.Title, c.Description)
 
 		err := trx.Get(&id,
-			`INSERT INTO posts (title, slug, number, description, tenant_id, user_id, created_at, status, is_approved, language)
-			 VALUES ($1, $2, (SELECT COALESCE(MAX(number), 0) + 1 FROM posts p WHERE p.tenant_id = $4), $3, $4, $5, $6, 0, $7, $8)
-			 RETURNING id`, c.Title, slug.Make(c.Title), c.Description, tenant.ID, user.ID, time.Now(), isApproved, lang)
+			`INSERT INTO posts (title, slug, number, description, problem, ideal_outcome, workaround, suggested_solution, importance, tenant_id, user_id, created_at, status, is_approved, language)
+			 VALUES ($1, $2, (SELECT COALESCE(MAX(number), 0) + 1 FROM posts p WHERE p.tenant_id = $9), $3, $4, $5, $6, $7, $8, $9, $10, $11, 0, $12, $13)
+			 RETURNING id`,
+			c.Title, slug.Make(c.Title), c.Description,
+			nullableString(c.Problem), nullableString(c.IdealOutcome), nullableString(c.Workaround), nullableString(c.Suggestion), int(c.Importance),
+			tenant.ID, user.ID, time.Now(), isApproved, lang)
 		if err != nil {
 			return errors.Wrap(err, "failed add new post")
 		}

@@ -115,6 +115,60 @@
       padding-bottom: spacing(2);
     }
   }
+
+  .c-form-field-label {
+    display: block;
+    font-weight: 600;
+  }
+}
+
+.c-share-feedback__more-detail-toggle {
+  display: inline-block;
+  margin-bottom: spacing(6);
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--colors-primary-base);
+  font-size: 0.875rem;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.c-share-feedback__more-detail {
+  margin-bottom: spacing(2);
+}
+
+.c-share-feedback__importance {
+  display: flex;
+  gap: spacing(2);
+  flex-wrap: wrap;
+
+  &-option {
+    padding: spacing(2) spacing(3);
+    border: 1px solid var(--colors-gray-300);
+    border-radius: 6px;
+    background-color: var(--colors-white);
+    color: var(--colors-gray-700);
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    @include dark-mode {
+      background-color: var(--colors-gray-100);
+    }
+
+    &:hover {
+      border-color: var(--colors-primary-base);
+    }
+
+    &--selected {
+      border-color: var(--colors-primary-base);
+      background-color: var(--colors-primary-base);
+      color: var(--colors-white);
+    }
+  }
 }
 
 .animate-fade-in {

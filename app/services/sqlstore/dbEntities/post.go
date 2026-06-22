@@ -16,6 +16,11 @@ type Post struct {
 	Title          string         `db:"title"`
 	Slug           string         `db:"slug"`
 	Description    string         `db:"description"`
+	Problem        dbx.NullString `db:"problem"`
+	IdealOutcome   dbx.NullString `db:"ideal_outcome"`
+	Workaround     dbx.NullString `db:"workaround"`
+	Suggestion     dbx.NullString `db:"suggested_solution"`
+	Importance     int            `db:"importance"`
 	CreatedAt      time.Time      `db:"created_at"`
 	Search         []byte         `db:"search"`
 	User           *User          `db:"user"`
@@ -43,6 +48,11 @@ func (i *Post) ToModel(ctx context.Context) *entity.Post {
 		Title:         i.Title,
 		Slug:          i.Slug,
 		Description:   i.Description,
+		Problem:       i.Problem.String,
+		IdealOutcome:  i.IdealOutcome.String,
+		Workaround:    i.Workaround.String,
+		Suggestion:    i.Suggestion.String,
+		Importance:    enum.PostImportance(i.Importance),
 		CreatedAt:     i.CreatedAt,
 		User:          i.User.ToModel(ctx),
 		VoteType:      int(i.VoteType.Int64),

@@ -46,11 +46,12 @@ func TestCreatePostHandler(t *testing.T) {
 	code, _ := mock.NewServer().
 		OnTenant(mock.DemoTenant).
 		AsUser(mock.JonSnow).
-		ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)" }`)
+		ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "problem": "I cannot find my past orders quickly." }`)
 
 	Expect(code).Equals(http.StatusOK)
 	Expect(newPost.Title).Equals("My newest post :)")
 	Expect(newPost.Description).Equals("")
+	Expect(newPost.Problem).Equals("I cannot find my past orders quickly.")
 }
 
 func TestCreatePostHandler_WithoutTitle(t *testing.T) {
@@ -78,7 +79,7 @@ func TestCreatePostHandler_WithNonExistentTag(t *testing.T) {
 		code, _ := mock.NewServer().
 			OnTenant(mock.DemoTenant).
 			AsUser(mock.JonSnow).
-			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "tags": ["inexistent_tag"]}`)
+			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "problem": "I cannot find my past orders quickly.", "tags": ["inexistent_tag"]}`)
 
 		Expect(code).Equals(http.StatusBadRequest)
 	}
@@ -110,7 +111,7 @@ func TestCreatePostHandler_WithPrivateTagAsVisitor(t *testing.T) {
 		code, _ := mock.NewServer().
 			OnTenant(mock.DemoTenant).
 			AsUser(mock.AryaStark).
-			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "tags": ["private_tag"]}`)
+			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "problem": "I cannot find my past orders quickly.", "tags": ["private_tag"]}`)
 
 		Expect(code).Equals(http.StatusForbidden)
 	}
@@ -163,7 +164,7 @@ func TestCreatePostHandler_WithPublicTagAsVisitor(t *testing.T) {
 		code, _ := mock.NewServer().
 			OnTenant(mock.DemoTenant).
 			AsUser(mock.AryaStark).
-			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "tags": ["public_tag"]}`)
+			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "problem": "I cannot find my past orders quickly.", "tags": ["public_tag"]}`)
 
 		Expect(code).Equals(http.StatusOK)
 		Expect(tagAssignment.Tag).Equals(publicTag)
@@ -234,7 +235,7 @@ func TestCreatePostHandler_WithPublicTagAndPrivateTagAsCollaborator(t *testing.T
 		code, _ := mock.NewServer().
 			OnTenant(mock.DemoTenant).
 			AsUser(mock.JonSnow).
-			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "tags": ["public_tag", "private_tag"]}`)
+			ExecutePost(apiv1.CreatePost(), `{ "title": "My newest post :)", "problem": "I cannot find my past orders quickly.", "tags": ["public_tag", "private_tag"]}`)
 
 		Expect(code).Equals(http.StatusOK)
 		Expect(tagAssignments[0].Tag).Equals(publicTag)

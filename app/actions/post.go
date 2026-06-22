@@ -22,10 +22,15 @@ import (
 
 // CreateNewPost is used to create a new post
 type CreateNewPost struct {
-	Title       string             `json:"title"`
-	Description string             `json:"description"`
-	TagSlugs    []string           `json:"tags"`
-	Attachments []*dto.ImageUpload `json:"attachments"`
+	Title        string              `json:"title"`
+	Description  string              `json:"description"`
+	Problem      string              `json:"problem"`
+	IdealOutcome string              `json:"idealOutcome"`
+	Workaround   string              `json:"workaround"`
+	Suggestion   string              `json:"suggestedSolution"`
+	Importance   enum.PostImportance `json:"importance"`
+	TagSlugs     []string            `json:"tags"`
+	Attachments  []*dto.ImageUpload  `json:"attachments"`
 
 	Tags []*entity.Tag
 }
@@ -68,6 +73,14 @@ func (action *CreateNewPost) Validate(ctx context.Context, user *entity.User) *v
 
 	re := regexp.MustCompile(`\s+`)
 	normalizedTitle := strings.TrimSpace(re.ReplaceAllString(action.Title, " "))
+
+	if strings.TrimSpace(action.Problem) == "" {
+		result.AddFieldFailure("problem", propertyIsRequired(ctx, "problem"))
+	}
+
+	if !action.Importance.IsValid() {
+		result.AddFieldFailure("importance", propertyIsInvalid(ctx, "importance"))
+	}
 
 	if normalizedTitle == "" {
 		result.AddFieldFailure("title", propertyIsRequired(ctx, "title"))

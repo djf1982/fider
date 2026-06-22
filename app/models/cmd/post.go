@@ -6,8 +6,13 @@ import (
 )
 
 type AddNewPost struct {
-	Title       string
-	Description string
+	Title        string
+	Description  string
+	Problem      string
+	IdealOutcome string
+	Workaround   string
+	Suggestion   string
+	Importance   enum.PostImportance
 
 	Result *entity.Post
 }

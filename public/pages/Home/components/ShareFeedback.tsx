@@ -2,7 +2,8 @@ import "./ShareFeedback.scss"
 
 import React, { useEffect, useRef, useState } from "react"
 import { SignInControl } from "@fider/components/common/SignInControl"
-import { Modal, CloseIcon, Form, Button, Input, LegalFooter, Icon } from "@fider/components/common"
+import { Modal, CloseIcon, Form, Button, Input, TextArea, LegalFooter, Icon } from "@fider/components/common"
+import type { PostImportance } from "@fider/services/actions/post"
 import { useFider } from "@fider/hooks"
 import { Trans } from "@lingui/react/macro"
 import { actions, Failure, querystring, classSet } from "@fider/services"
@@ -68,7 +69,14 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
 
   const canEditTags = fider.settings.postWithTags && props.tags.length > 0
   const [title, setTitle] = useState(getCachedTitle())
+  // `description` holds the primary "problem" body (rich text). It feeds the auto-title and,
+  // together with the optional fields below, is sent as structured feature-request data.
   const [description, setDescription] = useState(getCachedDescription())
+  const [idealOutcome, setIdealOutcome] = useState("")
+  const [workaround, setWorkaround] = useState("")
+  const [suggestedSolution, setSuggestedSolution] = useState("")
+  const [importance, setImportance] = useState<PostImportance>("")
+  const [showMoreDetail, setShowMoreDetail] = useState(false)
   const { attachments, handleImageUploaded, getImageSrc, clearAttachments } = useAttachments({
     cacheKey: CACHE_KEYS.ATTACHMENT,
     useLocalStorage: true,
@@ -195,9 +203,15 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
       const [result] = await Promise.all([
         actions.createPost(
           title,
-          description,
           attachments,
-          tags.map((tag) => tag.slug)
+          tags.map((tag) => tag.slug),
+          {
+            problem: description,
+            idealOutcome,
+            workaround,
+            suggestedSolution,
+            importance,
+          }
         ),
         minDelay,
       ])
@@ -263,6 +277,12 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
   const handleBackToIdeas = () => {
     onClose()
   }
+
+  const importanceOptions: { value: PostImportance; label: string }[] = [
+    { value: "nice-to-have", label: i18n._({ id: "newpost.modal.importance.nicetohave", message: "Nice to have" }) },
+    { value: "important", label: i18n._({ id: "newpost.modal.importance.important", message: "Important" }) },
+    { value: "critical", label: i18n._({ id: "newpost.modal.importance.critical", message: "Critical" }) },
+  ]
 
   const showSubmitButton = title.replace(/\s+/g, " ").trim().length > 9
 
@@ -351,9 +371,18 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
           </h1>
           <div className="c-share-feedback-form">
             <Form error={error}>
+              <label className="c-form-field-label" htmlFor="input-problem">
+                <Trans id="newpost.modal.problem.label">What are you trying to do, and what is getting in the way?</Trans>
+              </label>
+              <p className="text-muted text-sm mb-2">
+                <Trans id="newpost.modal.problem.hint">
+                  Describe the problem rather than a specific solution. A good shape is: when [situation] happens, [this gets in the way], which is a problem
+                  because [why it matters].
+                </Trans>
+              </p>
               <div ref={editorRef} className="mb-4">
                 <CommentEditor
-                  field="description"
+                  field="problem"
                   onChange={handleDescriptionChange}
                   onFocus={handleEditorFocus}
                   initialValue={description}
@@ -361,8 +390,8 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                   maxAttachments={3}
                   maxImageSizeKB={5 * 1024}
                   placeholder={i18n._({
-                    id: "newpost.modal.description.placeholder",
-                    message: "Tell us about it. Explain it fully, don't hold back, the more information the better.",
+                    id: "newpost.modal.problem.placeholder",
+                    message: "Tell us about the problem you're hitting. The more context, the better.",
                   })}
                   onImageUploaded={handleImageUploaded}
                   onGetImageSrc={getImageSrc}
@@ -380,6 +409,62 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                 onKeyDown={handleKeyDown}
                 placeholder={i18n._({ id: "newpost.modal.title.placeholder", message: "Something short and snappy, sum it up in a few words" })}
               />
+              {!showMoreDetail ? (
+                <button type="button" className="c-share-feedback__more-detail-toggle" onClick={() => setShowMoreDetail(true)}>
+                  <Trans id="newpost.modal.moredetail.show">+ Add more detail (optional)</Trans>
+                </button>
+              ) : (
+                <div className="c-share-feedback__more-detail animate-fade-in">
+                  <TextArea
+                    field="idealOutcome"
+                    label={i18n._({ id: "newpost.modal.idealoutcome.label", message: "What would a good solution let you do? (optional)" })}
+                    value={idealOutcome}
+                    minRows={2}
+                    disabled={fider.isReadOnly || submissionState === "submitting"}
+                    onChange={setIdealOutcome}
+                    placeholder={i18n._({ id: "newpost.modal.idealoutcome.placeholder", message: "Describe the outcome you're after, not how to build it." })}
+                  />
+                  <div className="c-form-field">
+                    <label>
+                      <Trans id="newpost.modal.importance.label">How important is this to you? (optional)</Trans>
+                    </label>
+                    <div className="c-share-feedback__importance">
+                      {importanceOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          className={classSet({
+                            "c-share-feedback__importance-option": true,
+                            "c-share-feedback__importance-option--selected": importance === option.value,
+                          })}
+                          disabled={fider.isReadOnly || submissionState === "submitting"}
+                          onClick={() => setImportance(importance === option.value ? "" : option.value)}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <TextArea
+                    field="workaround"
+                    label={i18n._({ id: "newpost.modal.workaround.label", message: "How do you deal with this today? (optional)" })}
+                    value={workaround}
+                    minRows={2}
+                    disabled={fider.isReadOnly || submissionState === "submitting"}
+                    onChange={setWorkaround}
+                    placeholder={i18n._({ id: "newpost.modal.workaround.placeholder", message: "Any current workaround, or nothing at all." })}
+                  />
+                  <TextArea
+                    field="suggestedSolution"
+                    label={i18n._({ id: "newpost.modal.suggestion.label", message: "Got a solution in mind? (optional)" })}
+                    value={suggestedSolution}
+                    minRows={2}
+                    disabled={fider.isReadOnly || submissionState === "submitting"}
+                    onChange={setSuggestedSolution}
+                    placeholder={i18n._({ id: "newpost.modal.suggestion.placeholder", message: "Optional — your idea for how this could work." })}
+                  />
+                </div>
+              )}
               {canEditTags && (
                 <div className="c-form-field">
                   <label>

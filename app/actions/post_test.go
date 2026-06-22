@@ -33,7 +33,7 @@ func TestCreateNewPost_InvalidPostTitles(t *testing.T) {
 		"My great great great great great great great great great great great great great great great great great post.",
 		"my GREAT post",
 	} {
-		action := &actions.CreateNewPost{Title: title}
+		action := &actions.CreateNewPost{Title: title, Problem: "I cannot find my past orders quickly."}
 		result := action.Validate(context.Background(), nil)
 		ExpectFailed(result, "title")
 	}
@@ -50,10 +50,38 @@ func TestCreateNewPost_ValidPostTitles(t *testing.T) {
 		"this is my new post",
 		"this post is very descriptive",
 	} {
-		action := &actions.CreateNewPost{Title: title}
+		action := &actions.CreateNewPost{Title: title, Problem: "I cannot find my past orders quickly."}
 		result := action.Validate(context.Background(), nil)
 		ExpectSuccess(result)
 	}
+}
+
+func TestCreateNewPost_RequiresProblem(t *testing.T) {
+	RegisterT(t)
+
+	bus.AddHandler(func(ctx context.Context, q *query.GetPostBySlug) error {
+		return app.ErrNotFound
+	})
+
+	action := &actions.CreateNewPost{Title: "this is my new post", Problem: ""}
+	result := action.Validate(context.Background(), nil)
+	ExpectFailed(result, "problem")
+}
+
+func TestCreateNewPost_RejectsInvalidImportance(t *testing.T) {
+	RegisterT(t)
+
+	bus.AddHandler(func(ctx context.Context, q *query.GetPostBySlug) error {
+		return app.ErrNotFound
+	})
+
+	action := &actions.CreateNewPost{
+		Title:      "this is my new post",
+		Problem:    "I cannot find my past orders quickly.",
+		Importance: enum.PostImportance(99),
+	}
+	result := action.Validate(context.Background(), nil)
+	ExpectFailed(result, "importance")
 }
 
 func TestSetResponse_InvalidStatus(t *testing.T) {

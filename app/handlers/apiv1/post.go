@@ -75,8 +75,13 @@ func CreatePost() web.HandlerFunc {
 		}
 
 		newPost := &cmd.AddNewPost{
-			Title:       action.Title,
-			Description: action.Description,
+			Title:        action.Title,
+			Description:  action.Description,
+			Problem:      action.Problem,
+			IdealOutcome: action.IdealOutcome,
+			Workaround:   action.Workaround,
+			Suggestion:   action.Suggestion,
+			Importance:   action.Importance,
 		}
 		err := bus.Dispatch(c, newPost)
 		if err != nil {
@@ -103,9 +108,9 @@ func CreatePost() web.HandlerFunc {
 
 		metrics.TotalPosts.Inc()
 		return c.Ok(web.Map{
-			"id":     newPost.Result.ID,
-			"number": newPost.Result.Number,
-			"title":  newPost.Result.Title,
+			"id":         newPost.Result.ID,
+			"number":     newPost.Result.Number,
+			"title":      newPost.Result.Title,
 			"slug":       newPost.Result.Slug,
 			"isApproved": newPost.Result.IsApproved,
 		})
