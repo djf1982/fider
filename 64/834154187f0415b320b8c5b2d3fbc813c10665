@@ -1,0 +1,64 @@
+migrations/202606221300_add_structured_post_fields.sql
+  s_28cdf12dc9e204::t_51c926aaac139b 1-9
+public/pages/Home/components/ShareFeedback.tsx
+  s_28cdf12dc9e204::t_b92b590f9979bc 281-286
+  s_28cdf12dc9e204::t_ef151e09d05ba6 207-214
+  s_28cdf12dc9e204::t_4ed8abf316ac49 5-6
+  s_28cdf12dc9e204::t_79f402a483809b 376-378,381-382,385,393-394
+  s_28cdf12dc9e204::t_3c8e260591b638 412-467
+  s_28cdf12dc9e204::t_58a93a2ecb6c4e 379-380
+  s_28cdf12dc9e204::t_e96a8c320f648f 374-375
+  s_28cdf12dc9e204::t_8f7d595afefb37 72-73,75-79
+app/models/enum/post_importance.go
+  s_28cdf12dc9e204::t_da75ba59dec74e 1-52
+app/actions/post.go
+  s_28cdf12dc9e204::t_89f584e7035ff7 77-84
+  s_28cdf12dc9e204::t_0ce9f4f9d31b1e 25-33
+app/models/entity/post.go
+  s_28cdf12dc9e204::t_0ce9f4f9d31b1e 10,12-20,22-31,43,51
+  s_28cdf12dc9e204::t_3152c2e585ea85 21
+app/handlers/apiv1/post_test.go
+  s_28cdf12dc9e204::t_7e03579322f7ff 49,54
+  s_28cdf12dc9e204::t_dad888568f9e43 238
+  s_28cdf12dc9e204::t_2a9575fdd317d8 114
+  s_28cdf12dc9e204::t_bce73560a77c16 82
+  s_28cdf12dc9e204::t_ef555515cc62ac 167
+app/actions/post_test.go
+  s_28cdf12dc9e204::t_785447ccdf35be 36
+  s_28cdf12dc9e204::t_0db72703bf1bd7 53,59-85
+public/services/actions/post.ts
+  s_28cdf12dc9e204::t_cf63d65329e99b 133-160
+app/models/cmd/post.go
+  s_28cdf12dc9e204::t_bdb50171588caa 11-15
+  s_28cdf12dc9e204::t_0ce9f4f9d31b1e 9-10
+app/handlers/apiv1/post.go
+  s_28cdf12dc9e204::t_0ce9f4f9d31b1e 111-113
+  s_28cdf12dc9e204::t_c248f83a3bdec0 78-84
+app/services/sqlstore/postgres/post.go
+  s_28cdf12dc9e204::t_25b80b0ac06837 245-294
+  s_28cdf12dc9e204::t_430bc68391304e 299-306,311-316
+  s_28cdf12dc9e204::t_2dd9792ef43572 71-75
+public/pages/Home/components/ShareFeedback.scss
+  s_28cdf12dc9e204::t_ce5fade9f12462 118-171
+docs/superpowers/specs/2026-06-22-structured-feedback-design.md
+  s_28cdf12dc9e204::t_43f893ce5ac317 1-117
+app/services/sqlstore/dbEntities/post.go
+  s_28cdf12dc9e204::t_8ce11eb76b990d 51-55
+  s_28cdf12dc9e204::t_c841c656c57237 19-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "64834154187f0415b320b8c5b2d3fbc813c10665",
+  "prompts": {},
+  "sessions": {
+    "s_28cdf12dc9e204": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f074554-e519-4bc6-a4db-7fc0d959167d",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
