@@ -19,7 +19,7 @@ while protecting submission volume with a light-touch, progressive design.
 
 - **Feature requests only.** Bugs/questions are handled elsewhere — no type branching.
 - One fixed, opinionated template for all tenants. No per-tenant form builder.
-- Light-touch friction: minimal required fields, optional fields progressively disclosed.
+- Light-touch friction: one required field (problem/goal); the rest optional but visible.
 - Duplicate detection already exists (`SimilarPosts`) and is retained.
 
 ## Decisions (from brainstorming)
@@ -37,7 +37,7 @@ while protecting submission volume with a light-touch, progressive design.
 
 | Field | Column | Type | Required | Prompt |
 |---|---|---|---|---|
-| Problem | `problem` | text | **Yes** | "What are you trying to do, and what's getting in the way?" |
+| Problem | `problem` | text | **Yes** | "What would you love to be able to do?" |
 | Ideal outcome | `ideal_outcome` | text | No | "What would a good solution let you do?" |
 | Importance | `importance` | smallint | No | Nice-to-have / Important / Critical |
 | Workaround | `workaround` | text | No | "How do you deal with this today?" |
@@ -86,10 +86,11 @@ the composed `description`. Legacy posts (null structured columns) render their 
 
 1. **`actions.createPost`** — extend signature/body with the new fields.
 2. **`ShareFeedback.tsx`** — replace the single editor with:
-   - **Problem** (required, multi-line) — primary field, with scaffolding helper text.
+   - **Problem** (required, multi-line) — primary field, framed positively ("What would
+     you love to be able to do?") with goal-focused helper text.
    - **Title** (required) — auto-derived from problem if untouched (reuse existing logic).
    - `SimilarPosts` live dedup (retained).
-   - **Progressive "Add more detail"** disclosure revealing: Ideal outcome, Importance
+   - **Optional detail fields, always visible** (no collapsible): Ideal outcome, Importance
      (segmented control), Workaround, Suggested solution — all optional.
    - Submit gate stays on title length; problem required client + server side.
    - Tags + attachments unchanged.
@@ -112,6 +113,6 @@ the composed `description`. Legacy posts (null structured columns) render their 
 
 - Go: extend `app/actions` post tests for `problem` required; postgres store test that
   structured columns persist and `description` is composed.
-- Jest: `ShareFeedback` renders problem field, progressive disclosure toggles, submit
-  passes new fields.
+- Jest: `ShareFeedback` renders the problem field and the always-visible optional fields,
+  submit passes new fields.
 - `make lint` + `make test` green.

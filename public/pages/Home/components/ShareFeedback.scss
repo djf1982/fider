@@ -122,21 +122,6 @@
   }
 }
 
-.c-share-feedback__more-detail-toggle {
-  display: inline-block;
-  margin-bottom: spacing(6);
-  padding: 0;
-  background: none;
-  border: none;
-  color: var(--colors-primary-base);
-  font-size: 0.875rem;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .c-share-feedback__more-detail {
   margin-bottom: spacing(2);
 }

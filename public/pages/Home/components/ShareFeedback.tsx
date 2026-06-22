@@ -76,7 +76,6 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
   const [workaround, setWorkaround] = useState("")
   const [suggestedSolution, setSuggestedSolution] = useState("")
   const [importance, setImportance] = useState<PostImportance>("")
-  const [showMoreDetail, setShowMoreDetail] = useState(false)
   const { attachments, handleImageUploaded, getImageSrc, clearAttachments } = useAttachments({
     cacheKey: CACHE_KEYS.ATTACHMENT,
     useLocalStorage: true,
@@ -372,12 +371,12 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
           <div className="c-share-feedback-form">
             <Form error={error}>
               <label className="c-form-field-label" htmlFor="input-problem">
-                <Trans id="newpost.modal.problem.label">What are you trying to do, and what is getting in the way?</Trans>
+                <Trans id="newpost.modal.problem.label">What would you love to be able to do?</Trans>
               </label>
               <p className="text-muted text-sm mb-2">
                 <Trans id="newpost.modal.problem.hint">
-                  Describe the problem rather than a specific solution. A good shape is: when [situation] happens, [this gets in the way], which is a problem
-                  because [why it matters].
+                  Tell us what you&apos;re trying to achieve and why it matters to you. Focus on the goal rather than a specific solution — that helps us find
+                  the best way to help.
                 </Trans>
               </p>
               <div ref={editorRef} className="mb-4">
@@ -391,7 +390,7 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                   maxImageSizeKB={5 * 1024}
                   placeholder={i18n._({
                     id: "newpost.modal.problem.placeholder",
-                    message: "Tell us about the problem you're hitting. The more context, the better.",
+                    message: "Tell us what you'd like to do and why. The more context, the better.",
                   })}
                   onImageUploaded={handleImageUploaded}
                   onGetImageSrc={getImageSrc}
@@ -409,62 +408,56 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                 onKeyDown={handleKeyDown}
                 placeholder={i18n._({ id: "newpost.modal.title.placeholder", message: "Something short and snappy, sum it up in a few words" })}
               />
-              {!showMoreDetail ? (
-                <button type="button" className="c-share-feedback__more-detail-toggle" onClick={() => setShowMoreDetail(true)}>
-                  <Trans id="newpost.modal.moredetail.show">+ Add more detail (optional)</Trans>
-                </button>
-              ) : (
-                <div className="c-share-feedback__more-detail animate-fade-in">
-                  <TextArea
-                    field="idealOutcome"
-                    label={i18n._({ id: "newpost.modal.idealoutcome.label", message: "What would a good solution let you do? (optional)" })}
-                    value={idealOutcome}
-                    minRows={2}
-                    disabled={fider.isReadOnly || submissionState === "submitting"}
-                    onChange={setIdealOutcome}
-                    placeholder={i18n._({ id: "newpost.modal.idealoutcome.placeholder", message: "Describe the outcome you're after, not how to build it." })}
-                  />
-                  <div className="c-form-field">
-                    <label>
-                      <Trans id="newpost.modal.importance.label">How important is this to you? (optional)</Trans>
-                    </label>
-                    <div className="c-share-feedback__importance">
-                      {importanceOptions.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          className={classSet({
-                            "c-share-feedback__importance-option": true,
-                            "c-share-feedback__importance-option--selected": importance === option.value,
-                          })}
-                          disabled={fider.isReadOnly || submissionState === "submitting"}
-                          onClick={() => setImportance(importance === option.value ? "" : option.value)}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
+              <div className="c-share-feedback__more-detail">
+                <TextArea
+                  field="idealOutcome"
+                  label={i18n._({ id: "newpost.modal.idealoutcome.label", message: "What would a good solution let you do? (optional)" })}
+                  value={idealOutcome}
+                  minRows={2}
+                  disabled={fider.isReadOnly || submissionState === "submitting"}
+                  onChange={setIdealOutcome}
+                  placeholder={i18n._({ id: "newpost.modal.idealoutcome.placeholder", message: "Describe the outcome you're after, not how to build it." })}
+                />
+                <div className="c-form-field">
+                  <label>
+                    <Trans id="newpost.modal.importance.label">How important is this to you? (optional)</Trans>
+                  </label>
+                  <div className="c-share-feedback__importance">
+                    {importanceOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        className={classSet({
+                          "c-share-feedback__importance-option": true,
+                          "c-share-feedback__importance-option--selected": importance === option.value,
+                        })}
+                        disabled={fider.isReadOnly || submissionState === "submitting"}
+                        onClick={() => setImportance(importance === option.value ? "" : option.value)}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
                   </div>
-                  <TextArea
-                    field="workaround"
-                    label={i18n._({ id: "newpost.modal.workaround.label", message: "How do you deal with this today? (optional)" })}
-                    value={workaround}
-                    minRows={2}
-                    disabled={fider.isReadOnly || submissionState === "submitting"}
-                    onChange={setWorkaround}
-                    placeholder={i18n._({ id: "newpost.modal.workaround.placeholder", message: "Any current workaround, or nothing at all." })}
-                  />
-                  <TextArea
-                    field="suggestedSolution"
-                    label={i18n._({ id: "newpost.modal.suggestion.label", message: "Got a solution in mind? (optional)" })}
-                    value={suggestedSolution}
-                    minRows={2}
-                    disabled={fider.isReadOnly || submissionState === "submitting"}
-                    onChange={setSuggestedSolution}
-                    placeholder={i18n._({ id: "newpost.modal.suggestion.placeholder", message: "Optional — your idea for how this could work." })}
-                  />
                 </div>
-              )}
+                <TextArea
+                  field="workaround"
+                  label={i18n._({ id: "newpost.modal.workaround.label", message: "How do you handle this today? (optional)" })}
+                  value={workaround}
+                  minRows={2}
+                  disabled={fider.isReadOnly || submissionState === "submitting"}
+                  onChange={setWorkaround}
+                  placeholder={i18n._({ id: "newpost.modal.workaround.placeholder", message: "Any current workaround, or nothing at all." })}
+                />
+                <TextArea
+                  field="suggestedSolution"
+                  label={i18n._({ id: "newpost.modal.suggestion.label", message: "Got a solution in mind? (optional)" })}
+                  value={suggestedSolution}
+                  minRows={2}
+                  disabled={fider.isReadOnly || submissionState === "submitting"}
+                  onChange={setSuggestedSolution}
+                  placeholder={i18n._({ id: "newpost.modal.suggestion.placeholder", message: "Optional — your idea for how this could work." })}
+                />
+              </div>
               {canEditTags && (
                 <div className="c-form-field">
                   <label>
