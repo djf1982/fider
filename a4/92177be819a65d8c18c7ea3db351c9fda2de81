@@ -1,0 +1,27 @@
+public/pages/Home/components/ShareFeedback.tsx
+  s_28cdf12dc9e204::t_a2e4a6e29cdf3b 374,378-379
+  s_28cdf12dc9e204::t_15ee2665179251 393
+  s_28cdf12dc9e204::t_29c4b6c8a35782 411-439,442-443,445-460
+  s_28cdf12dc9e204::t_d2eb244b7156b6 444
+docs/superpowers/specs/2026-06-22-structured-feedback-design.md
+  s_28cdf12dc9e204::t_f1dd6ad7943914 40
+  s_28cdf12dc9e204::t_0c678d9dda48cf 89-90,93
+  s_28cdf12dc9e204::t_31566f96ffa1e9 116-117
+  s_28cdf12dc9e204::t_9cf9b97404e941 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "a492177be819a65d8c18c7ea3db351c9fda2de81",
+  "prompts": {},
+  "sessions": {
+    "s_28cdf12dc9e204": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f074554-e519-4bc6-a4db-7fc0d959167d",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
