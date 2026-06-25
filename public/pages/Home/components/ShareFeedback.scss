@@ -36,15 +36,34 @@
   }
 
   // Anchor the editor card vertically so it doesn't sit lonely at the top
-  // of a tall fullscreen takeover (screenshot 2 issue).
+  // of a tall fullscreen takeover (screenshot 2 issue) — but stay scrollable
+  // when the form is taller than the viewport.
+  //
+  // We use `margin: auto` on the children rather than `justify-content: center`
+  // on the container: a centered flex container pushes overflow above its top
+  // edge, where the scrollbar can't reach it (the reported "only the middle is
+  // visible" bug). Auto margins centre when there's spare room and collapse to
+  // zero when there isn't, so the top of the form stays scrollable.
   .c-modal-content {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     padding-top: spacing(6);
     padding-bottom: spacing(10);
+
+    > * {
+      flex-shrink: 0;
+    }
+
+    > :first-child {
+      margin-top: auto;
+    }
+
+    > :last-child {
+      margin-bottom: auto;
+    }
   }
 
   // Success state styles
