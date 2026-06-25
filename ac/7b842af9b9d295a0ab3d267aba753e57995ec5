@@ -1,0 +1,19 @@
+public/pages/Home/components/ShareFeedback.scss
+  s_b78ebb5da515a1::t_39a70f686ab2a4 39-46,49,55-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.13",
+  "base_commit_sha": "ac7b842af9b9d295a0ab3d267aba753e57995ec5",
+  "prompts": {},
+  "sessions": {
+    "s_b78ebb5da515a1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1c0b260c-b184-4f79-8754-05ac7de52cf1",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
