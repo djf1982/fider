@@ -1,0 +1,319 @@
+public/hooks/use-sound-enabled.ts
+  s_caba02f70c628e::t_3c18112333b31f 1-22
+public/components/common/EmptyState/EmptyState.scss
+  s_caba02f70c628e::t_82eb3041597d67 15-16,20-24
+views/email/signup_email.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-8
+public/components/StatusJourney.spec.tsx
+  s_caba02f70c628e::t_1c54ca5e02497e 1-26
+public/pages/ShowPost/components/VoteSection.scss
+  s_caba02f70c628e::t_f220b0a7bfb8e5 99-103,106
+  s_caba02f70c628e::t_3c409f74a15947 104-105
+public/pages/Roadmap/Roadmap.page.scss
+  s_caba02f70c628e::t_7ea577552264fe 1-99,101-103,105-107,109-186
+  s_caba02f70c628e::t_47d7b249e5d544 100,104,108
+public/components/common/form/OtpInput.spec.tsx
+  s_caba02f70c628e::t_d651b499475497 1-10,16-30,36-53
+  s_caba02f70c628e::t_ac7827861f32bf 11-15,31-35
+public/components/common/SignInControl.tsx
+  s_caba02f70c628e::t_17f1960fe564c5 3,35-36,93-96,98
+  s_caba02f70c628e::t_a4a688a1896ff5 4,6,33-34,92,97,120-121,131,283-284,286,288,290-293
+app/tasks/new_post.go
+  s_caba02f70c628e::t_cd5d08cc708baa 125
+public/pages/Home/components/ShareFeedback.scss
+  s_caba02f70c628e::t_8d5592b7c2d944 33,227-345
+  s_caba02f70c628e::t_fed859ecffedc3 32
+public/hooks/use-copy-to-clipboard.ts
+  s_caba02f70c628e::t_ed3eda79d36363 1-101
+public/components/ShowPostResponse.tsx
+  s_caba02f70c628e::t_50a0db31451cb7 13,64-67,70,72,74,76,78,80,110,113,115-118
+public/assets/styles/reset.scss
+  s_caba02f70c628e::t_2dd39010e600cc 20
+public/components/common/HoldToConfirm.scss
+  s_caba02f70c628e::t_1efd1842d00d2e 1-53
+public/hooks/use-optimistic-vote.spec.tsx
+  s_caba02f70c628e::t_0ed7e4d6b9ccca 1-113
+public/components/CommandPalette.tsx
+  s_caba02f70c628e::t_cab543bc294b60 1-242,244-279
+  s_caba02f70c628e::t_d5741a2c7e983b 243
+public/components/CommandPalette.spec.tsx
+  s_caba02f70c628e::t_7154b72e09ae5b 1-9,11-49
+  s_caba02f70c628e::t_cab543bc294b60 10
+app/handlers/post.go
+  s_caba02f70c628e::t_8fba2339b6eb9f 120
+public/pages/Home/components/PostsContainer.scss
+  s_caba02f70c628e::t_6af6cf7980f308 46-62
+public/assets/styles/variables/_colors.scss
+  s_caba02f70c628e::t_2dd39010e600cc 21
+public/hooks/use-otp-input.ts
+  s_caba02f70c628e::t_d651b499475497 1-177
+public/hooks/use-new-posts.ts
+  s_caba02f70c628e::t_073d721c2b6596 1-58
+public/components/NotificationIndicator.tsx
+  s_caba02f70c628e::t_82eb3041597d67 7,112,115
+public/components/index.tsx
+  s_caba02f70c628e::t_1c54ca5e02497e 5
+  s_caba02f70c628e::t_7c87031b8f91db 8
+views/email/change_emailaddress_email.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-8
+public/pages/ShowPost/components/VoteSection.tsx
+  s_caba02f70c628e::t_f220b0a7bfb8e5 3,5,7-8,27-40,42,48-50,62,92-96,105-107
+public/pages/Error/Error404.page.tsx
+  s_caba02f70c628e::t_28909f3fade01b 8
+public/services/sound.ts
+  s_caba02f70c628e::t_85dc7eeea13a14 1-5,9-19,21-70
+  s_caba02f70c628e::t_a74f973473cf57 6-8,20
+public/components/VoteBurst.tsx
+  s_caba02f70c628e::t_a11eebaf1e0b3e 1-49
+locale/en/server.json
+  s_caba02f70c628e::t_d4a06fd44ca1c3 73-74
+public/components/common/index.tsx
+  s_caba02f70c628e::t_1efd1842d00d2e 37
+  s_caba02f70c628e::t_f6b65b9a79da9c 4
+  s_caba02f70c628e::t_8253d3ff96bc91 36
+app/models/entity/post.go
+  s_caba02f70c628e::t_8fba2339b6eb9f 5-6,45-64
+  s_caba02f70c628e::t_a3c0d120b6c34e 65-66
+public/components/common/form/OtpInput.scss
+  s_caba02f70c628e::t_f6b65b9a79da9c 1-83
+public/hooks/index.ts
+  s_caba02f70c628e::t_49d5f02c4318fa 5
+  s_caba02f70c628e::t_d651b499475497 7
+  s_caba02f70c628e::t_3c18112333b31f 8
+  s_caba02f70c628e::t_1efd1842d00d2e 9
+  s_caba02f70c628e::t_073d721c2b6596 10
+  s_caba02f70c628e::t_ed3eda79d36363 6
+views/email/new_post.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-11
+app/services/email/email_test.go
+  s_caba02f70c628e::t_9b3cbe69e55f4d 20-21,23-25,27-29,31-36,39-49,55-56
+public/pages/ShowPost/components/CopyLinkButton.tsx
+  s_caba02f70c628e::t_ed3eda79d36363 4-44
+  s_caba02f70c628e::t_bbc6a89f654571 1
+  s_caba02f70c628e::t_554615e6582b20 2-3
+app/handlers/roadmap.go
+  s_caba02f70c628e::t_2801ae3be3cca1 1-36
+public/pages/Home/components/SimilarPosts.tsx
+  s_caba02f70c628e::t_2c777916a9e078 5-6,23-24,64,70,78,89-91,94-95,97-104
+  s_caba02f70c628e::t_38f46037156d10 96
+app/handlers/roadmap_test.go
+  s_caba02f70c628e::t_2801ae3be3cca1 1-40
+public/pages/Home/components/SimilarPosts.scss
+  s_caba02f70c628e::t_e7617d0cbfe755 24-31
+  s_caba02f70c628e::t_2c777916a9e078 14-23,32-83
+public/components/common/EmptyState/EmptyState.tsx
+  s_caba02f70c628e::t_82eb3041597d67 6-10,24-28,35
+  s_caba02f70c628e::t_da0af9e1593f1a 31
+app/services/email/inline.go
+  s_caba02f70c628e::t_0696b665079b18 10
+  s_caba02f70c628e::t_f51e6981a78a40 1-9,11-55
+public/components/Footer.tsx
+  s_caba02f70c628e::t_88eedd978cdad1 3-6,12-13,24-27
+  s_caba02f70c628e::t_7c87031b8f91db 1-2,7-11,14-23,28-31
+app/tasks/new_post_test.go
+  s_caba02f70c628e::t_58b0dcde9c368b 73
+app/models/entity/post_test.go
+  s_caba02f70c628e::t_06a87a4ebcb952 1-28
+public/jest.cuelume.ts
+  s_caba02f70c628e::t_85dc7eeea13a14 1-7
+public/components/common/Toggle.scss
+  s_caba02f70c628e::t_49475971a4c2ae 37
+app/services/email/mailgun/sendmail_test.go
+  s_caba02f70c628e::t_9b3cbe69e55f4d 67-68,70-72,74-76,78-83,86-96,102-103,195-196,198-200,202-204,206-211,214-224,230-231
+public/pages/Home/components/NewPostsPill.tsx
+  s_caba02f70c628e::t_7e2db3bfed0db3 1-5,7-19,23-44
+  s_caba02f70c628e::t_38f46037156d10 6,20-22
+public/pages/Home/Home.page.scss
+  s_caba02f70c628e::t_90ce8ce1f988c4 87,97
+  s_caba02f70c628e::t_1a07b52bc0f661 50,121-133
+  s_caba02f70c628e::t_9117bab4aa899c 42-49
+  s_caba02f70c628e::t_403b5f9d972e1b 51
+public/ssr.tsx
+  s_caba02f70c628e::t_7ea577552264fe 38
+app/tasks/new_comment_test.go
+  s_caba02f70c628e::t_58b0dcde9c368b 91,207,327
+public/pages/Home/components/ListPosts.tsx
+  s_caba02f70c628e::t_eb4b0007190119 8
+  s_caba02f70c628e::t_6af6cf7980f308 9,25,49-53
+  s_caba02f70c628e::t_8fba2339b6eb9f 70
+public/pages/Roadmap/Roadmap.page.tsx
+  s_caba02f70c628e::t_7ea577552264fe 1-6,8-30,32-97
+  s_caba02f70c628e::t_8411303f2eb3b5 7,31
+public/hooks/use-optimistic-vote.ts
+  s_caba02f70c628e::t_ea2dca2c1d4291 2,136-146
+  s_caba02f70c628e::t_49d5f02c4318fa 1,3-135
+public/components/common/IconBadge/index.tsx
+  s_caba02f70c628e::t_8253d3ff96bc91 1
+public/pages/Home/components/StatusChips.tsx
+  s_caba02f70c628e::t_4dbe9aa93b13d0 1-67
+public/pages/MySettings/components/SoundSettings.tsx
+  s_caba02f70c628e::t_da146bfcc73da0 18-20
+  s_caba02f70c628e::t_3c18112333b31f 1-17,21-28
+public/hooks/use-hold-to-confirm.ts
+  s_caba02f70c628e::t_1efd1842d00d2e 1-176
+public/components/RSSModal.tsx
+  s_caba02f70c628e::t_ac7827861f32bf 53-55
+  s_caba02f70c628e::t_0632e3ebc34594 7-10,19-23,46-52
+public/components/common/form/OtpInput.tsx
+  s_caba02f70c628e::t_f6b65b9a79da9c 1-68
+public/components/Header.tsx
+  s_caba02f70c628e::t_9e2283aebbda17 5-6,32,50,68-74
+  s_caba02f70c628e::t_1a07b52bc0f661 31,56-67,75-76
+public/pages/Home/Home.page.tsx
+  s_caba02f70c628e::t_1a07b52bc0f661 217-219
+  s_caba02f70c628e::t_3dac4b3c096d3f 49,63-71
+  s_caba02f70c628e::t_7c87031b8f91db 249
+  s_caba02f70c628e::t_82eb3041597d67 7,41
+  s_caba02f70c628e::t_9117bab4aa899c 201-203
+  s_caba02f70c628e::t_fc54adb4d6432f 72
+public/pages/Home/components/PostFilter.scss
+  s_caba02f70c628e::t_75fae4ef679eb0 8-9,13-14,16-22,25-26,30-59
+  s_caba02f70c628e::t_7e9a075f46b9b4 60
+public/pages/Home/components/PostsSort.tsx
+  s_caba02f70c628e::t_75fae4ef679eb0 2,8-9,31-36
+public/services/markdown.ts
+  s_caba02f70c628e::t_8fba2339b6eb9f 104-121
+app/services/email/inline_test.go
+  s_caba02f70c628e::t_da9b2170e6b29a 1-27
+views/email/new_comment.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-11
+public/pages/Home/components/PostsContainer.tsx
+  s_caba02f70c628e::t_63ff5882cdd8ab 15,179-182,234-236
+  s_caba02f70c628e::t_7e2db3bfed0db3 16,170-178,238
+  s_caba02f70c628e::t_cada310ee951de 142-165,228
+  s_caba02f70c628e::t_38f46037156d10 237
+public/components/PostDetails/PostDetails.tsx
+  s_caba02f70c628e::t_73c49124a560ee 12,309
+  s_caba02f70c628e::t_bbc6a89f654571 28,409
+  s_caba02f70c628e::t_554615e6582b20 258-259
+public/pages/MySettings/MySettings.page.tsx
+  s_caba02f70c628e::t_3c18112333b31f 10,220
+  s_caba02f70c628e::t_af867536300870 221
+public/components/common/HoldToConfirm.spec.tsx
+  s_caba02f70c628e::t_52151aaff78abd 1-64
+public/pages/Home/components/StatusChips.spec.tsx
+  s_caba02f70c628e::t_b90d0761e3a6c7 1-37
+app/cmd/routes.go
+  s_caba02f70c628e::t_2801ae3be3cca1 136
+public/components/VoteCounter.tsx
+  s_caba02f70c628e::t_bc60640529515c 9
+  s_caba02f70c628e::t_ea2dca2c1d4291 3,5,7-8,22-28,30,35-36,73,75-79
+  s_caba02f70c628e::t_ac7827861f32bf 65-71,80-86
+public/assets/images/heroicons-bars-arrow-down.svg
+  s_caba02f70c628e::t_d6da0894cdf6b4 1-3
+public/pages/Error/components/ErrorPageWrapper.tsx
+  s_caba02f70c628e::t_28909f3fade01b 25,27-28
+  s_caba02f70c628e::t_3305b9dc8aba8e 26
+public/components/Header.scss
+  s_caba02f70c628e::t_b54c18d1e293fd 40
+  s_caba02f70c628e::t_9e2283aebbda17 34,62-94
+  s_caba02f70c628e::t_a813c6cfba89ff 1-2
+  s_caba02f70c628e::t_1a07b52bc0f661 36-39,41-61
+  s_caba02f70c628e::t_685f118482a676 12,14,23-28,31,33
+  s_caba02f70c628e::t_7badb568766575 35
+views/email/delete_post.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-8
+app/tasks/status_change_test.go
+  s_caba02f70c628e::t_58b0dcde9c368b 83,201
+public/pages/Home/components/ShareFeedback.tsx
+  s_caba02f70c628e::t_d79401dbc77226 367,378,382,384,396-398
+  s_caba02f70c628e::t_2514aa810b5cab 92-97,288-343,424,427-451,453-482,513-514,533-540,542-570,574-575
+  s_caba02f70c628e::t_0261c1b773964d 9,239,242
+public/pages/Home/components/PostFilter.tsx
+  s_caba02f70c628e::t_75fae4ef679eb0 6,166,170-174
+app/services/email/message.go
+  s_caba02f70c628e::t_0696b665079b18 54
+public/services/lastVisit.spec.ts
+  s_caba02f70c628e::t_be3f26516f8bc2 1-29
+public/components/SignInModal.tsx
+  s_caba02f70c628e::t_3305b9dc8aba8e 27
+public/services/lastVisit.ts
+  s_caba02f70c628e::t_be3f26516f8bc2 1-49
+public/assets/styles/utility/text.scss
+  s_caba02f70c628e::t_bbc6a89f654571 160-172
+views/email/invite_email.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-5
+views/email/change_status.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-14,17
+views/email/signin_email.html
+  s_caba02f70c628e::t_d4a06fd44ca1c3 4-13
+app/tasks/status_change.go
+  s_caba02f70c628e::t_cd5d08cc708baa 79
+public/components/common/IconBadge/IconBadge.scss
+  s_caba02f70c628e::t_8253d3ff96bc91 1-17
+public/components/StatusJourney.scss
+  s_caba02f70c628e::t_1c54ca5e02497e 1-6,12-16,18-20,24,26-27,29-31,34-35,37-40,43-50,52-58,61-62,66-67,71-72
+  s_caba02f70c628e::t_dec6506943677d 7-11,17,21-23,25,28,32-33,36,41-42,51,59-60,63-65,68-70
+public/pages/ShowPost/components/DeletePostModal.tsx
+  s_caba02f70c628e::t_0c609d3ba45faf 4,55-57
+app/tasks/new_comment.go
+  s_caba02f70c628e::t_cd5d08cc708baa 304
+views/email/base_email.html
+  s_caba02f70c628e::t_0696b665079b18 3-4,6-8,10-12,14-34,40
+public/services/index.ts
+  s_caba02f70c628e::t_a74f973473cf57 13,15
+public/components/VoteCounter.scss
+  s_caba02f70c628e::t_ea2dca2c1d4291 12
+public/hooks/use-new-posts.spec.tsx
+  s_caba02f70c628e::t_073d721c2b6596 1-46
+public/components/StatusJourney.tsx
+  s_caba02f70c628e::t_1c54ca5e02497e 1-58,60
+  s_caba02f70c628e::t_6ac2a07de4308e 59,61-63
+public/pages/Home/components/NewPostsPill.scss
+  s_caba02f70c628e::t_7e2db3bfed0db3 1-53
+public/pages/SignIn/LoginEmailSent.page.tsx
+  s_caba02f70c628e::t_be3f26516f8bc2 2,4,21
+package.json
+  s_caba02f70c628e::t_85dc7eeea13a14 104
+  s_caba02f70c628e::t_efbf14b6124c59 20
+public/services/markdown.spec.ts
+  s_caba02f70c628e::t_06a87a4ebcb952 89-100
+public/components/Footer.scss
+  s_caba02f70c628e::t_88eedd978cdad1 18-19,31-56
+  s_caba02f70c628e::t_7c87031b8f91db 1-17,20-30,57-58
+public/pages/ShowPost/components/CopyLinkButton.scss
+  s_caba02f70c628e::t_bbc6a89f654571 1-74
+public/pages/ShowPost/ShowPost.page.tsx
+  s_caba02f70c628e::t_7c87031b8f91db 6,44
+public/components/VoteBurst.scss
+  s_caba02f70c628e::t_a11eebaf1e0b3e 1-15,17-72
+  s_caba02f70c628e::t_3c409f74a15947 16
+public/components/VoteCounter.spec.tsx
+  s_caba02f70c628e::t_bc60640529515c 123,127-132,148,152-157
+public/components/common/Logo.tsx
+  s_caba02f70c628e::t_ecc4cf2a4c2139 27-28
+public/components/common/HoldToConfirm.tsx
+  s_caba02f70c628e::t_1efd1842d00d2e 1-45
+public/components/common/Modal.tsx
+  s_caba02f70c628e::t_a2e21a1f8b3ee7 72,74
+public/components/ShowPostResponse.scss
+  s_caba02f70c628e::t_50a0db31451cb7 1-60
+public/components/common/IconBadge/IconBadge.tsx
+  s_caba02f70c628e::t_8253d3ff96bc91 1-19
+public/pages/Home/components/StatusChips.scss
+  s_caba02f70c628e::t_4dbe9aa93b13d0 1-69
+public/components/CommandPalette.scss
+  s_caba02f70c628e::t_9e2283aebbda17 1-47,50-147
+  s_caba02f70c628e::t_d5741a2c7e983b 48-49
+public/pages/ShowPost/ShowPost.page.scss
+  s_caba02f70c628e::t_70f92d54227f8b 46-47,49,52,54-58,62,66
+  s_caba02f70c628e::t_287569ad17b2a1 158-159,161,194-195,197,203,207-208,210,214
+package-lock.json
+  s_caba02f70c628e::t_80ec477866382c 24,7822-7827
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ce6bed5c4849965b6c17a1c3ca42975b636dfbec",
+  "prompts": {},
+  "sessions": {
+    "s_caba02f70c628e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "63d8c449-ae65-4079-82f9-c9422ce7ef64",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "djf1982 <138519957+djf1982@users.noreply.github.com>"
+    }
+  }
+}
