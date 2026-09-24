@@ -1,0 +1,147 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
+.c-palette {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12vh spacing(4) spacing(4);
+  background-color: rgba(15, 23, 42, 0.32);
+  animation: c-palette-fade 0.16s ease both;
+
+  &__panel {
+    width: 100%;
+    max-width: 560px;
+    overflow: hidden;
+    border: 1px solid var(--colors-gray-200);
+    border-radius: get("border.radius.large");
+    background-color: var(--colors-white);
+    box-shadow: 0 24px 48px -16px rgba(15, 23, 42, 0.32);
+    animation: c-palette-rise 0.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: spacing(3);
+    padding: 0 spacing(4);
+    border-bottom: 1px solid var(--colors-gray-200);
+  }
+
+  &__search-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--colors-gray-500);
+    flex-shrink: 0;
+  }
+
+  &__input {
+    flex: 1;
+    height: 52px;
+    border: 0;
+    background: transparent;
+    color: var(--colors-gray-900);
+    font-size: 16px;
+
+    // The global focus ring is off (class no-focus): the whole panel is the focus context.
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: var(--colors-gray-500);
+    }
+  }
+
+  &__kbd {
+    padding: 2px 6px;
+    border: 1px solid var(--colors-gray-200);
+    border-radius: 4px;
+    color: var(--colors-gray-500);
+    font-family: $font-base;
+    font-size: 11px;
+  }
+
+  &__list {
+    max-height: min(52vh, 380px);
+    margin: 0;
+    padding: spacing(2);
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: spacing(3);
+    min-height: 40px;
+    padding: 0 spacing(3);
+    border-radius: get("border.radius.medium");
+    color: var(--colors-gray-700);
+    font-size: get("font.size.sm");
+    cursor: pointer;
+
+    &--active {
+      background-color: var(--colors-gray-100);
+      color: var(--colors-gray-900);
+    }
+  }
+
+  &__icon {
+    width: 16px;
+    height: 16px;
+    color: var(--colors-gray-500);
+    flex-shrink: 0;
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__votes {
+    color: var(--colors-gray-500);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__empty {
+    padding: spacing(6) spacing(3);
+    color: var(--colors-gray-600);
+    font-size: get("font.size.sm");
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+
+    &__panel {
+      animation: none;
+    }
+  }
+}
+
+@keyframes c-palette-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes c-palette-rise {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

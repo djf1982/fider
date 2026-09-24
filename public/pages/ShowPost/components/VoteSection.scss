@@ -96,3 +96,11 @@
     }
   }
 }
+
+// The burst sparks need a positioned parent around the icon.
+.c-vote-section__icon-wrap {
+  position: relative;
+  display: inline-flex;
+  // The up button is dark, so the sparks use a light blue.
+  --burst-color: var(--colors-blue-300);
+}

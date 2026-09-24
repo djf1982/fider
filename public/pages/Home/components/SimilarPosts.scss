@@ -11,3 +11,73 @@
   max-height: 100vh;
   //   opacity: 1;
 }
+
+// One line under the editor that reports the duplicate check.
+.similar-posts-status {
+  min-height: 22px;
+  margin: -8px 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+
+  &__checking {
+    // Shimmer text, as in the Shimmer part of beautifului.dev.
+    background: linear-gradient(
+      90deg,
+      var(--colors-gray-500) 0%,
+      var(--colors-gray-500) 35%,
+      var(--colors-gray-900) 50%,
+      var(--colors-gray-500) 65%,
+      var(--colors-gray-500) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: similar-posts-shimmer 1.8s linear infinite;
+  }
+
+  &__new {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--colors-green-700);
+    animation: similar-posts-fade-in 0.25s ease both;
+  }
+
+  &__icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__checking {
+      animation: none;
+      color: var(--colors-gray-600);
+      background: none;
+    }
+
+    &__new {
+      animation: none;
+    }
+  }
+}
+
+@keyframes similar-posts-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes similar-posts-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

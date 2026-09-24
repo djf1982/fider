@@ -5,7 +5,7 @@ import { ErrorPageWrapper } from "./components/ErrorPageWrapper"
 const Error404 = () => {
   return (
     <ErrorPageWrapper id="p-error404" showHomeLink={true}>
-      <h1 className="text-display uppercase">
+      <h1 className="text-display">
         <Trans id="error.pagenotfound.title">Page not found</Trans>
       </h1>
       <p>

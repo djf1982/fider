@@ -10,6 +10,7 @@ import HeroIconThumbsDown from "@fider/assets/images/heroicons-thumbsdown.svg"
 import { HStack, VStack } from "./layout"
 import { Trans } from "@lingui/react/macro"
 import { useFider } from "@fider/hooks"
+import "./ShowPostResponse.scss"
 
 type Size = "micro" | "small" | "xsmall" | "normal"
 
@@ -60,26 +61,23 @@ export const ResponseDetails = (props: PostResponseProps): JSX.Element | null =>
   )
 }
 
-// Monochrome status lozenge. Completed / Declined keep a subtle hue
-// because they're terminal states that benefit from being scannable;
-// the rest are ink-on-paper so admin-coloured tags carry the only
-// colour signal in the post list.
-const getLozengeProps = (status: PostStatus): { icon: SpriteSymbol; bg: string; color: string; border: string } => {
+// Status chip, styled like the uptime chips on the Scoutworks status page.
+// Completed and Declined keep green and red. Planned and Started use the
+// brand cobalt. Open and Duplicate stay neutral ink-on-paper.
+const getLozengeIcon = (status: PostStatus): SpriteSymbol => {
   switch (status) {
     case PostStatus.Declined:
-      return { icon: HeroIconThumbsDown, bg: "bg-red-50", color: "text-red-700", border: "border-red-200" }
+      return HeroIconThumbsDown
     case PostStatus.Completed:
-      return { icon: HeroIconCheck, bg: "bg-green-50", color: "text-green-700", border: "border-green-200" }
+      return HeroIconCheck
     case PostStatus.Duplicate:
-      return { icon: HeroIconDuplicate, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
+      return HeroIconDuplicate
     case PostStatus.Planned:
-      return { icon: HeroIconThumbsUp, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
-    case PostStatus.Started:
-      return { icon: HeroIconSparkles, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
+      return HeroIconThumbsUp
     case PostStatus.Open:
-      return { icon: HeroIconLightBulb, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
+      return HeroIconLightBulb
     default:
-      return { icon: HeroIconSparkles, bg: "bg-gray-100", color: "text-gray-700", border: "border-gray-200" }
+      return HeroIconSparkles
   }
 }
 
@@ -106,30 +104,17 @@ const getStatusTranslation = (status: PostStatus): JSX.Element => {
 
 export const ResponseLozenge = (props: PostResponseProps): JSX.Element | null => {
   const status = PostStatus.Get(props.status)
-  const { icon, bg, color, border } = getLozengeProps(status)
   const translatedStatus = getStatusTranslation(status)
 
   if (props.size == "micro") {
-    return <span className={`${color} text-sm`}>{translatedStatus}</span>
+    return <span className={`c-status-text c-status-text--${status.value} text-sm`}>{translatedStatus}</span>
   }
 
-  if (props.size === "xsmall") {
-    return (
-      <div>
-        <HStack align="center" className={`${color} ${bg} rounded-full p-0 px-3`}>
-          <Icon sprite={icon} className={`h-4 c-status-col--${status.value}`} />
-          <span className={`c-status-col--${status.value} text-xs uppercase`}>{translatedStatus}</span>
-        </HStack>
-      </div>
-    )
-  }
-
+  const showIcon = props.size !== "small"
   return (
-    <div>
-      <HStack align="start" className={`${color} ${bg} border ${border} rounded-full p-1 px-3`}>
-        {!props.size && <Icon sprite={icon} className={`h-5 c-status-col--${status.value}`} />}
-        <span className={`c-status-col--${status.value} ${props.size === "small" ? "text-sm" : "text-semibold"}`}>{translatedStatus}</span>
-      </HStack>
-    </div>
+    <span className={`c-status-chip c-status-chip--${status.value}`}>
+      {showIcon && <Icon sprite={getLozengeIcon(status)} className="c-status-chip__icon" />}
+      <span>{translatedStatus}</span>
+    </span>
   )
 }

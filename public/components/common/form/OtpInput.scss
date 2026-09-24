@@ -1,0 +1,83 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
+.c-otp {
+  display: flex;
+  align-items: center;
+  gap: spacing(2);
+
+  &__cell {
+    width: 44px;
+    height: 52px;
+    padding: 0;
+    border: 1px solid var(--colors-gray-200);
+    border-radius: get("border.radius.medium");
+    background-color: var(--colors-white);
+    color: var(--colors-gray-900);
+    font-size: 22px;
+    font-weight: get("font.weight.semibold");
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    caret-color: var(--colors-blue-600);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus {
+      outline: none;
+    }
+
+    &--filled {
+      border-color: var(--colors-gray-400);
+    }
+
+    &--focused {
+      border-color: var(--colors-blue-600);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+    }
+  }
+
+  &__separator {
+    width: 8px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: var(--colors-gray-300);
+  }
+
+  &--invalid &__cell {
+    border-color: var(--colors-red-500);
+  }
+
+  &--shake {
+    animation: c-otp-shake 360ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__cell {
+      transition: none;
+    }
+
+    &--shake {
+      animation: none;
+    }
+  }
+}
+
+@keyframes c-otp-shake {
+  15%,
+  85% {
+    transform: translateX(-2px);
+  }
+  30%,
+  70% {
+    transform: translateX(4px);
+  }
+  45%,
+  55% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}

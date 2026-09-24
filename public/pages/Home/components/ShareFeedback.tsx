@@ -6,7 +6,7 @@ import { Modal, CloseIcon, Form, Button, Input, TextArea, LegalFooter, Icon } fr
 import type { PostImportance } from "@fider/services/actions/post"
 import { useFider } from "@fider/hooks"
 import { Trans } from "@lingui/react/macro"
-import { actions, Failure, querystring, classSet } from "@fider/services"
+import { actions, Failure, querystring, classSet, sound } from "@fider/services"
 import { plainText } from "@fider/services/markdown"
 import { i18n } from "@lingui/core"
 import { Tag } from "@fider/models"
@@ -89,6 +89,12 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
   const [isInitialMount, setIsInitialMount] = useState(true)
   const [submissionState, setSubmissionState] = useState<SubmissionState>("editing")
   const [createdPost, setCreatedPost] = useState<CreatedPost | null>(null)
+  // The form is a wizard: one step shows at a time. All fields stay mounted,
+  // so the editor, attachments and saved drafts keep their state.
+  const [step, setStep] = useState(0)
+  const [furthestStep, setFurthestStep] = useState(0)
+  const [stepDirection, setStepDirection] = useState<"forward" | "back">("forward")
+  const stepsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setIsInitialMount(false)
@@ -230,8 +236,10 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
           setSubmissionState("success")
           // Fire confetti for approved posts
           fireConfetti()
+          sound.playCue("submitted")
         } else {
           setSubmissionState("moderation")
+          sound.playCue("submitted")
         }
       } else if (result.error) {
         setSubmissionState("editing")
@@ -277,6 +285,62 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
     onClose()
   }
 
+  const steps = [
+    i18n._({ id: "newpost.wizard.step.problem", message: "The problem" }),
+    i18n._({ id: "newpost.wizard.step.outcome", message: "The outcome" }),
+    i18n._({ id: "newpost.wizard.step.detail", message: "More detail" }),
+    i18n._({ id: "newpost.wizard.step.title", message: "Title and submit" }),
+  ]
+  const lastStep = steps.length - 1
+
+  const goToStep = (next: number) => {
+    if (next === step || next < 0 || next > lastStep) {
+      return
+    }
+    setStepDirection(next > step ? "forward" : "back")
+    setStep(next)
+    setFurthestStep((furthest) => Math.max(furthest, next))
+    sound.playCue("more")
+  }
+
+  // Move focus to the first field of the step that just opened.
+  useEffect(() => {
+    if (isInitialMount) {
+      return
+    }
+    const section = stepsRef.current?.querySelector(`[data-step="${step}"]`)
+    const target = section?.querySelector<HTMLElement>(".ProseMirror, input:not([type=hidden]), textarea, button")
+    target?.focus()
+  }, [step])
+
+  // Open the step that holds the first field the server rejected.
+  const stepForField: { [field: string]: number } = {
+    problem: 0,
+    idealOutcome: 1,
+    importance: 1,
+    workaround: 2,
+    suggestedSolution: 2,
+    tags: 2,
+    title: 3,
+  }
+  useEffect(() => {
+    const field = error?.errors?.find((e) => e.field && e.field in stepForField)?.field
+    if (field !== undefined) {
+      goToStep(stepForField[field])
+    }
+  }, [error])
+
+  const problemIsLongEnough = plainText(description).trim().length >= 10
+  const stepIsEmpty =
+    (step === 1 && !idealOutcome.trim() && !importance) || (step === 2 && !workaround.trim() && !suggestedSolution.trim() && tags.length === 0)
+
+  const stepClass = (index: number) =>
+    classSet({
+      "c-wizard__step": true,
+      "c-wizard__step--active": index === step,
+      [`c-wizard__step--${stepDirection}`]: index === step,
+    })
+
   const importanceOptions: { value: PostImportance; label: string }[] = [
     { value: "nice-to-have", label: i18n._({ id: "newpost.modal.importance.nicetohave", message: "Nice to have" }) },
     { value: "important", label: i18n._({ id: "newpost.modal.importance.important", message: "Important" }) },
@@ -300,11 +364,7 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
           <div className="c-share-feedback__content c-share-feedback__success">
             <VStack spacing={6} className="text-center">
               <div className="c-share-feedback__success-icon">
-                {isSuccess ? (
-                  <span className="c-share-feedback__celebration-emoji">🎉</span>
-                ) : (
-                  <span className="c-share-feedback__moderation-emoji">📝</span>
-                )}
+                {isSuccess ? <span className="c-share-feedback__celebration-emoji">🎉</span> : <span className="c-share-feedback__moderation-emoji">📝</span>}
               </div>
 
               <h1 className="text-large">
@@ -315,19 +375,13 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                 )}
               </h1>
 
-              {createdPost && (
-                <p className="c-share-feedback__success-post-title">"{createdPost.title}"</p>
-              )}
+              {createdPost && <p className="c-share-feedback__success-post-title">&ldquo;{createdPost.title}&rdquo;</p>}
 
               <p className="text-muted">
                 {isSuccess ? (
-                  <Trans id="newpost.success.description">
-                    We'll notify you when there's an update on your idea.
-                  </Trans>
+                  <Trans id="newpost.success.description">We&apos;ll notify you when there&apos;s an update on your idea.</Trans>
                 ) : (
-                  <Trans id="newpost.moderation.description">
-                    Your idea is awaiting review by our team. We'll notify you once it's published.
-                  </Trans>
+                  <Trans id="newpost.moderation.description">Your idea is awaiting review by our team. We&apos;ll notify you once it&apos;s published.</Trans>
                 )}
               </p>
 
@@ -339,7 +393,9 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                   <Button variant="secondary" onClick={handleShareIdea}>
                     <HStack spacing={2}>
                       <Icon sprite={IconShare} className="h-4 w-4" />
-                      <span><Trans id="newpost.success.shareidea">Share Idea</Trans></span>
+                      <span>
+                        <Trans id="newpost.success.shareidea">Share Idea</Trans>
+                      </span>
                     </HStack>
                   </Button>
                 </HStack>
@@ -365,50 +421,65 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
       </Modal.Header>
       <Modal.Content>
         <div className="c-share-feedback__content mb-4">
-          <h1 className="text-large pb-6">
+          <h1 className="text-large pb-4">
             <Trans id="newpost.modal.title">Share your idea...</Trans>
           </h1>
-          <div className="c-share-feedback-form">
+          <div className="c-wizard__header">
+            <p className="c-wizard__label" aria-live="polite">
+              {i18n._({ id: "newpost.wizard.progress", message: "Step {current} of {total}", values: { current: step + 1, total: steps.length } })}
+              <span className="c-wizard__label-name"> · {steps[step]}</span>
+            </p>
+            <ol className="c-wizard__markers">
+              {steps.map((name, i) => (
+                <li key={name}>
+                  <button
+                    type="button"
+                    className={classSet({
+                      "c-wizard__marker": true,
+                      "c-wizard__marker--done": i < step,
+                      "c-wizard__marker--current": i === step,
+                    })}
+                    disabled={i > furthestStep}
+                    aria-current={i === step ? "step" : undefined}
+                    aria-label={name}
+                    onClick={() => goToStep(i)}
+                  />
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="c-share-feedback-form" ref={stepsRef}>
             <Form error={error}>
-              <label className="c-form-field-label" htmlFor="input-problem">
-                <Trans id="newpost.modal.problem.label">What would you love to be able to do?</Trans>
-              </label>
-              <p className="text-muted text-sm mb-2">
-                <Trans id="newpost.modal.problem.hint">
-                  Tell us what you&apos;re trying to achieve and why it matters to you. Focus on the goal rather than a specific solution — that helps us find
-                  the best way to help.
-                </Trans>
-              </p>
-              <div ref={editorRef} className="mb-4">
-                <CommentEditor
-                  field="problem"
-                  onChange={handleDescriptionChange}
-                  onFocus={handleEditorFocus}
-                  initialValue={description}
-                  disabled={fider.isReadOnly || submissionState === "submitting"}
-                  maxAttachments={3}
-                  maxImageSizeKB={5 * 1024}
-                  placeholder={i18n._({
-                    id: "newpost.modal.problem.placeholder",
-                    message: "Tell us what you'd like to do and why. The more context, the better.",
-                  })}
-                  onImageUploaded={handleImageUploaded}
-                  onGetImageSrc={getImageSrc}
-                />
-              </div>
-              <SimilarPosts title={title} tags={props.tags} />
-              <Input
-                field="title"
-                inputRef={titleRef}
-                maxLength={255}
-                label={i18n._({ id: "newpost.modal.title.label", message: "Give your idea a title" })}
-                value={title}
-                disabled={fider.isReadOnly || submissionState === "submitting"}
-                onChange={handleTitleChange}
-                onKeyDown={handleKeyDown}
-                placeholder={i18n._({ id: "newpost.modal.title.placeholder", message: "Something short and snappy, sum it up in a few words" })}
-              />
-              <div className="c-share-feedback__more-detail">
+              <section data-step={0} className={stepClass(0)}>
+                <label className="c-form-field-label" htmlFor="input-problem">
+                  <Trans id="newpost.modal.problem.label">What would you love to be able to do?</Trans>
+                </label>
+                <p className="text-muted text-sm mb-2">
+                  <Trans id="newpost.modal.problem.hint">
+                    Tell us what you&apos;re trying to achieve and why it matters to you. Focus on the goal rather than a specific solution — that helps us find
+                    the best way to help.
+                  </Trans>
+                </p>
+                <div ref={editorRef} className="mb-4">
+                  <CommentEditor
+                    field="problem"
+                    onChange={handleDescriptionChange}
+                    onFocus={handleEditorFocus}
+                    initialValue={description}
+                    disabled={fider.isReadOnly || submissionState === "submitting"}
+                    maxAttachments={3}
+                    maxImageSizeKB={5 * 1024}
+                    placeholder={i18n._({
+                      id: "newpost.modal.problem.placeholder",
+                      message: "Tell us what you'd like to do and why. The more context, the better.",
+                    })}
+                    onImageUploaded={handleImageUploaded}
+                    onGetImageSrc={getImageSrc}
+                  />
+                </div>
+                <SimilarPosts title={title} tags={props.tags} />
+              </section>
+              <section data-step={1} className={stepClass(1)}>
                 <TextArea
                   field="idealOutcome"
                   label={i18n._({ id: "newpost.modal.idealoutcome.label", message: "What would a good solution let you do? (optional)" })}
@@ -439,6 +510,8 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                     ))}
                   </div>
                 </div>
+              </section>
+              <section data-step={2} className={stepClass(2)}>
                 <TextArea
                   field="workaround"
                   label={i18n._({ id: "newpost.modal.workaround.label", message: "How do you handle this today? (optional)" })}
@@ -457,22 +530,49 @@ export const ShareFeedback: React.FC<ShareFeedbackProps> = (props) => {
                   onChange={setSuggestedSolution}
                   placeholder={i18n._({ id: "newpost.modal.suggestion.placeholder", message: "Optional — your idea for how this could work." })}
                 />
-              </div>
-              {canEditTags && (
-                <div className="c-form-field">
-                  <label>
-                    <Trans id="label.tags">Tags</Trans>
-                  </label>
-                  <div className={classSet({ "c-form-field": true })}>
-                    <TagsSelect tags={props.tags} selectionChanged={handleTagsChanged} selected={tags} alwaysEditing={true} canEdit={true} />
+                {canEditTags && (
+                  <div className="c-form-field">
+                    <label>
+                      <Trans id="label.tags">Tags</Trans>
+                    </label>
+                    <div className={classSet({ "c-form-field": true })}>
+                      <TagsSelect tags={props.tags} selectionChanged={handleTagsChanged} selected={tags} alwaysEditing={true} canEdit={true} />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </section>
+              <section data-step={3} className={stepClass(3)}>
+                <Input
+                  field="title"
+                  inputRef={titleRef}
+                  maxLength={255}
+                  label={i18n._({ id: "newpost.modal.title.label", message: "Give your idea a title" })}
+                  value={title}
+                  disabled={fider.isReadOnly || submissionState === "submitting"}
+                  onChange={handleTitleChange}
+                  onKeyDown={handleKeyDown}
+                  placeholder={i18n._({ id: "newpost.modal.title.placeholder", message: "Something short and snappy, sum it up in a few words" })}
+                />
+              </section>
+              <div className="c-wizard__nav">
+                {step > 0 ? (
+                  <Button variant="secondary" onClick={() => goToStep(step - 1)} disabled={submissionState === "submitting"}>
+                    <Trans id="newpost.wizard.back">Back</Trans>
+                  </Button>
+                ) : (
+                  <span />
+                )}
+                {step < lastStep && (
+                  <Button variant="primary" onClick={() => goToStep(step + 1)} disabled={step === 0 && !problemIsLongEnough}>
+                    {stepIsEmpty ? <Trans id="newpost.wizard.skip">Skip</Trans> : <Trans id="newpost.wizard.next">Next</Trans>}
+                  </Button>
+                )}
+              </div>
             </Form>
           </div>
         </div>
-        {/* For unauthenticated users, always show the sign-in control */}
-        {!fider.session.isAuthenticated ? (
+        {/* The sign-in control and the submit button show on the last step only. */}
+        {step !== lastStep ? null : !fider.session.isAuthenticated ? (
           <div className="c-share-feedback__content">
             <div className="c-share-feedback-signin">
               <h2 className="text-title text-center mb-4">

@@ -1,3 +1,5 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
 #c-header {
   border-bottom: 1px solid var(--colors-gray-200);
 
@@ -7,7 +9,9 @@
     }
   }
 
+  // Logo mark + wordmark lockup, as in the marketing site's Navbar.tsx.
   .c-header__logo-link {
+    gap: 8px;
     color: var(--colors-gray-900);
     transition: color 0.2s ease;
 
@@ -16,10 +20,78 @@
     }
   }
 
+  .c-header__logo {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
   .c-header__wordmark {
     display: inline-block;
-    height: 22px;
+    height: 29px;
     width: auto;
+    margin-left: 2px;
+  }
+
+  // Text links, as in the website navbar. Hidden on small screens,
+  // where the home page links to the roadmap from the welcome card.
+  .c-header__nav {
+    display: none;
+    align-items: center;
+    gap: spacing(6);
+    margin-left: spacing(10);
+
+    @include media("md") {
+      display: flex;
+    }
+
+    a {
+      color: var(--colors-gray-600);
+      font-size: get("font.size.sm");
+      font-weight: get("font.weight.medium");
+      text-decoration: none;
+      transition: color 0.15s ease;
+
+      &:hover,
+      &.is-active {
+        color: var(--colors-gray-900);
+      }
+    }
+  }
+
+  .c-header__palette {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing(2);
+    height: 32px;
+    padding: 0 spacing(2) 0 spacing(3);
+    border: 1px solid var(--colors-gray-200);
+    border-radius: get("border.radius.medium");
+    background-color: var(--colors-gray-50);
+    color: var(--colors-gray-600);
+    font-size: get("font.size.sm");
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      border-color: var(--colors-gray-300);
+      color: var(--colors-gray-900);
+    }
+
+    kbd {
+      padding: 1px 6px;
+      border: 1px solid var(--colors-gray-200);
+      border-radius: 4px;
+      background-color: var(--colors-white);
+      color: var(--colors-gray-500);
+      font-family: $font-base;
+      font-size: 11px;
+    }
+  }
+
+  .c-header__palette-icon {
+    width: 14px;
+    height: 14px;
   }
 
   .c-header__moderation {

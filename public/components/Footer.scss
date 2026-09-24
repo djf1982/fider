@@ -1,0 +1,58 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
+#c-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: spacing(3);
+  margin-top: spacing(6);
+  padding-top: spacing(6);
+  padding-bottom: spacing(10);
+  border-top: 1px solid var(--colors-gray-200);
+  color: var(--colors-gray-500);
+  font-size: 14px;
+
+  .c-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: spacing(5);
+
+    a {
+      color: var(--colors-blue-600);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--colors-blue-700);
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .c-footer__sound {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing(1);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--colors-gray-500);
+    font: inherit;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--colors-gray-900);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--colors-primary-base);
+      outline-offset: 2px;
+    }
+  }
+
+  .c-footer__sound-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

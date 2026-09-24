@@ -3,7 +3,7 @@ import "./ShowPost.page.scss"
 import React from "react"
 
 import { Comment, Post, Tag, Vote } from "@fider/models"
-import { Header, Icon } from "@fider/components"
+import { Header, Footer, Icon } from "@fider/components"
 import { PostDetails } from "@fider/components/PostDetails"
 import { HStack } from "@fider/components/layout"
 import { Trans } from "@lingui/react/macro"
@@ -41,6 +41,7 @@ export default function ShowPostPage(props: ShowPostPageProps) {
           initialAttachments={props.attachments}
         />
       </div>
+      <Footer />
     </>
   )
 }

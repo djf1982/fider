@@ -101,3 +101,21 @@ export const plainText = (input: string): string => {
   const text = sanitize(marked(input, { renderer: plainTextRenderer }).trim())
   return decodeHtmlEntities(text).trim()
 }
+
+// A structured post description starts with a "**The problem**" heading.
+// See composePostDescription in app/services/sqlstore/postgres/post.go.
+const problemHeading = /^\*\*The problem\*\*[ \t]*\n+/
+const nextSectionHeading = /\n\n\*\*(Ideal outcome|Importance|Current workaround|Suggested solution)\*\*[ \t]*(\n|$)/
+
+// postSummary returns the Markdown to show in a short preview of a post.
+// For a structured post, it is the text of "The problem" section only.
+// For any other post, it is the full description.
+// Keep this in step with Post.Summary in app/models/entity/post.go.
+export const postSummary = (description: string): string => {
+  if (!problemHeading.test(description)) {
+    return description
+  }
+  const body = description.replace(problemHeading, "")
+  const next = body.search(nextSectionHeading)
+  return (next >= 0 ? body.slice(0, next) : body).trim()
+}

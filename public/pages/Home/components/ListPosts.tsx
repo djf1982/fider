@@ -5,6 +5,8 @@ import { i18n } from "@lingui/core"
 import IconChatAlt2 from "@fider/assets/images/heroicons-chat-alt-2.svg"
 import { HStack, VStack } from "@fider/components/layout"
 import { useFider } from "@fider/hooks"
+import { markdown } from "@fider/services"
+import { isNewSincePreviousVisit } from "@fider/services/lastVisit"
 import { Trans } from "@lingui/react/macro"
 
 interface ListPostsProps {
@@ -20,6 +22,7 @@ const ListPostItem = (props: { post: Post; user?: CurrentUser; tags: Tag[]; onPo
   const isModerationEnabled = fider.session.tenant.isModerationEnabled
   const isPending = isModerationEnabled && !props.post.isApproved
   const isBug = props.post.tags.some((tag) => tag.toLowerCase() === "bug")
+  const isNew = isNewSincePreviousVisit(props.post.createdAt)
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (props.onPostClick) {
@@ -43,6 +46,11 @@ const ListPostItem = (props: { post: Post; user?: CurrentUser; tags: Tag[]; onPo
           <HStack justify="between" align="start">
             <HStack spacing={2} align="start" className="w-full">
               <h3 className="c-posts-container__post-title text-break">
+                {isNew && (
+                  <span className="c-posts-container__new">
+                    <Trans id="home.post.new">New</Trans>
+                  </span>
+                )}
                 {isBug && <span title="Bug">🐛 </span>}
                 {props.post.title}
               </h3>
@@ -59,7 +67,7 @@ const ListPostItem = (props: { post: Post; user?: CurrentUser; tags: Tag[]; onPo
               </HStack>
             )}
           </HStack>
-          <Markdown className="c-posts-container__postdescription" maxLength={300} text={props.post.description} style="plainText" />
+          <Markdown className="c-posts-container__postdescription" maxLength={300} text={markdown.postSummary(props.post.description)} style="plainText" />
           {props.tags.length >= 1 && (
             <HStack spacing={0} className="gap-2 flex-wrap">
               {props.tags.map((tag) => (

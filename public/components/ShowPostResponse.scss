@@ -1,0 +1,60 @@
+// Post status chips. They copy the uptime chips on the Scoutworks
+// status page (uptime-kuma overrides/dist/scoutworks/status.css).
+
+.c-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border: 1px solid var(--colors-gray-200);
+  border-radius: 9999px;
+  background-color: var(--colors-gray-100);
+  color: var(--colors-gray-700);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  &__icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  &--planned,
+  &--started {
+    background-color: var(--colors-blue-50);
+    border-color: var(--colors-blue-200);
+    color: var(--colors-blue-600);
+  }
+
+  &--completed {
+    background-color: var(--colors-green-50);
+    border-color: var(--colors-green-200);
+    color: var(--colors-green-700);
+  }
+
+  &--declined {
+    background-color: var(--colors-red-50);
+    border-color: var(--colors-red-200);
+    color: var(--colors-red-700);
+  }
+}
+
+.c-status-text {
+  color: var(--colors-gray-700);
+
+  &--planned,
+  &--started {
+    color: var(--colors-blue-600);
+  }
+
+  &--completed {
+    color: var(--colors-green-700);
+  }
+
+  &--declined {
+    color: var(--colors-red-700);
+  }
+}

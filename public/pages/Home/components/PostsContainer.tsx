@@ -12,6 +12,8 @@ import { ListPosts } from "./ListPosts"
 import { i18n } from "@lingui/core"
 import { Trans } from "@lingui/react/macro"
 import { PostsSort } from "./PostsSort"
+import { StatusChips } from "./StatusChips"
+import { NewPostsPill } from "./NewPostsPill"
 
 interface PostsContainerProps {
   user?: CurrentUser
@@ -137,8 +139,45 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
     }
   }
 
+  public componentDidMount() {
+    document.addEventListener("keydown", this.handleSearchShortcut)
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleSearchShortcut)
+  }
+
+  // Press "/" to move to the search box, unless the user is typing somewhere else.
+  private handleSearchShortcut = (e: KeyboardEvent) => {
+    if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) {
+      return
+    }
+    const target = e.target as HTMLElement | null
+    if (target && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))) {
+      return
+    }
+    const search = document.getElementById("input-query")
+    if (search) {
+      e.preventDefault()
+      search.focus()
+    }
+  }
+
   private handleFilterChanged = (filterState: FilterState) => {
     this.changeFilterCriteria({ filterState }, true)
+  }
+
+  private listRef = React.createRef<HTMLDivElement>()
+
+  // Show the newest ideas at the top of the list.
+  private showNewPosts = () => {
+    this.changeFilterCriteria({ view: "recent", query: "" }, true)
+    const top = (this.listRef.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 96
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" })
+  }
+
+  private handleStatusChipChanged = (statuses: string[]) => {
+    this.changeFilterCriteria({ filterState: { ...this.state.filterState, statuses } }, true)
   }
 
   private handleSearchFilterChanged = (query: string) => {
@@ -186,13 +225,17 @@ export class PostsContainer extends React.Component<PostsContainerProps, PostsCo
               field="query"
               icon={this.state.query ? IconX : IconSearch}
               onIconClick={this.state.query ? this.clearSearch : undefined}
-              placeholder={i18n._({ id: "home.postscontainer.query.placeholder", message: "Search" })}
+              placeholder={i18n._({ id: "home.postscontainer.query.placeholder.shortcut", message: "Search (press /)" })}
               value={this.state.query}
               onChange={this.handleSearchFilterChanged}
             />
           </div>
         </div>
-        <div className="c-posts-container__list">
+        {!this.state.query && (
+          <StatusChips countPerStatus={this.props.countPerStatus} statuses={this.state.filterState.statuses} onChange={this.handleStatusChipChanged} />
+        )}
+        <NewPostsPill onShow={this.showNewPosts} />
+        <div className="c-posts-container__list" ref={this.listRef}>
           <ListPosts
             posts={this.state.posts}
             tags={this.props.tags}

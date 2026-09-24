@@ -1,9 +1,9 @@
 import "./SignInControl.scss"
 
-import React, { useState } from "react"
-import { SocialSignInButton, Form, Button, Input, Message } from "@fider/components"
+import React, { useRef, useState } from "react"
+import { SocialSignInButton, Form, Button, Input, Message, OtpInput } from "@fider/components"
 import { Divider } from "@fider/components/layout"
-import { device, actions, Failure, isCookieEnabled } from "@fider/services"
+import { device, actions, Failure, isCookieEnabled, sound } from "@fider/services"
 import { useFider } from "@fider/hooks"
 import { Trans } from "@lingui/react/macro"
 import { i18n } from "@lingui/core"
@@ -30,6 +30,10 @@ export const SignInControl: React.FunctionComponent<SignInControlProps> = (props
   const [emailSignInStep, setEmailSignInStep] = useState(EmailSigninStep.EnterEmail)
   const [userName, setUserName] = useState("")
   const [code, setCode] = useState("")
+  const [codeErrorTick, setCodeErrorTick] = useState(0)
+  const [codeFieldKey, setCodeFieldKey] = useState(0)
+  // The code is sent when the last digit is typed, so Enter must not send it again.
+  const verifying = useRef(false)
   const [error, setError] = useState<Failure | undefined>(undefined)
   const [resendMessage, setResendMessage] = useState("")
 
@@ -85,8 +89,13 @@ export const SignInControl: React.FunctionComponent<SignInControlProps> = (props
     }
   }
 
-  const verifyCode = async () => {
-    const result = await actions.verifySignInCode(email, code)
+  const verifyCode = async (value: string = code) => {
+    if (verifying.current) {
+      return
+    }
+    verifying.current = true
+    const result = await actions.verifySignInCode(email, value)
+    verifying.current = false
     if (result.ok) {
       if (props.onCodeVerified) {
         // Let the parent component decide what to do
@@ -108,6 +117,8 @@ export const SignInControl: React.FunctionComponent<SignInControlProps> = (props
         // Display the error from the server
         setError(result.error)
       }
+      setCodeErrorTick((t) => t + 1)
+      sound.playCue("error")
     }
   }
 
@@ -117,6 +128,7 @@ export const SignInControl: React.FunctionComponent<SignInControlProps> = (props
     if (result.ok) {
       setError(undefined)
       setCode("")
+      setCodeFieldKey((k) => k + 1)
       setResendMessage(i18n._({ id: "signin.code.sent", message: "A new code has been sent to your email." }))
     } else if (result.error) {
       setError(result.error)
@@ -268,16 +280,17 @@ export const SignInControl: React.FunctionComponent<SignInControlProps> = (props
             <Trans id="signin.code.edit">Edit</Trans>
           </a>
         </p>
-        <Input
-          className="text-left"
+        <OtpInput
+          key={codeFieldKey}
           field="code"
-          value={code}
+          label={i18n._({ id: "signin.code.label", message: "Sign-in code" })}
           autoFocus={!device.isTouch()}
-          autoComplete="one-time-code"
-          inputMode="numeric"
+          errorTick={codeErrorTick}
           onChange={setCode}
-          placeholder={i18n._({ id: "signin.code.placeholder", message: "Type in the code here" })}
-          maxLength={6}
+          onComplete={(value) => {
+            setCode(value)
+            verifyCode(value)
+          }}
         />
         {resendMessage && <p className="text-green-700 mt-2">{resendMessage}</p>}
         <p className="text-center mt-2 text-muted text-left">

@@ -4,6 +4,10 @@ import { Trans } from "@lingui/react/macro"
 import { HStack, VStack } from "./layout"
 import IconRss from "@fider/assets/images/heroicons-rss.svg"
 import IconClipboard from "@fider/assets/images/heroicons-clipboard.svg"
+import IconCheck from "@fider/assets/images/heroicons-check.svg"
+import { useCopyToClipboard } from "@fider/hooks"
+import { sound } from "@fider/services"
+import { i18n } from "@lingui/core"
 
 interface RSSModalProps {
   isOpen: boolean
@@ -12,20 +16,11 @@ interface RSSModalProps {
 }
 
 export const RSSModal: React.FC<RSSModalProps> = (props) => {
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(props.url)
-    } catch (err) {
-      // Fallback for older browsers
-      const textArea = document.createElement("textarea")
-      textArea.value = props.url
-      document.body.appendChild(textArea)
-      textArea.focus()
-      textArea.select()
-      document.execCommand("copy")
-      document.body.removeChild(textArea)
-    }
-  }
+  const { copy, status } = useCopyToClipboard({
+    onCopy: () => sound.playCue("copied"),
+    onError: () => sound.playCue("error"),
+  })
+  const copied = status === "copied"
 
   return (
     <Modal.Window isOpen={props.isOpen} onClose={props.onClose} size="small">
@@ -48,8 +43,16 @@ export const RSSModal: React.FC<RSSModalProps> = (props) => {
           <div className="bg-gray-200 px-1 py-2 rounded border">
             <div className="flex items-center justify-between text-left">
               <p className="px-2 text-xs text-gray-800 mr-2 nowrap mb-0">{props.url}</p>
-              <Button style={{ padding: "0 4px" }} className="text-center hover" variant="tertiary" onClick={copyToClipboard}>
-                <Icon height="18" width="18" sprite={IconClipboard} />
+              <Button
+                style={{ padding: "0 4px" }}
+                className={`text-center hover ${copied ? "text-green-700" : ""}`}
+                variant="tertiary"
+                onClick={() => copy(props.url)}
+              >
+                <Icon height="18" width="18" sprite={copied ? IconCheck : IconClipboard} />
+                <span className="sr-only">
+                  {copied ? i18n._({ id: "action.copylink.copied", message: "Copied" }) : i18n._({ id: "action.copy", message: "Copy" })}
+                </span>
               </Button>
             </div>
           </div>

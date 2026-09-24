@@ -1,10 +1,12 @@
 import "./VoteCounter.scss"
 
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { Post, PostStatus } from "@fider/models"
-import { actions, classSet } from "@fider/services"
+import { classSet, sound } from "@fider/services"
 import { Icon, SignInModal } from "@fider/components"
-import { useFider } from "@fider/hooks"
+import { useFider, useOptimisticVote, toggleVoteCommit } from "@fider/hooks"
+import { VoteBurst } from "./VoteBurst"
+import { i18n } from "@lingui/core"
 import ChevronUp from "@fider/assets/images/chevron-up.svg"
 import ChevronDown from "@fider/assets/images/chevron-down.svg"
 
@@ -16,25 +18,22 @@ export interface VoteCounterProps {
 export const VoteCounter = (props: VoteCounterProps) => {
   const fider = useFider()
   const { size = "default" } = props
-  const [voteType, setVoteType] = useState(props.post.voteType || (props.post.hasVoted ? 1 : 0))
-  const [votesCount, setVotesCount] = useState(props.post.votesCount)
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
+  const commit = useMemo(() => toggleVoteCommit(props.post.number), [props.post.number])
+  const { voteType, count, burst, direction, vote } = useOptimisticVote({
+    initialVoteType: props.post.voteType || (props.post.hasVoted ? 1 : 0),
+    initialCount: props.post.votesCount,
+    commit,
+    onError: () => sound.playCue("error"),
+  })
 
-  const handleVote = async (requestedType: 1 | -1) => {
+  const handleVote = (requestedType: 1 | -1) => {
     if (!fider.session.isAuthenticated) {
       setIsSignInModalOpen(true)
       return
     }
-
-    const response = await actions.toggleVote(props.post.number, requestedType)
-    if (response.ok) {
-      const newVoteType = response.data.voteType
-      // Calculate count change: old contribution removed, new contribution added
-      const oldContribution = voteType
-      const newContribution = newVoteType
-      setVotesCount(votesCount - oldContribution + newContribution)
-      setVoteType(newVoteType)
-    }
+    sound.playCue(voteType === requestedType || requestedType === -1 ? "unvote" : "vote")
+    vote(requestedType)
   }
 
   const hideModal = () => setIsSignInModalOpen(false)
@@ -63,11 +62,28 @@ export const VoteCounter = (props: VoteCounterProps) => {
     <>
       <SignInModal isOpen={isSignInModalOpen} onClose={hideModal} />
       <div className={containerClass}>
-        <button className={upClass} onClick={() => !isDisabled && handleVote(1)} disabled={isDisabled}>
+        <button
+          className={upClass}
+          onClick={() => !isDisabled && handleVote(1)}
+          disabled={isDisabled}
+          aria-pressed={voteType === 1}
+          aria-label={i18n._({ id: "action.upvote", message: "Upvote" })}
+        >
           <Icon sprite={ChevronUp} className="c-vote-counter__icon" />
+          <VoteBurst burst={burst} />
         </button>
-        <span className="c-vote-counter__count">{votesCount}</span>
-        <button className={downClass} onClick={() => !isDisabled && handleVote(-1)} disabled={isDisabled}>
+        <span className="c-vote-counter__count" aria-live="polite">
+          <span key={count} className={`c-vote-roll ${direction < 0 ? "c-vote-roll--down" : ""}`}>
+            {count}
+          </span>
+        </span>
+        <button
+          className={downClass}
+          onClick={() => !isDisabled && handleVote(-1)}
+          disabled={isDisabled}
+          aria-pressed={voteType === -1}
+          aria-label={i18n._({ id: "action.downvote", message: "Downvote" })}
+        >
           <Icon sprite={ChevronDown} className="c-vote-counter__icon" />
         </button>
       </div>

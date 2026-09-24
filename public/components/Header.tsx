@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { SignInModal, RSSModal, NotificationIndicator, UserMenu, Icon, Button, ModerationIndicator } from "@fider/components"
 import { useFider } from "@fider/hooks"
 import { HStack } from "./layout"
+import { CommandPalette } from "./CommandPalette"
+import IconSearch from "@fider/assets/images/heroicons-search.svg"
 import { Trans } from "@lingui/react/macro"
 import { i18n } from "@lingui/core"
 import IconRss from "@fider/assets/images/heroicons-rss.svg"
@@ -26,6 +28,8 @@ export const Header = (props: HeaderProps) => {
   const fider = useFider()
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
   const [isRSSModalOpen, setIsRSSModalOpen] = useState(false)
+  const isRoadmap = fider.session.page === "Roadmap/Roadmap.page"
+  const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform)
 
   const handleSignInClick = () => {
     setIsSignInModalOpen(true)
@@ -43,14 +47,33 @@ export const Header = (props: HeaderProps) => {
   return (
     <div id="c-header" className="bg-white" {...(props.hasInert && { inert: "true" })}>
       <SignInModal isOpen={isSignInModalOpen} onClose={hideSignInModal} />
+      <CommandPalette />
       <RSSModal isOpen={isRSSModalOpen} onClose={hideRSSModal} url={`${fider.settings.baseURL}/feed/global.atom`} />
       <HStack className="c-menu py-3 px-4 w-full">
         <div className="container c-header__container">
           <div className="flex flex-wrap flex-items-center gap-2">
             <div className="flex flex-x flex-items-center justify-between w-full">
-              <a href="/" className="flex flex-x flex-items-center h-8 c-header__logo-link" aria-label="Scoutworks">
-                <ScoutworksWordmark />
-              </a>
+              <div className="flex flex-x flex-items-center">
+                <a href="/" className="flex flex-x flex-items-center h-8 c-header__logo-link" aria-label="Scoutworks">
+                  <img src="/static/assets/scoutworks/logo-64.png" alt="" width="32" height="32" className="c-header__logo" />
+                  <ScoutworksWordmark />
+                </a>
+                <nav className="c-header__nav">
+                  <a href="/" className={isRoadmap ? "" : "is-active"}>
+                    <Trans id="header.nav.suggestions">Suggestions</Trans>
+                  </a>
+                  <a href="/roadmap" className={isRoadmap ? "is-active" : ""}>
+                    <Trans id="header.nav.roadmap">Roadmap</Trans>
+                  </a>
+                  <button type="button" className="c-header__palette" onClick={() => window.dispatchEvent(new Event("fider:command-palette"))}>
+                    <Icon sprite={IconSearch} className="c-header__palette-icon" />
+                    <span>
+                      <Trans id="header.nav.search">Search</Trans>
+                    </span>
+                    <kbd>{isMac ? "⌘K" : "Ctrl K"}</kbd>
+                  </button>
+                </nav>
+              </div>
               {fider.session.isAuthenticated && (
                 <HStack spacing={2}>
                   {fider.session.tenant.isFeedEnabled && (

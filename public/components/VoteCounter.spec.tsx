@@ -120,9 +120,16 @@ describe("<VoteCounter />", () => {
     )
 
     const upButton = container.querySelector(".c-vote-counter__up") || fail("up button not found")
+    jest.useFakeTimers()
     await act(async () => {
       fireEvent.click(upButton)
     })
+    // Votes are sent after a short settle time, so fast taps become one request.
+    expect(mock.post).toHaveBeenCalledTimes(0)
+    await act(async () => {
+      jest.runAllTimers()
+    })
+    jest.useRealTimers()
 
     expect(mock.post).toHaveBeenCalledWith("/api/v1/posts/10/votes/toggle", { voteType: 1 })
     expect(mock.post).toHaveBeenCalledTimes(1)
@@ -138,9 +145,16 @@ describe("<VoteCounter />", () => {
     )
 
     const downButton = container.querySelector(".c-vote-counter__down") || fail("down button not found")
+    jest.useFakeTimers()
     await act(async () => {
       fireEvent.click(downButton)
     })
+    // Votes are sent after a short settle time, so fast taps become one request.
+    expect(mock.post).toHaveBeenCalledTimes(0)
+    await act(async () => {
+      jest.runAllTimers()
+    })
+    jest.useRealTimers()
 
     expect(mock.post).toHaveBeenCalledWith("/api/v1/posts/10/votes/toggle", { voteType: -1 })
     expect(mock.post).toHaveBeenCalledTimes(1)

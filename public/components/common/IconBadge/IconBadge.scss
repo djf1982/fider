@@ -1,0 +1,17 @@
+.c-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--colors-gray-200);
+  border-radius: 9999px;
+  background-color: var(--colors-white);
+  box-shadow: 0 0 0 8px var(--colors-gray-100);
+  color: var(--colors-gray-700);
+
+  &__icon {
+    width: 26px;
+    height: 26px;
+  }
+}

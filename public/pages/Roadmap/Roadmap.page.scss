@@ -1,0 +1,186 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
+#p-roadmap {
+  padding-top: spacing(4);
+  padding-bottom: spacing(12);
+
+  @include media("md") {
+    padding-top: spacing(10);
+  }
+
+  .p-roadmap {
+    &__back-link {
+      display: inline-block;
+      margin-bottom: spacing(6);
+      text-decoration: none;
+    }
+
+    // The page hero, as on the website: paper panel, cobalt bloom,
+    // eyebrow, Newsreader headline and a muted subline.
+    &__hero {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: spacing(10);
+      padding: spacing(12) spacing(6);
+      border-radius: 1rem;
+      background-color: var(--colors-gray-100);
+      text-align: center;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0 10%;
+        background: radial-gradient(ellipse farthest-side at center, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.04) 55%, transparent 100%);
+        pointer-events: none;
+      }
+
+      > * {
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    &__eyebrow {
+      margin-bottom: spacing(4);
+      font-size: 11px;
+      font-weight: get("font.weight.semibold");
+      letter-spacing: 0.22em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--colors-blue-600);
+    }
+
+    &__title {
+      margin-bottom: spacing(4);
+      font-family: $font-display;
+      font-size: 32px;
+      font-weight: get("font.weight.medium");
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--colors-gray-900);
+
+      @include media("md") {
+        font-size: 44px;
+      }
+    }
+
+    &__subline {
+      max-width: 36rem;
+      margin: 0 auto;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--colors-gray-600);
+    }
+
+    &__columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: spacing(8);
+
+      @include media("lg") {
+        grid-template-columns: repeat(3, 1fr);
+        gap: spacing(6);
+      }
+    }
+
+    &__column-header {
+      margin-bottom: spacing(4);
+      padding-bottom: spacing(3);
+      border-bottom: 1px solid var(--colors-gray-200);
+    }
+
+    &__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background-color: var(--colors-gray-400);
+      flex-shrink: 0;
+    }
+
+    &__column--planned .p-roadmap__dot {
+      background-color: var(--colors-blue-300);
+    }
+
+    &__column--started .p-roadmap__dot {
+      background-color: var(--colors-blue-600);
+    }
+
+    &__column--completed .p-roadmap__dot {
+      background-color: var(--colors-green-600);
+    }
+
+    &__column-title {
+      font-family: $font-display;
+      font-size: 20px;
+      font-weight: get("font.weight.medium");
+      letter-spacing: -0.012em;
+      color: var(--colors-gray-900);
+    }
+
+    &__count {
+      margin-left: auto;
+      min-width: 24px;
+      padding: 0 8px;
+      border-radius: 9999px;
+      background-color: var(--colors-gray-100);
+      color: var(--colors-gray-600);
+      font-size: 12px;
+      font-weight: get("font.weight.semibold");
+      line-height: 22px;
+      text-align: center;
+    }
+
+    &__cards {
+      display: flex;
+      flex-direction: column;
+      gap: spacing(3);
+    }
+
+    &__card {
+      display: flex;
+      flex-direction: column;
+      gap: spacing(3);
+      padding: spacing(4) spacing(5);
+      border: 1px solid var(--colors-gray-200);
+      border-radius: get("border.radius.large");
+      background-color: var(--colors-white);
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        border-color: var(--colors-gray-300);
+        box-shadow: 0 8px 18px -10px rgba(15, 23, 42, 0.18);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--colors-primary-base);
+        outline-offset: 2px;
+      }
+    }
+
+    &__card-title {
+      font-family: $font-base;
+      font-size: 15px;
+      font-weight: get("font.weight.semibold");
+      line-height: 1.35;
+      color: var(--colors-gray-900);
+    }
+
+    &__votes {
+      font-size: 13px;
+      font-weight: get("font.weight.medium");
+      color: var(--colors-gray-600);
+      font-variant-numeric: tabular-nums;
+    }
+
+    &__empty {
+      padding: spacing(6) spacing(4);
+      border: 1px dashed var(--colors-gray-300);
+      border-radius: get("border.radius.large");
+      color: var(--colors-gray-600);
+      font-size: 14px;
+      text-align: center;
+    }
+  }
+}

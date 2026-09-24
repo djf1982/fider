@@ -86,3 +86,15 @@ testCases.forEach((x) => {
     expect(result).toEqual(x.expectedPlainText)
   })
 })
+
+describe("postSummary", () => {
+  test.each([
+    ["Plain description", "Plain description"],
+    ["**The problem**\n\nSlow export.", "Slow export."],
+    ["**The problem**\n\nSlow export.\n\nIt takes minutes.\n\n**Ideal outcome**\n\nFast export.", "Slow export.\n\nIt takes minutes."],
+    ["**The problem**\n\nSlow export.\n\n**Importance**\n\nCritical", "Slow export."],
+    ["Intro\n\n**The problem**\n\nSlow export.", "Intro\n\n**The problem**\n\nSlow export."],
+  ])("summarises %j", (description, expected) => {
+    expect(markdown.postSummary(description)).toEqual(expected)
+  })
+})
