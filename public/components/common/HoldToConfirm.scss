@@ -1,0 +1,53 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
+.c-hold-confirm {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 spacing(5);
+  overflow: hidden;
+  border: 1px solid var(--colors-red-300);
+  border-radius: get("border.radius.medium");
+  background-color: var(--colors-red-50);
+  color: var(--colors-red-700);
+  font-size: get("font.size.sm");
+  font-weight: get("font.weight.semibold");
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--colors-red-600);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  // The white copy of the label on the red fill.
+  &__fill {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--colors-red-600);
+    color: var(--colors-white);
+    transition: clip-path 60ms linear;
+  }
+
+  &--committed {
+    border-color: var(--colors-red-600);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__fill {
+      transition: none;
+    }
+  }
+}

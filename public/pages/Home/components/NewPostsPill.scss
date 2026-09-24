@@ -1,0 +1,53 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
+.c-new-posts {
+  position: sticky;
+  top: spacing(3);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  height: 0;
+
+  &__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing(2);
+    height: 34px;
+    padding: 0 spacing(4);
+    border: 0;
+    border-radius: 9999px;
+    background-color: var(--colors-blue-600);
+    box-shadow: 0 8px 20px -8px rgba(29, 78, 216, 0.6);
+    color: var(--colors-white);
+    font-size: get("font.size.sm");
+    font-weight: get("font.weight.semibold");
+    cursor: pointer;
+    animation: c-new-posts-in 0.35s cubic-bezier(0.23, 1, 0.32, 1) both;
+
+    &:hover {
+      background-color: var(--colors-blue-700);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--colors-blue-600);
+      outline-offset: 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__pill {
+      animation: none;
+    }
+  }
+}
+
+@keyframes c-new-posts-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

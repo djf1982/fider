@@ -22,14 +22,10 @@ export const ErrorPageWrapper = (props: ErrorPageWrapperProps) => {
           </div>
           {props.children}
           {props.showHomeLink && fider.session.tenant && (
-            <p>
-              <Trans id="page.backhome">
-                Take me back to{" "}
-                <a className="text-link" href={fider.settings.baseURL}>
-                  {fider.settings.baseURL}
-                </a>{" "}
-                home page.
-              </Trans>
+            <p className="mt-6">
+              <a className="c-button c-button--primary c-button--default" href={fider.settings.baseURL}>
+                <Trans id="page.backtosuggestions">Back to all suggestions</Trans>
+              </a>
             </p>
           )}
         </div>

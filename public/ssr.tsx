@@ -35,6 +35,7 @@ const messages: { [key: string]: any } = {
 const pages: { [key: string]: any } = {
   "Home/Home.page": require(`./pages/Home/Home.page`),
   "ShowPost/ShowPost.page": require(`./pages/ShowPost/ShowPost.page`),
+  "Roadmap/Roadmap.page": require(`./pages/Roadmap/Roadmap.page`),
   "SignIn/SignIn.page": require(`./pages/SignIn/SignIn.page`),
   "SignUp/SignUp.page": require(`./pages/SignUp/SignUp.page`),
   "SignUp/PendingActivation.page": require(`./pages/SignUp/PendingActivation.page`),

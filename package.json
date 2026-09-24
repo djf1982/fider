@@ -17,6 +17,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@tiptap/suggestion": "^2.11.5",
     "canvas-confetti": "^1.9.4",
+    "cuelume": "0.2.2",
     "dompurify": "^3.2.4",
     "inter-ui": "^4.1.0",
     "marked": "^4.0.15",
@@ -100,6 +101,7 @@
       "node"
     ],
     "moduleNameMapper": {
+      "^cuelume$": "<rootDir>/public/jest.cuelume.ts",
       ".*\\.(png|scss|svg)$": "<rootDir>/public/jest.assets.ts",
       "@fider/(.*)": "<rootDir>/public/$1",
       "@commercial/(.*)": "<rootDir>/commercial/$1",

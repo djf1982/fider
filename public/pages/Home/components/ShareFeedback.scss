@@ -29,6 +29,8 @@
     border: 1px solid var(--colors-gray-200);
     padding: spacing(7);
     border-radius: get("border.radius.large");
+    // Full width up to the maximum, so the card does not change size between wizard steps.
+    width: 100%;
     max-width: 720px;
     margin: 0 auto spacing(4);
     flex-shrink: 0;
@@ -141,10 +143,6 @@
   }
 }
 
-.c-share-feedback__more-detail {
-  margin-bottom: spacing(2);
-}
-
 .c-share-feedback__importance {
   display: flex;
   gap: spacing(2);
@@ -224,5 +222,124 @@
   .c-share-feedback__success-icon,
   .animate-fade-in {
     animation: none;
+  }
+}
+
+// The submission wizard. It is based on WizardSteps from interior.dev,
+// with CSS animations in place of motion.
+.c-wizard {
+  &__header {
+    margin-bottom: spacing(6);
+  }
+
+  &__label {
+    margin-bottom: spacing(2);
+    font-size: 11px;
+    font-weight: get("font.weight.semibold");
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--colors-blue-600);
+  }
+
+  &__label-name {
+    color: var(--colors-gray-600);
+  }
+
+  &__markers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: spacing(2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__marker {
+    display: block;
+    width: 100%;
+    height: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 9999px;
+    background-color: var(--colors-gray-200);
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+
+    &--done {
+      background-color: var(--colors-blue-300);
+    }
+
+    &--current {
+      background-color: var(--colors-blue-600);
+    }
+
+    &:disabled {
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--colors-primary-base);
+      outline-offset: 3px;
+    }
+  }
+
+  &__step {
+    display: none;
+
+    &--active {
+      display: block;
+    }
+
+    &--forward {
+      animation: c-wizard-in-forward 0.32s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    &--back {
+      animation: c-wizard-in-back 0.32s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: spacing(4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__step--forward,
+    &__step--back {
+      animation: none;
+    }
+
+    &__marker {
+      transition: none;
+    }
+  }
+}
+
+@keyframes c-wizard-in-forward {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes c-wizard-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }

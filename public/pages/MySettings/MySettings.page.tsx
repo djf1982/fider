@@ -7,6 +7,7 @@ import { Failure, actions, Fider } from "@fider/services"
 import { NotificationSettings } from "./components/NotificationSettings"
 import { APIKeyForm } from "./components/APIKeyForm"
 import { DangerZone } from "./components/DangerZone"
+import { SoundSettings } from "./components/SoundSettings"
 import { i18n } from "@lingui/core"
 import { Trans } from "@lingui/react/macro"
 
@@ -215,6 +216,8 @@ export default class MySettingsPage extends React.Component<MySettingsPageProps,
                 <Trans id="action.save">Save</Trans>
               </Button>
             </Form>
+
+            <SoundSettings />
 
             <div className="mt-8">{Fider.session.user.isCollaborator && <APIKeyForm />}</div>
             <div className="mt-8">

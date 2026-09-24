@@ -1,6 +1,7 @@
 export * from "./Button"
 export * from "./form/Form"
 export * from "./form/Input"
+export * from "./form/OtpInput"
 export * from "./form/ImageUploader"
 export * from "./form/MultiImageUploader"
 export * from "./form/TextArea"
@@ -32,6 +33,8 @@ export * from "./Money"
 export * from "./Pagination"
 export * from "./Skeleton"
 export * from "./EmptyState"
+export * from "./IconBadge"
+export * from "./HoldToConfirm"
 
 import Textarea from "react-textarea-autosize"
 export { Textarea }

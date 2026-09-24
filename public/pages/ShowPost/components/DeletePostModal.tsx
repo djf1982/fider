@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { PostStatus, Post } from "@fider/models"
 import { actions, navigator, Failure } from "@fider/services"
-import { Form, Modal, Button, TextArea } from "@fider/components"
+import { Form, Modal, Button, TextArea, HoldToConfirm } from "@fider/components"
 import { useFider } from "@fider/hooks"
 import { i18n } from "@lingui/core"
 import { Trans } from "@lingui/react/macro"
@@ -52,9 +52,9 @@ export const DeletePostModal = (props: DeletePostModalProps) => {
       </Modal.Content>
 
       <Modal.Footer>
-        <Button variant="danger" onClick={handleDelete}>
-          <Trans id="action.delete">Delete</Trans>
-        </Button>
+        <HoldToConfirm onConfirm={handleDelete} confirmLabel={<Trans id="action.deleting">Deleting…</Trans>}>
+          <Trans id="action.holdtodelete">Hold to delete</Trans>
+        </HoldToConfirm>
         <Button variant="tertiary" onClick={props.onModalClose}>
           <Trans id="action.cancel">Cancel</Trans>
         </Button>

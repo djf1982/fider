@@ -1,12 +1,8 @@
 {{define "subject"}}{{ "email.signup_email.subject" | translate }}{{end}}
 
 {{define "body"}}
-<tr>
-  <td style="padding:20px 30px 30px 30px;">
-    <h2 style="color:#1c262d;margin:0 0 15px 0;padding:0;">{{ "email.greetings" | translate }}</h2>
-    <p style="color:#1c262d;margin:0 0 10px 0;">{{ "email.signup_email.text" | translate }}</p>
-    <p style="color:#1c262d;margin:0 0 20px 0;">{{ "email.signup_email.confirmation" | translate }}</p>
-    <p style="margin:0;">{{ .link | html }}</p>
-  </td>
-</tr>
+<h1 style="font-size:20px;font-weight:600;color:#f9fafb;margin:0 0 20px 0;line-height:1.3;letter-spacing:-0.01em;">{{ "email.greetings" | translate }}</h1>
+<p>{{ "email.signup_email.text" | translate }}</p>
+<p>{{ "email.signup_email.confirmation" | translate }}</p>
+<p>{{ .link | html }}</p>
 {{end}}

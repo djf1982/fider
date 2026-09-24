@@ -301,6 +301,7 @@ func sendEmailNotifications(c *worker.Context, post *entity.Post, to []dto.Recip
 		"content":             markdown.Full(comment, false),
 		"postLink":            linkWithText(fmt.Sprintf("#%d", post.Number), baseURL, "/posts/%d/%s", post.Number, post.Slug),
 		"view":                linkWithText(i18n.T(c, "email.subscription.view"), baseURL, "/posts/%d/%s", post.Number, post.Slug),
+		"postURL":             fmt.Sprintf("%s/posts/%d/%s", baseURL, post.Number, post.Slug),
 		"unsubscribe":         linkWithText(i18n.T(c, "email.subscription.unsubscribe"), baseURL, "/posts/%d/%s", post.Number, post.Slug),
 		"change":              linkWithText(i18n.T(c, "email.subscription.change"), baseURL, "/settings"),
 		"logo":                logoURL,

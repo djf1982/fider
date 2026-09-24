@@ -5,7 +5,6 @@
   grid-template-columns: 1fr;
   column-gap: 0;
   row-gap: spacing(8);
-  background-color: var(--colors-gray-100);
   padding-top: spacing(12);
   padding-bottom: spacing(12);
 
@@ -38,6 +37,16 @@
       @include media("lg") {
         margin-right: spacing(4);
       }
+    }
+
+    // Cobalt small-caps eyebrow, as above every marketing-site hero.
+    &__eyebrow {
+      font-size: 11px;
+      font-weight: get("font.weight.semibold");
+      letter-spacing: 0.22em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--colors-blue-600);
     }
 
     &__welcome-title {
@@ -75,6 +84,7 @@
     // Dark CTA living inside the welcome card. Centered label + plus icon,
     // pill-rounded corners, and a soft shadow so it reads as the obvious
     // primary action — not as a search box or wide banner.
+    // Hover only changes colour. A transform makes the label blur while it moves.
     &__add-idea-btn {
       width: 100%;
       padding: spacing(2) spacing(5);
@@ -84,7 +94,7 @@
       border-radius: 999px;
       box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
       cursor: pointer;
-      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease, transform 0.2s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
       font-family: $font-base;
       font-size: get("font.size.base");
       font-weight: get("font.weight.semibold");
@@ -100,13 +110,24 @@
       &:hover {
         background-color: var(--colors-gray-800);
         border-color: var(--colors-gray-800);
-        transform: translateY(-1px);
-        box-shadow: 0 8px 18px -6px rgba(15, 23, 42, 0.28);
       }
 
       &:focus-visible {
         outline: 2px solid var(--colors-primary-base);
         outline-offset: 2px;
+      }
+    }
+
+    &__roadmap-link {
+      align-self: center;
+      color: var(--colors-blue-600);
+      font-size: get("font.size.sm");
+      font-weight: get("font.weight.medium");
+      text-decoration: none;
+
+      &:hover {
+        color: var(--colors-blue-700);
+        text-decoration: underline;
       }
     }
 

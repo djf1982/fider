@@ -1,0 +1,69 @@
+@use "~@fider/assets/styles/variables.scss" as *;
+
+// Status chips, as in WEBSITE-STYLE-GUIDE §2.5: monochrome chips, a cobalt
+// border on hover, and a dark ink-900 chip for "you are here".
+.c-status-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing(2);
+  margin-bottom: spacing(5);
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing(2);
+    height: 32px;
+    padding: 0 spacing(3);
+    border: 1px solid var(--colors-gray-200);
+    border-radius: 9999px;
+    background-color: var(--colors-white);
+    color: var(--colors-gray-700);
+    font-size: get("font.size.sm");
+    font-weight: get("font.weight.medium");
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+
+    &:hover:not(.c-status-chips__chip--active) {
+      border-color: var(--colors-blue-500);
+      color: var(--colors-gray-900);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--colors-primary-base);
+      outline-offset: 2px;
+    }
+
+    &--active {
+      background-color: var(--colors-gray-900);
+      border-color: var(--colors-gray-900);
+      color: var(--colors-white);
+      cursor: default;
+    }
+  }
+
+  &__count {
+    min-width: 20px;
+    padding: 0 6px;
+    border-radius: 9999px;
+    background-color: var(--colors-gray-100);
+    color: var(--colors-gray-600);
+    font-size: 12px;
+    font-weight: get("font.weight.semibold");
+    line-height: 18px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    transition: background-color 0.18s ease, color 0.18s ease;
+  }
+
+  &__chip--active &__count {
+    background-color: rgba(255, 255, 255, 0.16);
+    color: var(--colors-white);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__chip,
+    &__count {
+      transition: none;
+    }
+  }
+}

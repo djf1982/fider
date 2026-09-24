@@ -51,7 +51,7 @@ func RenderMessage(ctx context.Context, templateName string, fromAddress string,
 	}
 
 	lines := strings.Split(bf.String(), "\n")
-	body := strings.TrimLeft(strings.Join(lines[2:], "\n"), " ")
+	body := InlineStyles(strings.TrimLeft(strings.Join(lines[2:], "\n"), " "))
 
 	return &Message{
 		Subject: strings.TrimLeft(lines[0], "subject: "),

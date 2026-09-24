@@ -1,11 +1,10 @@
 import "./Home.page.scss"
-import NoDataIllustration from "@fider/assets/images/undraw-no-data.svg"
 import IconPlusCircle from "@fider/assets/images/heroicons-pluscircle.svg"
 import IconArrowLeft from "@fider/assets/images/heroicons-arrowleft.svg"
 
 import React, { useEffect, useState, useRef } from "react"
 import { Post, Tag, PostStatus } from "@fider/models"
-import { Markdown, Hint, Icon, Header, Button } from "@fider/components"
+import { Markdown, Hint, Icon, Header, Footer, Button, EmptyState } from "@fider/components"
 import { PostsContainer } from "./components/PostsContainer"
 import { useFider } from "@fider/hooks"
 import { HStack, VStack } from "@fider/components/layout"
@@ -39,10 +38,7 @@ const Lonely = () => {
           </Trans>
         </p>
       </Hint>
-      <Icon sprite={NoDataIllustration} height="120" className="mt-6 mb-2" />
-      <p className="text-muted">
-        <Trans id="home.lonely.text">No posts have been created yet.</Trans>
-      </p>
+      <EmptyState illustration="posts" title={i18n._({ id: "home.lonely.text", message: "No posts have been created yet." })} />
     </div>
   )
 }
@@ -50,7 +46,7 @@ const Lonely = () => {
 const HomePage = (props: HomePageProps) => {
   const fider = useFider()
   const postsContainerRef = useRef<PostsContainer>(null)
-  const [isShareFeedbackOpen, setIsShareFeedbackOpen] = useState(isPostPending())
+  const [isShareFeedbackOpen, setIsShareFeedbackOpen] = useState(isPostPending() || (typeof window !== "undefined" && window.location.hash === "#suggest"))
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
   const [savedScrollPosition, setSavedScrollPosition] = useState<number>(0)
   const [isPostDirty, setIsPostDirty] = useState(false)
@@ -63,6 +59,16 @@ const HomePage = (props: HomePageProps) => {
       }
     }
   })
+
+  // The command palette opens the suggest form with "/#suggest" or a "fider:suggest" event.
+  useEffect(() => {
+    if (window.location.hash === "#suggest") {
+      window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search)
+    }
+    const openSuggest = () => setIsShareFeedbackOpen(true)
+    window.addEventListener("fider:suggest", openSuggest)
+    return () => window.removeEventListener("fider:suggest", openSuggest)
+  }, [])
 
   // Handle post clicks from ListPosts
   const handlePostClick = (postNumber: number, slug: string) => {
@@ -192,6 +198,9 @@ What can we do better? This is the place for you to vote, discuss and share idea
             <div className="p-home__welcome-col">
               <VStack spacing={4}>
                 <div>
+                  <p className="p-home__eyebrow mb-3">
+                    <Trans id="home.eyebrow">Feature requests</Trans>
+                  </p>
                   {fider.session.tenant.welcomeHeader && (
                     <h1 className="p-home__welcome-title mb-5">{parseWelcomeHeader(fider.session.tenant.welcomeHeader)}</h1>
                   )}
@@ -205,6 +214,9 @@ What can we do better? This is the place for you to vote, discuss and share idea
                     </span>
                   </HStack>
                 </button>
+                <a href="/roadmap" className="p-home__roadmap-link">
+                  <Trans id="home.roadmaplink">See what&apos;s planned on the roadmap</Trans> →
+                </a>
               </VStack>
             </div>
             <div className="p-home__posts-col">
@@ -234,6 +246,7 @@ What can we do better? This is the place for you to vote, discuss and share idea
             <PostDetails postNumber={selectedPostId} onDataChanged={() => setIsPostDirty(true)} />
           </div>
         )}
+        <Footer />
       </div>
     </>
   )

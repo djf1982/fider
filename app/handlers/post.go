@@ -117,7 +117,7 @@ func PostDetails() web.HandlerFunc {
 		return c.Page(http.StatusOK, web.Props{
 			Page:        "ShowPost/ShowPost.page",
 			Title:       getPost.Result.Title,
-			Description: markdown.PlainText(getPost.Result.Description),
+			Description: markdown.PlainText(getPost.Result.Summary()),
 			Data: web.Map{
 				"comments":    getComments.Result,
 				"subscribed":  isSubscribed.Result,

@@ -24,7 +24,7 @@ export const SignInModal: React.FC<SignInModalProps> = (props) => {
             <TenantLogo size={24} useFiderIfEmpty={true} />
             <CloseIcon closeModal={props.onClose} />
           </HStack>
-          <p>
+          <p className="text-display2">
             <Trans id="modal.signin.header">Join the conversation</Trans>
           </p>
         </VStack>

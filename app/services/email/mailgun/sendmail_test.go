@@ -64,64 +64,43 @@ func TestSend_Success(t *testing.T) {
 	Expect(values.Get("subject")).Equals("Message to: Hello")
 	Expect(values["o:tag"][0]).Equals("template:echo_test")
 	Expect(values["o:tag"][1]).Equals("tenant:got")
-	Expect(values.Get("html")).Equals(`<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+	Expect(values.Get("html")).Equals(`<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="viewport" content="width=device-width">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<style>
-			.user-content {
-				text-align: left;
-				padding: 20px;
-				margin: 10px;
-				border-radius: 5px;
-				color: #1c262d;
-				border: 1px solid #E0E0E0;
-				min-width: 320px;
-				max-width: 660px;
-				overflow-wrap: break-word;
-				word-break: break-word;
-				table-layout: fixed;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-
-				pre:has(code) {
-					white-space: break-spaces;
-				}
-			}
-		</style>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="color-scheme" content="dark">
 	</head>
-	<body bgcolor="#F7F7F7" style="font-size:18px">
-		<table width="100%" bgcolor="#F7F7F7" cellpadding="0" cellspacing="0" border="0" style="text-align:center;font-size:18px;">
+	
+	<body style="margin:0;padding:0;background-color:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.5;color:#e5e7eb;-webkit-font-smoothing:antialiased;">
+		<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#111827" style="background-color:#111827;">
 			<tr>
-				<td height="40">&nbsp;</td>
-			</tr>
-			
-			<tr>
-				<td align="center">
-					<table class="user-content" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" border="0" style="text-align:left;padding:20px;margin:10px;border-radius:5px;color:#1c262d;border:1px solid #E0E0E0;min-width:320px;max-width:660px;overflow-wrap:break-word;word-break:break-word;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-						
+				<td align="center" style="padding:0;">
+					<table role="presentation" width="480" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;width:100%;">
+						<tr>
+							<td style="padding:48px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5;color:#e5e7eb;text-align:left;overflow-wrap:break-word;word-break:break-word;">
+								
+								
 Hello World Hello!
 
+								<div style="margin:32px 0 24px 0;color:#4b5563;">&#8212;</div>
+								<div style="font-size:12px;color:#6b7280;line-height:1.6;">
+									
+									
+									<p style="font-size:12px;color:#6b7280;margin:0 0 12px 0;">This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</p>
+									
+									<p style="font-size:12px;color:#6b7280;margin:0 0 4px 0;">Scoutworks<br />
+									<a href="mailto:support@scoutworks.app" style="color:#9ca3af;text-decoration:none;">support@scoutworks.app</a> · <a href="https://scoutworks.app/kb" style="color:#9ca3af;text-decoration:none;">Help</a> · <a href="https://feedback.scoutworks.app" style="color:#9ca3af;text-decoration:none;">Feedback</a></p>
+								</div>
+							</td>
+						</tr>
 					</table>
 				</td>
 			</tr>
-			
-			<tr>
-				<td height="20">&nbsp;</td>
-			</tr>
-			<tr>
-				<td style="padding:0 20px;">
-					<span style="color:#666;font-size:12px">This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</span>
-				</td>
-			</tr>
-			
-			<tr>
-				<td height="40">&nbsp;</td>
-			</tr>
 		</table>
 	</body>
-</html>`)
+</html>
+`)
 }
 
 func TestSend_SkipEmptyAddress(t *testing.T) {
@@ -213,64 +192,43 @@ func TestBatch_Success(t *testing.T) {
 	Expect(values["o:tag"][0]).Equals("template:echo_test")
 	Expect(values["o:tag"][1]).Equals("tenant:got")
 	Expect(values.Get("recipient-variables")).Equals("{\"arya.start@got.com\":{\"name\":\"Arya\"},\"jon.snow@got.com\":{\"name\":\"Jon\"}}")
-	Expect(values.Get("html")).Equals(`<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+	Expect(values.Get("html")).Equals(`<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="viewport" content="width=device-width">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<style>
-			.user-content {
-				text-align: left;
-				padding: 20px;
-				margin: 10px;
-				border-radius: 5px;
-				color: #1c262d;
-				border: 1px solid #E0E0E0;
-				min-width: 320px;
-				max-width: 660px;
-				overflow-wrap: break-word;
-				word-break: break-word;
-				table-layout: fixed;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-
-				pre:has(code) {
-					white-space: break-spaces;
-				}
-			}
-		</style>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="color-scheme" content="dark">
 	</head>
-	<body bgcolor="#F7F7F7" style="font-size:18px">
-		<table width="100%" bgcolor="#F7F7F7" cellpadding="0" cellspacing="0" border="0" style="text-align:center;font-size:18px;">
+	
+	<body style="margin:0;padding:0;background-color:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.5;color:#e5e7eb;-webkit-font-smoothing:antialiased;">
+		<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#111827" style="background-color:#111827;">
 			<tr>
-				<td height="40">&nbsp;</td>
-			</tr>
-			
-			<tr>
-				<td align="center">
-					<table class="user-content" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" border="0" style="text-align:left;padding:20px;margin:10px;border-radius:5px;color:#1c262d;border:1px solid #E0E0E0;min-width:320px;max-width:660px;overflow-wrap:break-word;word-break:break-word;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-						
+				<td align="center" style="padding:0;">
+					<table role="presentation" width="480" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;width:100%;">
+						<tr>
+							<td style="padding:48px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5;color:#e5e7eb;text-align:left;overflow-wrap:break-word;word-break:break-word;">
+								
+								
 Hello World %recipient.name%!
 
+								<div style="margin:32px 0 24px 0;color:#4b5563;">&#8212;</div>
+								<div style="font-size:12px;color:#6b7280;line-height:1.6;">
+									
+									
+									<p style="font-size:12px;color:#6b7280;margin:0 0 12px 0;">This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</p>
+									
+									<p style="font-size:12px;color:#6b7280;margin:0 0 4px 0;">Scoutworks<br />
+									<a href="mailto:support@scoutworks.app" style="color:#9ca3af;text-decoration:none;">support@scoutworks.app</a> · <a href="https://scoutworks.app/kb" style="color:#9ca3af;text-decoration:none;">Help</a> · <a href="https://feedback.scoutworks.app" style="color:#9ca3af;text-decoration:none;">Feedback</a></p>
+								</div>
+							</td>
+						</tr>
 					</table>
 				</td>
 			</tr>
-			
-			<tr>
-				<td height="20">&nbsp;</td>
-			</tr>
-			<tr>
-				<td style="padding:0 20px;">
-					<span style="color:#666;font-size:12px">This email was sent from a notification-only address that cannot accept incoming email. Please do not reply to this message.</span>
-				</td>
-			</tr>
-			
-			<tr>
-				<td height="40">&nbsp;</td>
-			</tr>
 		</table>
 	</body>
-</html>`)
+</html>
+`)
 }
 
 func TestGetBaseURL(t *testing.T) {

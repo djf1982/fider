@@ -1,7 +1,7 @@
 import React from "react"
-import MailSentIllustration from "@fider/assets/images/undraw_mail-sent.svg"
+import IconInbox from "@fider/assets/images/heroicons-inbox.svg"
 
-import { LegalFooter, TenantLogo, Icon } from "@fider/components"
+import { LegalFooter, TenantLogo, IconBadge } from "@fider/components"
 import { Trans } from "@lingui/react/macro"
 
 import "./LoginEmailSent.page.scss"
@@ -18,7 +18,7 @@ const LoginEmailSentPage = ({ email }: { email: string }) => {
           </div>
 
           <div className="box shadow-sm text-center w-full">
-            <Icon sprite={MailSentIllustration} height="120" className="mb-4" />
+            <IconBadge sprite={IconInbox} className="mt-4 mb-8" />
 
             <p className="text-xl text-center mb-4 text-gray-800">
               <Trans id="signin.message.emailsent">

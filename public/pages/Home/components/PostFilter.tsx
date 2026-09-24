@@ -3,6 +3,7 @@ import { PostStatus, Tag } from "@fider/models"
 import { Checkbox, Dropdown, Icon } from "@fider/components"
 import { HStack } from "@fider/components/layout"
 import HeroIconFilter from "@fider/assets/images/heroicons-filter.svg"
+import IconChevronDown from "@fider/assets/images/chevron-down.svg"
 import { useFider } from "@fider/hooks"
 import { i18n } from "@lingui/core"
 import { FilterState } from "./PostsContainer"
@@ -162,14 +163,15 @@ export const PostFilter = (props: PostFilterProps) => {
   }
 
   return (
-    <HStack className="mr-4">
+    <HStack>
       <Dropdown
         onToggled={() => setQuery("")}
         renderHandle={
-          <HStack className="c-post-filter-btn">
-            <Icon sprite={HeroIconFilter} className="h-5 pr-1" />
-            {i18n._({ id: "home.filter.label", message: "Filter" })}
-            {filterCount > 0 && <div className="bg-gray-200 inline-block rounded-full px-2 py-1 w-min-4 text-2xs text-center">{filterCount}</div>}
+          <HStack spacing={2} className="c-post-filter-btn">
+            <Icon sprite={HeroIconFilter} className="c-post-toolbar-btn__icon" />
+            <span>{i18n._({ id: "home.filter.label", message: "Filter" })}</span>
+            {filterCount > 0 && <span className="c-post-toolbar-btn__count">{filterCount}</span>}
+            <Icon sprite={IconChevronDown} className="c-post-toolbar-btn__chevron" />
           </HStack>
         }
       >

@@ -1,0 +1,74 @@
+.c-copy-link {
+  position: relative;
+
+  &__icons {
+    position: relative;
+    display: inline-grid;
+
+    > * {
+      grid-area: 1 / 1;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+  }
+
+  &__tick {
+    width: 16px;
+    height: 16px;
+    color: var(--colors-green-700);
+    opacity: 0;
+    transform: scale(0.6);
+
+    path {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 0.26s cubic-bezier(0.23, 1, 0.32, 1) 0.05s;
+    }
+  }
+
+  // Both labels sit in one grid cell, so the button width does not change.
+  &__labels {
+    display: inline-grid;
+  }
+
+  &__label {
+    grid-area: 1 / 1;
+    transition: opacity 0.2s ease;
+
+    &--done {
+      opacity: 0;
+      color: var(--colors-green-700);
+    }
+  }
+
+  &--copied {
+    .c-copy-link__copy {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    .c-copy-link__tick {
+      opacity: 1;
+      transform: scale(1);
+
+      path {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .c-copy-link__label--idle {
+      opacity: 0;
+    }
+
+    .c-copy-link__label--done {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__icons > *,
+    &__label,
+    &__tick path {
+      transition: none;
+    }
+  }
+}

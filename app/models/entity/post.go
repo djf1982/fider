@@ -2,6 +2,8 @@ package entity
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/getfider/fider/app/models/enum"
@@ -38,6 +40,28 @@ func (i *Post) CanBeVoted() bool {
 
 func (i *Post) Url(baseURL string) string {
 	return fmt.Sprintf("%s/posts/%d/%s", baseURL, i.Number, i.Slug)
+}
+
+// A structured post description starts with this heading.
+// See composePostDescription in app/services/sqlstore/postgres/post.go.
+const problemHeading = "**The problem**"
+
+// The headings that can follow the problem section.
+var nextSectionHeading = regexp.MustCompile(`\n\n\*\*(Ideal outcome|Importance|Current workaround|Suggested solution)\*\*[ \t]*(\n|$)`)
+
+// Summary returns the Markdown to show in a short preview of the post.
+// For a structured post, it is the text of "The problem" section only.
+// For any other post, it is the full description.
+// Keep this in step with postSummary in public/services/markdown.ts.
+func (i *Post) Summary() string {
+	if !strings.HasPrefix(i.Description, problemHeading) {
+		return i.Description
+	}
+	body := strings.TrimLeft(strings.TrimPrefix(i.Description, problemHeading), " \t\n")
+	if loc := nextSectionHeading.FindStringIndex(body); loc != nil {
+		body = body[:loc[0]]
+	}
+	return strings.TrimSpace(body)
 }
 
 // PostResponse is a staff response to a given post

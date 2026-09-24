@@ -24,7 +24,8 @@ export const TenantLogo = ({ size, useFiderIfEmpty = false }: TenantLogoProps) =
   if (tenant && tenant.logoBlobKey) {
     return <img src={TenantLogoURL(fider.session.tenant, size)} alt={tenant.name} />
   } else if (useFiderIfEmpty) {
-    return <img src="https://login.fider.io/static/assets/logo.png" alt="Fider" height={size} width={size} />
+    // Scoutworks: fall back to the Scoutworks logo mark, not the Fider logo.
+    return <img src="/static/assets/scoutworks/logo-256.png" alt="Scoutworks" height={size} width={size} />
   }
   return null
 }

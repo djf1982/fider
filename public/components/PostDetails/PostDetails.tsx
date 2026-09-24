@@ -4,13 +4,12 @@ import React, { useState, useEffect, useCallback } from "react"
 
 import { Comment, Post, Tag, Vote, CurrentUser, PostStatus } from "@fider/models"
 import { actions, cache, clearUrlHash, Failure, Fider, notify, timeAgo } from "@fider/services"
-import IconDuplicate from "@fider/assets/images/heroicons-duplicate.svg"
 import { i18n } from "@lingui/core"
 import IconRSS from "@fider/assets/images/heroicons-rss.svg"
 import IconPencil from "@fider/assets/images/heroicons-pencil-alt.svg"
 import IconChat from "@fider/assets/images/heroicons-chat-alt-2.svg"
 
-import { ResponseDetails, Button, UserName, Moment, Markdown, Input, Form, Icon, Avatar, RSSModal, ResponseLozenge } from "@fider/components"
+import { ResponseDetails, Button, UserName, Moment, Markdown, Input, Form, Icon, Avatar, RSSModal, ResponseLozenge, StatusJourney } from "@fider/components"
 import { CommentInput } from "@fider/pages/ShowPost/components/CommentInput"
 import { ShowComment } from "@fider/pages/ShowPost/components/ShowComment"
 import { VoteSection } from "@fider/pages/ShowPost/components/VoteSection"
@@ -26,6 +25,7 @@ import { ResponseModal } from "@fider/pages/ShowPost/components/ResponseModal"
 import { VotesPanel } from "@fider/pages/ShowPost/components/VotesPanel"
 import { TagsPanel } from "@fider/pages/ShowPost/components/TagsPanel"
 import { ActionButton } from "@fider/pages/ShowPost/components/ActionButton"
+import { CopyLinkButton } from "@fider/pages/ShowPost/components/CopyLinkButton"
 import { t } from "@lingui/macro"
 import { useFider } from "@fider/hooks"
 import { useAttachments } from "@fider/hooks/useAttachments"
@@ -255,11 +255,8 @@ export const PostDetails: React.FC<PostDetailsProps> = (props) => {
     }
   }
 
-  const onActionSelected = (action: "copy" | "delete" | "status" | "feed" | "edit") => () => {
-    if (action === "copy") {
-      navigator.clipboard.writeText(window.location.href)
-      notify.success(<Trans id="showpost.copylink.success">Link copied to clipboard</Trans>)
-    } else if (action === "delete") {
+  const onActionSelected = (action: "delete" | "status" | "feed" | "edit") => () => {
+    if (action === "delete") {
       setShowDeleteModal(true)
     } else if (action === "status") {
       setShowResponseModal(true)
@@ -309,6 +306,7 @@ export const PostDetails: React.FC<PostDetailsProps> = (props) => {
                 <PostMetaInfo post={post} locale={fider.currentLocale} />
               </div>
             )}
+            {!editMode && post.isApproved && <StatusJourney status={post.status} respondedAt={post.response?.respondedAt} />}
           </VStack>
 
           {/* Moderation status banner for unapproved posts */}
@@ -408,9 +406,7 @@ export const PostDetails: React.FC<PostDetailsProps> = (props) => {
           {!editMode && (
             <div className="p-show-post__actions">
               <HStack spacing={0} align="center" className="flex-wrap gap-2">
-                <ActionButton icon={IconDuplicate} onClick={onActionSelected("copy")}>
-                  <Trans id="action.copylink">Copy link</Trans>
-                </ActionButton>
+                <CopyLinkButton />
 
                 {Fider.session.isAuthenticated && canEditPost(Fider.session.user, post) && (
                   <ActionButton icon={IconPencil} onClick={onActionSelected("edit")}>
