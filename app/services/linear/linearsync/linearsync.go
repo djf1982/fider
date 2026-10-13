@@ -17,7 +17,7 @@ import (
 const StaleClaimAfter = 10 * time.Minute
 
 // NoAccountExternalID is the catch-all Linear customer for voters with no
-// Scoutworks account (or when the Scoutworks lookup is not configured).
+// Scoutworks account.
 const NoAccountExternalID = "fider-no-scoutworks-account"
 
 // NoAccountName is the catch-all customer's name in Linear.

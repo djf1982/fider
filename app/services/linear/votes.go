@@ -261,13 +261,13 @@ type voterGroupsResponse struct {
 }
 
 // lookupVoterGroups asks Scoutworks which group each voter belongs to, keyed
-// by lower-case email. With the lookup unset, it returns an empty map, so
-// every voter counts under the catch-all customer.
+// by lower-case email. An unset URL or token is an error, not "no groups": a
+// missing token once put every voter under the catch-all customer.
 func lookupVoterGroups(ctx context.Context, voters []linearsync.Voter) (map[string]*linearsync.VoterGroup, error) {
 	groups := map[string]*linearsync.VoterGroup{}
 	lookup := env.Config.ScoutworksVoterLookup
 	if lookup.URL == "" || lookup.Token == "" {
-		return groups, nil
+		return nil, errors.New("SCOUTWORKS_VOTER_LOOKUP_URL and SCOUTWORKS_VOTER_LOOKUP_TOKEN must both be set")
 	}
 
 	seen := map[string]bool{}
