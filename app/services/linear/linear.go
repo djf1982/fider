@@ -41,6 +41,9 @@ func (s Service) Enabled() bool {
 func (s Service) Init() {
 	bus.AddHandler(syncPostToLinear)
 	bus.AddHandler(syncCommentToLinear)
+	bus.AddHandler(syncPostVotesToLinear)
+	bus.AddHandler(syncPostStatusToLinear)
+	bus.AddHandler(syncAllVotesToLinear)
 }
 
 // VerifyWebhookSignature validates the Linear-Signature header against the raw body.
@@ -162,12 +165,27 @@ func syncPostToLinear(ctx context.Context, c *cmd.SyncPostToLinear) error {
 		return errors.New("linear issueCreate returned success=false")
 	}
 
-	return bus.Dispatch(ctx, &cmd.SaveLinearIssueMapping{
+	mapping := &cmd.SaveLinearIssueMapping{
 		PostID:                c.Post.ID,
 		LinearIssueID:         out.IssueCreate.Issue.ID,
 		LinearIssueIdentifier: out.IssueCreate.Issue.Identifier,
 		LinearIssueURL:        out.IssueCreate.Issue.URL,
-	})
+	}
+	if err := bus.Dispatch(ctx, mapping); err != nil {
+		return err
+	}
+
+	// The author's own vote, and any vote cast before the issue existed. A
+	// failure here must not roll back the mapping: the issue already exists.
+	issue := &entity.PostLinearIssue{
+		PostID:                c.Post.ID,
+		LinearIssueID:         mapping.LinearIssueID,
+		LinearIssueIdentifier: mapping.LinearIssueIdentifier,
+	}
+	if err := syncVotes(ctx, integration.Result, issue, map[string]bool{}); err != nil {
+		logSyncFailure(ctx, "sync the first votes", issue, err)
+	}
+	return nil
 }
 
 const commentCreateMutation = `

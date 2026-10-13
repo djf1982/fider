@@ -15,6 +15,9 @@ type SaveLinearIntegration struct {
 	IsEnabled     bool                       `json:"isEnabled"`
 	StatusMapping entity.LinearStatusMapping `json:"statusMapping"`
 	WebhookSecret string                     `json:"webhookSecret"`
+	// The Linear states a Fider decline or duplicate moves the issue to.
+	DeclinedStateID  string `json:"declinedStateID"`
+	DuplicateStateID string `json:"duplicateStateID"`
 }
 
 func (a *SaveLinearIntegration) IsAuthorized(_ context.Context, user *entity.User) bool {
@@ -36,6 +39,12 @@ func (a *SaveLinearIntegration) Validate(_ context.Context, _ *entity.User) *val
 	}
 	if len(a.LabelID) > 100 {
 		result.AddFieldFailure("labelID", "Label ID is too long.")
+	}
+	if len(a.DeclinedStateID) > 100 {
+		result.AddFieldFailure("declinedStateID", "Declined state ID is too long.")
+	}
+	if len(a.DuplicateStateID) > 100 {
+		result.AddFieldFailure("duplicateStateID", "Duplicate state ID is too long.")
 	}
 	if len(a.WebhookSecret) > 200 {
 		result.AddFieldFailure("webhookSecret", "Webhook secret is too long.")

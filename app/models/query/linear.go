@@ -29,3 +29,16 @@ type GetLinearIntegrationByWebhookSecret struct {
 
 	Result *entity.LinearIntegration
 }
+
+// ListLinearCustomerNeeds lists the vote ↔ customer need rows of a post.
+type ListLinearCustomerNeeds struct {
+	PostID int
+
+	Result []*entity.PostLinearCustomerNeed
+}
+
+// ListPostIDsWithLinearIssue lists the current tenant's posts that have a
+// Linear issue, oldest first.
+type ListPostIDsWithLinearIssue struct {
+	Result []int
+}

@@ -61,6 +61,13 @@ type config struct {
 		WebhookSecret string `env:"STRIPE_WEBHOOK_SECRET"`
 		PriceID       string `env:"STRIPE_PRICE_ID"`
 	}
+	// ScoutworksVoterLookup maps a voter's email to their Scout group, so a
+	// vote counts as a Linear customer request for that group (SCO-4014).
+	// Unset: every voter counts under the catch-all customer.
+	ScoutworksVoterLookup struct {
+		URL   string `env:"SCOUTWORKS_VOTER_LOOKUP_URL"`
+		Token string `env:"SCOUTWORKS_VOTER_LOOKUP_TOKEN"`
+	}
 	Metrics struct {
 		Enabled bool   `env:"METRICS_ENABLED,default=false"`
 		Port    string `env:"METRICS_PORT,default=4000"`

@@ -11,6 +11,8 @@ interface LinearIntegration {
   labelID: string
   isEnabled: boolean
   statusMapping: { [linearStateId: string]: string }
+  declinedStateID: string
+  duplicateStateID: string
 }
 
 interface ManageLinearPageProps {
@@ -36,6 +38,8 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
   const [labelID, setLabelID] = useState<string>(existing?.labelID || "")
   const [isEnabled, setIsEnabled] = useState<boolean>(existing?.isEnabled || false)
   const [webhookSecret, setWebhookSecret] = useState<string>("")
+  const [declinedStateID, setDeclinedStateID] = useState<string>(existing?.declinedStateID || "")
+  const [duplicateStateID, setDuplicateStateID] = useState<string>(existing?.duplicateStateID || "")
   const [rows, setRows] = useState<StatusMappingRow[]>(() => {
     const initial = toRows(existing?.statusMapping)
     return initial.length > 0 ? initial : [{ linearStateId: "", fiderStatus: "started" }]
@@ -64,6 +68,8 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
       isEnabled,
       statusMapping,
       webhookSecret,
+      declinedStateID: declinedStateID.trim(),
+      duplicateStateID: duplicateStateID.trim(),
     })
     if (result.ok) {
       e.preventEnable()
@@ -71,6 +77,14 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
       location.reload()
     } else if (result.error) {
       setError(result.error)
+    }
+  }
+
+  const handleSyncVotes = async (e: ButtonClickEvent) => {
+    const result = await actions.syncLinearVotes()
+    e.preventEnable()
+    if (result.ok) {
+      notify.success("Vote sync started. It runs in the background, about one post a second.")
     }
   }
 
@@ -89,7 +103,7 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
         <VStack spacing={6}>
           <p className="text-muted">
             Two-way sync between Fider ideas and Linear issues. New ideas become Linear issues; new comments on an idea are appended to the linked Linear issue;
-            status changes in Linear flow back to update the Fider idea&apos;s status.
+            upvotes become customer requests on it; status changes in Linear flow back to update the Fider idea&apos;s status.
           </p>
 
           <Field label="Enabled">
@@ -172,6 +186,43 @@ const ManageLinearPage = (props: ManageLinearPageProps) => {
               </div>
             </VStack>
           </Field>
+
+          <Field label="Sync back to Linear">
+            <p className="text-muted mt-1 mb-2">
+              When you decline an idea or mark it as a duplicate here, the linked Linear issue moves to the state below. Leave a field blank to keep that status
+              in Fider only. Other statuses do not sync back: Linear owns the rest of the lifecycle.
+            </p>
+            <VStack spacing={2}>
+              <Input
+                field="declinedStateID"
+                label="Linear state for declined ideas"
+                value={declinedStateID}
+                onChange={setDeclinedStateID}
+                placeholder="Linear state ID (UUID)"
+              />
+              <Input
+                field="duplicateStateID"
+                label="Linear state for duplicate ideas"
+                value={duplicateStateID}
+                onChange={setDuplicateStateID}
+                placeholder="Linear state ID (UUID)"
+              />
+            </VStack>
+          </Field>
+
+          {existing && (
+            <Field label="Votes">
+              <p className="text-muted mt-1 mb-2">
+                Each upvote becomes a customer request on the linked Linear issue, counted for the voter&apos;s Scout group. New votes sync on their own. Run
+                this once to bring in the votes cast before the sync existed. It is safe to run again.
+              </p>
+              <div>
+                <Button variant="secondary" onClick={handleSyncVotes}>
+                  Sync all votes to Linear
+                </Button>
+              </div>
+            </Field>
+          )}
 
           <div className="field flex gap-2">
             <Button variant="primary" onClick={handleSave}>

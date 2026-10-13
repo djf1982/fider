@@ -3,6 +3,7 @@ package entity
 import (
 	"database/sql/driver"
 	"encoding/json"
+	"time"
 
 	"github.com/getfider/fider/app/pkg/errors"
 )
@@ -35,6 +36,10 @@ type LinearIntegration struct {
 	IsEnabled     bool                `json:"isEnabled" db:"is_enabled"`
 	StatusMapping LinearStatusMapping `json:"statusMapping" db:"status_mapping"`
 	WebhookSecret string              `json:"-" db:"webhook_secret"`
+	// DeclinedStateID and DuplicateStateID are the Linear states a Fider
+	// decline or duplicate moves the issue to. Empty means "do not sync".
+	DeclinedStateID  string `json:"declinedStateID" db:"declined_state_id"`
+	DuplicateStateID string `json:"duplicateStateID" db:"duplicate_state_id"`
 }
 
 // PostLinearIssue is the mapping between a Fider post and a Linear issue.
@@ -45,4 +50,12 @@ type PostLinearIssue struct {
 	LinearIssueID         string `json:"linearIssueID" db:"linear_issue_id"`
 	LinearIssueIdentifier string `json:"linearIssueIdentifier" db:"linear_issue_identifier"`
 	LinearIssueURL        string `json:"linearIssueURL" db:"linear_issue_url"`
+}
+
+// PostLinearCustomerNeed links one upvote to one Linear customer need.
+// LinearNeedID is empty while a sync run holds the claim.
+type PostLinearCustomerNeed struct {
+	UserID       int       `db:"user_id"`
+	LinearNeedID string    `db:"linear_need_id"`
+	CreatedAt    time.Time `db:"created_at"`
 }

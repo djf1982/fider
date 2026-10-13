@@ -11,6 +11,7 @@ import (
 	"github.com/getfider/fider/app/pkg/bus"
 	"github.com/getfider/fider/app/pkg/errors"
 	"github.com/getfider/fider/app/pkg/web"
+	"github.com/getfider/fider/app/tasks"
 )
 
 // ManageLinear renders the Linear integration admin page.
@@ -68,12 +69,14 @@ func SaveLinearIntegration() web.HandlerFunc {
 		}
 
 		if err := bus.Dispatch(c, &cmd.SaveLinearIntegration{
-			APIKey:        apiKey,
-			TeamID:        action.TeamID,
-			LabelID:       action.LabelID,
-			IsEnabled:     action.IsEnabled,
-			StatusMapping: mapping,
-			WebhookSecret: webhookSecret,
+			APIKey:           apiKey,
+			TeamID:           action.TeamID,
+			LabelID:          action.LabelID,
+			IsEnabled:        action.IsEnabled,
+			StatusMapping:    mapping,
+			WebhookSecret:    webhookSecret,
+			DeclinedStateID:  action.DeclinedStateID,
+			DuplicateStateID: action.DuplicateStateID,
 		}); err != nil {
 			return c.Failure(err)
 		}
@@ -88,6 +91,15 @@ func DeleteLinearIntegration() web.HandlerFunc {
 		if err := bus.Dispatch(c, &cmd.DeleteLinearIntegration{}); err != nil {
 			return c.Failure(err)
 		}
+		return c.Ok(web.Map{})
+	}
+}
+
+// SyncLinearVotes starts the one-off backfill of every post's votes into
+// Linear customer needs. It runs in the background and is safe to repeat.
+func SyncLinearVotes() web.HandlerFunc {
+	return func(c *web.Context) error {
+		c.Enqueue(tasks.SyncAllVotesToLinear())
 		return c.Ok(web.Map{})
 	}
 }

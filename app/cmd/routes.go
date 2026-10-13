@@ -182,6 +182,7 @@ func routes(r *web.Engine) *web.Engine {
 		ui.Get("/admin/linear", handlers.ManageLinear())
 		ui.Post("/_api/admin/linear", handlers.SaveLinearIntegration())
 		ui.Delete("/_api/admin/linear", handlers.DeleteLinearIntegration())
+		ui.Post("/_api/admin/linear/sync-votes", handlers.SyncLinearVotes())
 		ui.Post("/_api/admin/webhook", handlers.CreateWebhook())
 		ui.Put("/_api/admin/webhook/:id", handlers.UpdateWebhook())
 		ui.Delete("/_api/admin/webhook/:id", handlers.DeleteWebhook())
