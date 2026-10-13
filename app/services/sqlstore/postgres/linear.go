@@ -12,14 +12,16 @@ import (
 )
 
 type dbLinearIntegration struct {
-	ID            int                        `db:"id"`
-	TenantID      int                        `db:"tenant_id"`
-	APIKey        string                     `db:"api_key"`
-	TeamID        string                     `db:"team_id"`
-	LabelID       string                     `db:"label_id"`
-	IsEnabled     bool                       `db:"is_enabled"`
-	StatusMapping entity.LinearStatusMapping `db:"status_mapping"`
-	WebhookSecret string                     `db:"webhook_secret"`
+	ID               int                        `db:"id"`
+	TenantID         int                        `db:"tenant_id"`
+	APIKey           string                     `db:"api_key"`
+	TeamID           string                     `db:"team_id"`
+	LabelID          string                     `db:"label_id"`
+	IsEnabled        bool                       `db:"is_enabled"`
+	StatusMapping    entity.LinearStatusMapping `db:"status_mapping"`
+	WebhookSecret    string                     `db:"webhook_secret"`
+	DeclinedStateID  string                     `db:"declined_state_id"`
+	DuplicateStateID string                     `db:"duplicate_state_id"`
 }
 
 func (m *dbLinearIntegration) toModel() *entity.LinearIntegration {
@@ -28,14 +30,16 @@ func (m *dbLinearIntegration) toModel() *entity.LinearIntegration {
 		mapping = entity.LinearStatusMapping{}
 	}
 	return &entity.LinearIntegration{
-		ID:            m.ID,
-		TenantID:      m.TenantID,
-		APIKey:        m.APIKey,
-		TeamID:        m.TeamID,
-		LabelID:       m.LabelID,
-		IsEnabled:     m.IsEnabled,
-		StatusMapping: mapping,
-		WebhookSecret: m.WebhookSecret,
+		ID:               m.ID,
+		TenantID:         m.TenantID,
+		APIKey:           m.APIKey,
+		TeamID:           m.TeamID,
+		LabelID:          m.LabelID,
+		IsEnabled:        m.IsEnabled,
+		StatusMapping:    mapping,
+		WebhookSecret:    m.WebhookSecret,
+		DeclinedStateID:  m.DeclinedStateID,
+		DuplicateStateID: m.DuplicateStateID,
 	}
 }
 
@@ -66,7 +70,7 @@ func getLinearIntegration(ctx context.Context, q *query.GetLinearIntegration) er
 		}
 		row := &dbLinearIntegration{}
 		err := trx.Get(row, `
-			SELECT id, tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret
+			SELECT id, tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret, declined_state_id, duplicate_state_id
 			FROM tenant_linear_integrations
 			WHERE tenant_id = $1
 		`, tenant.ID)
@@ -88,7 +92,7 @@ func getLinearIntegrationByWebhookSecret(ctx context.Context, q *query.GetLinear
 	}
 	row := &dbLinearIntegration{}
 	err := trx.Get(row, `
-		SELECT id, tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret
+		SELECT id, tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret, declined_state_id, duplicate_state_id
 		FROM tenant_linear_integrations
 		WHERE webhook_secret = $1
 	`, q.WebhookSecret)
@@ -110,8 +114,8 @@ func saveLinearIntegration(ctx context.Context, c *cmd.SaveLinearIntegration) er
 		}
 		_, err := trx.Execute(`
 			INSERT INTO tenant_linear_integrations
-				(tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret, created_at, updated_at)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+				(tenant_id, api_key, team_id, label_id, is_enabled, status_mapping, webhook_secret, declined_state_id, duplicate_state_id, created_at, updated_at)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
 			ON CONFLICT (tenant_id)
 			DO UPDATE SET
 				api_key = EXCLUDED.api_key,
@@ -120,8 +124,10 @@ func saveLinearIntegration(ctx context.Context, c *cmd.SaveLinearIntegration) er
 				is_enabled = EXCLUDED.is_enabled,
 				status_mapping = EXCLUDED.status_mapping,
 				webhook_secret = EXCLUDED.webhook_secret,
+				declined_state_id = EXCLUDED.declined_state_id,
+				duplicate_state_id = EXCLUDED.duplicate_state_id,
 				updated_at = NOW()
-		`, tenant.ID, c.APIKey, c.TeamID, c.LabelID, c.IsEnabled, mapping, c.WebhookSecret)
+		`, tenant.ID, c.APIKey, c.TeamID, c.LabelID, c.IsEnabled, mapping, c.WebhookSecret, c.DeclinedStateID, c.DuplicateStateID)
 		if err != nil {
 			return errors.Wrap(err, "failed to save linear integration")
 		}
@@ -208,4 +214,104 @@ func getPostByLinearIssueID(ctx context.Context, q *query.GetPostByLinearIssueID
 	}
 	q.Result = getPost.Result
 	return nil
+}
+
+func listLinearCustomerNeeds(ctx context.Context, q *query.ListLinearCustomerNeeds) error {
+	return using(ctx, func(trx *dbx.Trx, tenant *entity.Tenant, user *entity.User) error {
+		if tenant == nil {
+			return app.ErrNotFound
+		}
+		q.Result = []*entity.PostLinearCustomerNeed{}
+		err := trx.Select(&q.Result, `
+			SELECT user_id, linear_need_id, created_at
+			FROM post_linear_customer_needs
+			WHERE tenant_id = $1 AND post_id = $2
+			ORDER BY id
+		`, tenant.ID, q.PostID)
+		if err != nil {
+			return errors.Wrap(err, "failed to list linear customer needs")
+		}
+		return nil
+	})
+}
+
+func claimLinearCustomerNeed(ctx context.Context, c *cmd.ClaimLinearCustomerNeed) error {
+	return using(ctx, func(trx *dbx.Trx, tenant *entity.Tenant, user *entity.User) error {
+		if tenant == nil {
+			return app.ErrNotFound
+		}
+		// A concurrent run inserting the same row waits here until the first
+		// run commits, then gets no row back: only one run creates the need.
+		var id int
+		err := trx.Scalar(&id, `
+			INSERT INTO post_linear_customer_needs (tenant_id, post_id, user_id, linear_need_id, created_at)
+			VALUES ($1, $2, $3, '', NOW())
+			ON CONFLICT (post_id, user_id) DO NOTHING
+			RETURNING id
+		`, tenant.ID, c.PostID, c.UserID)
+		if errors.Cause(err) == app.ErrNotFound {
+			c.Result = false
+			return nil
+		}
+		if err != nil {
+			return errors.Wrap(err, "failed to claim linear customer need")
+		}
+		c.Result = true
+		return nil
+	})
+}
+
+func setLinearCustomerNeedID(ctx context.Context, c *cmd.SetLinearCustomerNeedID) error {
+	return using(ctx, func(trx *dbx.Trx, tenant *entity.Tenant, user *entity.User) error {
+		if tenant == nil {
+			return app.ErrNotFound
+		}
+		_, err := trx.Execute(`
+			UPDATE post_linear_customer_needs SET linear_need_id = $4
+			WHERE tenant_id = $1 AND post_id = $2 AND user_id = $3
+		`, tenant.ID, c.PostID, c.UserID, c.LinearNeedID)
+		if err != nil {
+			return errors.Wrap(err, "failed to store linear customer need id")
+		}
+		return nil
+	})
+}
+
+func deleteLinearCustomerNeed(ctx context.Context, c *cmd.DeleteLinearCustomerNeed) error {
+	return using(ctx, func(trx *dbx.Trx, tenant *entity.Tenant, user *entity.User) error {
+		if tenant == nil {
+			return app.ErrNotFound
+		}
+		_, err := trx.Execute(`
+			DELETE FROM post_linear_customer_needs
+			WHERE tenant_id = $1 AND post_id = $2 AND user_id = $3 AND linear_need_id = $4
+		`, tenant.ID, c.PostID, c.UserID, c.LinearNeedID)
+		if err != nil {
+			return errors.Wrap(err, "failed to delete linear customer need")
+		}
+		return nil
+	})
+}
+
+func listPostIDsWithLinearIssue(ctx context.Context, q *query.ListPostIDsWithLinearIssue) error {
+	return using(ctx, func(trx *dbx.Trx, tenant *entity.Tenant, user *entity.User) error {
+		if tenant == nil {
+			return app.ErrNotFound
+		}
+		q.Result = []int{}
+		type row struct {
+			PostID int `db:"post_id"`
+		}
+		rows := []*row{}
+		err := trx.Select(&rows, `
+			SELECT post_id FROM post_linear_issues WHERE tenant_id = $1 ORDER BY post_id
+		`, tenant.ID)
+		if err != nil {
+			return errors.Wrap(err, "failed to list posts with a linear issue")
+		}
+		for _, r := range rows {
+			q.Result = append(q.Result, r.PostID)
+		}
+		return nil
+	})
 }

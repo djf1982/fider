@@ -7,6 +7,8 @@ export interface LinearIntegrationData {
   isEnabled: boolean
   statusMapping: { [linearStateId: string]: string }
   webhookSecret: string
+  declinedStateID: string
+  duplicateStateID: string
 }
 
 export const saveLinearIntegration = async (data: LinearIntegrationData): Promise<Result> => {
@@ -15,4 +17,8 @@ export const saveLinearIntegration = async (data: LinearIntegrationData): Promis
 
 export const deleteLinearIntegration = async (): Promise<Result> => {
   return await http.delete(`/_api/admin/linear`)
+}
+
+export const syncLinearVotes = async (): Promise<Result> => {
+  return await http.post(`/_api/admin/linear/sync-votes`)
 }

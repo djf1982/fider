@@ -202,6 +202,11 @@ func SetResponse() web.HandlerFunc {
 		}
 
 		c.Enqueue(tasks.NotifyAboutStatusChange(getPost.Result, prevStatus))
+		c.Enqueue(tasks.SyncPostStatusToLinear(getPost.Result.ID))
+		if action.Status == enum.PostDuplicate && action.Original != nil {
+			// Marking a duplicate copies its votes onto the original post.
+			c.Enqueue(tasks.SyncPostVotesToLinear(action.Original.ID))
+		}
 
 		return c.Ok(web.Map{})
 	}
@@ -483,6 +488,7 @@ func ToggleVote() web.HandlerFunc {
 			if err != nil {
 				return c.Failure(err)
 			}
+			c.Enqueue(tasks.SyncPostVotesToLinear(getPost.Result.ID))
 			return c.Ok(web.Map{"voted": false, "voteType": 0})
 		}
 
@@ -492,6 +498,7 @@ func ToggleVote() web.HandlerFunc {
 			return c.Failure(err)
 		}
 		metrics.TotalVotes.Inc()
+		c.Enqueue(tasks.SyncPostVotesToLinear(getPost.Result.ID))
 		return c.Ok(web.Map{"voted": true, "voteType": input.VoteType})
 	}
 }
@@ -551,6 +558,11 @@ func addOrRemove(c *web.Context, getCommand func(post *entity.Post, user *entity
 	command := getCommand(getPost.Result, c.User())
 	if err := bus.Dispatch(c, command); err != nil {
 		return c.Failure(err)
+	}
+
+	switch command.(type) {
+	case *cmd.AddVote, *cmd.RemoveVote:
+		c.Enqueue(tasks.SyncPostVotesToLinear(getPost.Result.ID))
 	}
 
 	return c.Ok(web.Map{})

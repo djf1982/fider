@@ -28,3 +28,35 @@ func SyncNewCommentToLinear(post *entity.Post, comment *entity.Comment) worker.T
 		return nil
 	})
 }
+
+// SyncPostVotesToLinear makes the Linear customer needs of a post's issue
+// match its upvotes. Silently no-ops without a Linear integration or issue.
+func SyncPostVotesToLinear(postID int) worker.Task {
+	return describe("Sync post votes to Linear", func(c *worker.Context) error {
+		if err := bus.Dispatch(c, &cmd.SyncPostVotesToLinear{PostID: postID}); err != nil {
+			return c.Failure(err)
+		}
+		return nil
+	})
+}
+
+// SyncPostStatusToLinear moves the Linear issue after staff decline a post
+// or mark it as a duplicate. Other statuses do nothing.
+func SyncPostStatusToLinear(postID int) worker.Task {
+	return describe("Sync post status to Linear", func(c *worker.Context) error {
+		if err := bus.Dispatch(c, &cmd.SyncPostStatusToLinear{PostID: postID}); err != nil {
+			return c.Failure(err)
+		}
+		return nil
+	})
+}
+
+// SyncAllVotesToLinear backfills the votes of every post with a Linear issue.
+func SyncAllVotesToLinear() worker.Task {
+	return describe("Sync all votes to Linear", func(c *worker.Context) error {
+		if err := bus.Dispatch(c, &cmd.SyncAllVotesToLinear{}); err != nil {
+			return c.Failure(err)
+		}
+		return nil
+	})
+}
