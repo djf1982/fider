@@ -37,6 +37,12 @@ type ListLinearCustomerNeeds struct {
 	Result []*entity.PostLinearCustomerNeed
 }
 
+// ListLinearIssueLinks lists every visible post of the current tenant that
+// has a Linear issue, by post number. A deleted or unapproved post is left out.
+type ListLinearIssueLinks struct {
+	Result []*entity.PostLinearIssueLink
+}
+
 // ListPostIDsWithLinearIssue lists the current tenant's posts that have a
 // Linear issue, oldest first.
 type ListPostIDsWithLinearIssue struct {

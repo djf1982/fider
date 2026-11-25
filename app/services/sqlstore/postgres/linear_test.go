@@ -5,6 +5,7 @@ import (
 
 	"github.com/getfider/fider/app/models/cmd"
 	"github.com/getfider/fider/app/models/entity"
+	"github.com/getfider/fider/app/models/enum"
 	"github.com/getfider/fider/app/models/query"
 	. "github.com/getfider/fider/app/pkg/assert"
 	"github.com/getfider/fider/app/pkg/bus"
@@ -127,4 +128,24 @@ func TestLinearStorage_SavesTheDeclineAndDuplicateStates(t *testing.T) {
 	Expect(bus.Dispatch(demoTenantCtx, cleared)).IsNil()
 	Expect(cleared.Result.DeclinedStateID).Equals("")
 	Expect(cleared.Result.DuplicateStateID).Equals("")
+}
+
+func TestLinearStorage_ListsLinksByPostNumberWithoutDeletedPostsOrOtherTenants(t *testing.T) {
+	SetupDatabaseTest(t)
+	defer TeardownDatabaseTest()
+	first := newLinkedPost(t, "First linked request", "issue-6")
+	deleted := newLinkedPost(t, "Deleted linked request", "issue-7")
+	second := newLinkedPost(t, "Second linked request", "issue-8")
+	Expect(bus.Dispatch(jonSnowCtx, &cmd.SetPostResponse{Post: deleted, Status: enum.PostDeleted, Text: "spam"})).IsNil()
+
+	own := &query.ListLinearIssueLinks{}
+	other := &query.ListLinearIssueLinks{}
+	Expect(bus.Dispatch(jonSnowCtx, own)).IsNil()
+	Expect(bus.Dispatch(avengersTenantCtx, other)).IsNil()
+
+	Expect(own.Result).HasLen(2)
+	Expect(own.Result[0].PostNumber).Equals(first.Number)
+	Expect(own.Result[0].IssueIdentifier).Equals("SCO-issue-6")
+	Expect(own.Result[1].PostNumber).Equals(second.Number)
+	Expect(other.Result).HasLen(0)
 }

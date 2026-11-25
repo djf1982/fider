@@ -154,3 +154,81 @@ func Chunk[T any](items []T, size int) [][]T {
 	}
 	return chunks
 }
+
+// Fider statuses a post can no longer leave through Linear. A Linear change
+// never reopens a post that staff closed or merged.
+var closedStatuses = map[string]bool{
+	"completed": true,
+	"declined":  true,
+	"duplicate": true,
+	"deleted":   true,
+}
+
+// IsClosed reports whether a Fider status ends a post's life on the board.
+func IsClosed(fiderStatus string) bool {
+	return closedStatuses[fiderStatus]
+}
+
+// relationDuplicate is the Linear relation type of "this issue duplicates that one".
+const relationDuplicate = "duplicate"
+
+// Relation is one Linear issue relation, as the duplicate sync reads it. For a
+// relation, the issue fields name the related issue; for an inverse relation,
+// they name the issue that points here.
+type Relation struct {
+	Type       string
+	IssueID    string
+	Identifier string
+	StateID    string
+	StateName  string
+}
+
+// DuplicateOriginal returns the issue that this issue duplicates, or nil.
+func DuplicateOriginal(relations []Relation) *Relation {
+	for i := range relations {
+		if relations[i].Type == relationDuplicate && relations[i].IssueID != "" {
+			return &relations[i]
+		}
+	}
+	return nil
+}
+
+// DuplicateIssueIDs returns the IDs of the issues marked as duplicates of
+// this one, once each.
+func DuplicateIssueIDs(inverse []Relation) []string {
+	seen := map[string]bool{}
+	ids := []string{}
+	for _, r := range inverse {
+		if r.Type != relationDuplicate || r.IssueID == "" || seen[r.IssueID] {
+			continue
+		}
+		seen[r.IssueID] = true
+		ids = append(ids, r.IssueID)
+	}
+	return ids
+}
+
+// FollowsOriginal reports whether the post of a duplicate issue takes the
+// status of its original issue. Only a release carries over: the person who
+// asked must hear that it shipped. An open post on a duplicate stays open
+// while the original is still planned, and a closed post never moves.
+func FollowsOriginal(originalStatus, postStatus string) bool {
+	return originalStatus == "completed" && !IsClosed(postStatus)
+}
+
+// StatusOnLink returns the status a post takes when staff link it to an
+// existing Linear issue: the status the issue's state maps to. It returns ""
+// when the state has no mapping, when the post already has that status, or
+// when the post is closed and the issue is not.
+func StatusOnLink(mappedStatus string, mapped bool, postStatus string) string {
+	if !mapped || mappedStatus == "" || mappedStatus == postStatus {
+		return ""
+	}
+	if IsClosed(postStatus) && !IsClosed(mappedStatus) {
+		return ""
+	}
+	if postStatus == "duplicate" || postStatus == "deleted" {
+		return ""
+	}
+	return mappedStatus
+}
