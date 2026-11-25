@@ -290,6 +290,7 @@ func routes(r *web.Engine) *web.Engine {
 		adminApi.Use(middlewares.BlockLockedTenants())
 		adminApi.Delete("/api/v1/posts/:number", apiv1.DeletePost())
 		adminApi.Put("/api/v1/posts/:number/linear", apiv1.LinkPostToLinearIssue())
+		adminApi.Post("/api/v1/posts/:number/linear", apiv1.CreateLinearIssueForPost())
 	}
 
 	return r

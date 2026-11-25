@@ -114,3 +114,48 @@ func LinkPostToLinearIssue() web.HandlerFunc {
 		})
 	}
 }
+
+// CreateLinearIssueForPost creates a Linear issue for a post that has none,
+// as the sync does for every new post. Use it for posts from before the sync.
+// It refuses a post that already has an issue.
+func CreateLinearIssueForPost() web.HandlerFunc {
+	return func(c *web.Context) error {
+		number, err := c.ParamAsInt("number")
+		if err != nil {
+			return c.NotFound()
+		}
+
+		integration := &query.GetLinearIntegration{}
+		if err := bus.Dispatch(c, integration); err != nil && errors.Cause(err) != app.ErrNotFound {
+			return c.Failure(err)
+		}
+		if integration.Result == nil || !integration.Result.IsEnabled {
+			return c.BadRequest(web.Map{"issue": "The Linear integration is not set up on this site."})
+		}
+
+		getPost := &query.GetPostByNumber{Number: number}
+		if err := bus.Dispatch(c, getPost); err != nil {
+			return c.Failure(err)
+		}
+		post := getPost.Result
+
+		existing := &query.GetLinearIssueForPost{PostID: post.ID}
+		if err := bus.Dispatch(c, existing); err == nil && existing.Result != nil && existing.Result.LinearIssueID != "" {
+			return c.BadRequest(web.Map{"issue": fmt.Sprintf("Post #%d is already linked to %s.", post.Number, existing.Result.LinearIssueIdentifier)})
+		}
+
+		if err := bus.Dispatch(c, &cmd.SyncPostToLinear{Post: post}); err != nil {
+			return c.Failure(err)
+		}
+
+		created := &query.GetLinearIssueForPost{PostID: post.ID}
+		if err := bus.Dispatch(c, created); err != nil || created.Result == nil {
+			return c.Failure(errors.New("the Linear issue for post #%d was not saved", post.Number))
+		}
+		return c.Ok(web.Map{
+			"postNumber":      post.Number,
+			"issueIdentifier": created.Result.LinearIssueIdentifier,
+			"issueUrl":        created.Result.LinearIssueURL,
+		})
+	}
+}

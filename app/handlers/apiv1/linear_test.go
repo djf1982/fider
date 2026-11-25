@@ -167,3 +167,72 @@ func TestListLinearIssueLinks_ListsLinksByPostNumber(t *testing.T) {
 	Expect(code).Equals(http.StatusOK)
 	Expect(response.Body.String()).ContainsSubstring(`{"postNumber":337,"issueIdentifier":"SCO-1711","issueUrl":"https://linear.app/x/issue/SCO-1711"}`)
 }
+
+// createFixture: one post; the sync, when called, saves a mapping.
+type createFixture struct {
+	post    *entity.Post
+	mapping *entity.PostLinearIssue
+	synced  int
+}
+
+func newCreateFixture(alreadyLinked bool) *createFixture {
+	f := &createFixture{post: &entity.Post{ID: 8, Number: 233, Title: "Photo Galleries", Status: enum.PostOpen}}
+	if alreadyLinked {
+		f.mapping = &entity.PostLinearIssue{PostID: 8, LinearIssueID: "uuid-old", LinearIssueIdentifier: "SCO-77"}
+	}
+	bus.AddHandler(func(ctx context.Context, q *query.GetLinearIntegration) error {
+		q.Result = &entity.LinearIntegration{APIKey: "lin_api_test", IsEnabled: true}
+		return nil
+	})
+	bus.AddHandler(func(ctx context.Context, q *query.GetPostByNumber) error {
+		if q.Number != f.post.Number {
+			return app.ErrNotFound
+		}
+		q.Result = f.post
+		return nil
+	})
+	bus.AddHandler(func(ctx context.Context, q *query.GetLinearIssueForPost) error {
+		if f.mapping == nil {
+			return app.ErrNotFound
+		}
+		q.Result = f.mapping
+		return nil
+	})
+	bus.AddHandler(func(ctx context.Context, c *cmd.SyncPostToLinear) error {
+		f.synced++
+		f.mapping = &entity.PostLinearIssue{PostID: c.Post.ID, LinearIssueID: "uuid-new", LinearIssueIdentifier: "SCO-7000", LinearIssueURL: "https://linear.app/x/issue/SCO-7000"}
+		return nil
+	})
+	return f
+}
+
+func createRequest() (int, string) {
+	code, response := mock.NewServer().
+		OnTenant(mock.DemoTenant).
+		AsUser(mock.JonSnow).
+		AddParam("number", 233).
+		ExecutePost(apiv1.CreateLinearIssueForPost(), "")
+	return code, response.Body.String()
+}
+
+func TestCreateLinearIssueForPost_CreatesAnIssueForAnUnlinkedPost(t *testing.T) {
+	RegisterT(t)
+	f := newCreateFixture(false)
+
+	code, body := createRequest()
+
+	Expect(code).Equals(http.StatusOK)
+	Expect(f.synced).Equals(1)
+	Expect(body).ContainsSubstring(`"issueIdentifier":"SCO-7000"`)
+}
+
+func TestCreateLinearIssueForPost_RefusesAPostThatAlreadyHasAnIssue(t *testing.T) {
+	RegisterT(t)
+	f := newCreateFixture(true)
+
+	code, body := createRequest()
+
+	Expect(code).Equals(http.StatusBadRequest)
+	Expect(f.synced).Equals(0)
+	Expect(body).ContainsSubstring("already linked to SCO-77")
+}

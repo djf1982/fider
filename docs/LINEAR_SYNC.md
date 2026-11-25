@@ -22,6 +22,7 @@ Only a release (a state mapped to `completed`) carries across duplicates. A Line
 | --- | --- | --- |
 | `GET /api/v1/linear/links` | Anyone | Lists `{postNumber, issueIdentifier, issueUrl}` for every visible post that has an issue. |
 | `PUT /api/v1/posts/:number/linear` with `{"issue": "SCO-123"}` | Administrator | Links a post to an existing issue, for example a post from before the sync. When the issue's state is mapped, the post takes that status now. |
+| `POST /api/v1/posts/:number/linear` | Administrator | Creates a Linear issue for a post that has none, as the sync does for a new post. Refuses a post that already has one. |
 | `PUT /api/v1/posts/:number/status` | Collaborator or administrator | Sets the status directly. Prefer a Linear change, so the two stay in step. |
 
 The link call refuses an issue that is linked to another post, because one issue has at most one post.
