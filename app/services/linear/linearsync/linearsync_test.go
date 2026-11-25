@@ -159,3 +159,68 @@ func TestChunk_SplitsAtTheLookupLimit(t *testing.T) {
 		t.Fatalf("chunks = %v, want [100 100 5]", got)
 	}
 }
+
+func TestDuplicateOriginal_FindsTheIssueThisOneDuplicates(t *testing.T) {
+	relations := []linearsync.Relation{
+		{Type: "related", IssueID: "issue-related"},
+		{Type: "duplicate", IssueID: "issue-original", Identifier: "SCO-1365", StateID: "state-released"},
+	}
+	got := linearsync.DuplicateOriginal(relations)
+	if got == nil || got.IssueID != "issue-original" {
+		t.Fatalf("DuplicateOriginal = %+v, want issue-original", got)
+	}
+	if linearsync.DuplicateOriginal(relations[:1]) != nil {
+		t.Errorf("DuplicateOriginal found an original among non-duplicate relations")
+	}
+}
+
+func TestDuplicateIssueIDs_ListsEachDuplicateOnceAndSkipsOtherRelations(t *testing.T) {
+	inverse := []linearsync.Relation{
+		{Type: "duplicate", IssueID: "issue-a"},
+		{Type: "blocks", IssueID: "issue-b"},
+		{Type: "duplicate", IssueID: "issue-a"},
+		{Type: "duplicate", IssueID: "issue-c"},
+	}
+	got := linearsync.DuplicateIssueIDs(inverse)
+	if !reflect.DeepEqual(got, []string{"issue-a", "issue-c"}) {
+		t.Errorf("DuplicateIssueIDs = %v, want [issue-a issue-c]", got)
+	}
+}
+
+func TestFollowsOriginal_OnlyAReleaseClosesAnOpenDuplicate(t *testing.T) {
+	cases := []struct {
+		name, original, post string
+		want                 bool
+	}{
+		{"a released original closes an open duplicate", "completed", "open", true},
+		{"a released original closes a planned duplicate", "completed", "planned", true},
+		{"a started original leaves the duplicate open", "started", "open", false},
+		{"a declined original does not decline the duplicate", "declined", "open", false},
+		{"a closed duplicate never moves", "completed", "declined", false},
+	}
+	for _, c := range cases {
+		if got := linearsync.FollowsOriginal(c.original, c.post); got != c.want {
+			t.Errorf("%s: got %v, want %v", c.name, got, c.want)
+		}
+	}
+}
+
+func TestStatusOnLink_TakesTheIssueStatusButNeverReopensAClosedPost(t *testing.T) {
+	cases := []struct {
+		name, mappedStatus string
+		mapped             bool
+		post, want         string
+	}{
+		{"a released issue closes an open post", "completed", true, "open", "completed"},
+		{"an issue in progress starts an open post", "started", true, "open", "started"},
+		{"an unmapped state leaves the post", "", false, "open", ""},
+		{"the same status changes nothing", "started", true, "started", ""},
+		{"an open issue never reopens a completed post", "open", true, "completed", ""},
+		{"a duplicate post stays a duplicate", "completed", true, "duplicate", ""},
+	}
+	for _, c := range cases {
+		if got := linearsync.StatusOnLink(c.mappedStatus, c.mapped, c.post); got != c.want {
+			t.Errorf("%s: got %q, want %q", c.name, got, c.want)
+		}
+	}
+}

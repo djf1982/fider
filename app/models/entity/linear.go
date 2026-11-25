@@ -52,6 +52,14 @@ type PostLinearIssue struct {
 	LinearIssueURL        string `json:"linearIssueURL" db:"linear_issue_url"`
 }
 
+// PostLinearIssueLink is one post ↔ Linear issue link, as the public API
+// lists it: the post's number on the board, never its internal ID.
+type PostLinearIssueLink struct {
+	PostNumber      int    `json:"postNumber" db:"post_number"`
+	IssueIdentifier string `json:"issueIdentifier" db:"linear_issue_identifier"`
+	IssueURL        string `json:"issueUrl" db:"linear_issue_url"`
+}
+
 // PostLinearCustomerNeed links one upvote to one Linear customer need.
 // LinearNeedID is empty while a sync run holds the claim.
 type PostLinearCustomerNeed struct {

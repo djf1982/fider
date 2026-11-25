@@ -6,6 +6,7 @@ import (
 	"github.com/getfider/fider/app"
 	"github.com/getfider/fider/app/models/cmd"
 	"github.com/getfider/fider/app/models/entity"
+	"github.com/getfider/fider/app/models/enum"
 	"github.com/getfider/fider/app/models/query"
 	"github.com/getfider/fider/app/pkg/dbx"
 	"github.com/getfider/fider/app/pkg/errors"
@@ -312,6 +313,27 @@ func listPostIDsWithLinearIssue(ctx context.Context, q *query.ListPostIDsWithLin
 		for _, r := range rows {
 			q.Result = append(q.Result, r.PostID)
 		}
+		return nil
+	})
+}
+
+func listLinearIssueLinks(ctx context.Context, q *query.ListLinearIssueLinks) error {
+	return using(ctx, func(trx *dbx.Trx, tenant *entity.Tenant, user *entity.User) error {
+		if tenant == nil {
+			return app.ErrNotFound
+		}
+		rows := []*entity.PostLinearIssueLink{}
+		err := trx.Select(&rows, `
+			SELECT p.number AS post_number, l.linear_issue_identifier, l.linear_issue_url
+			FROM post_linear_issues l
+			INNER JOIN posts p ON p.id = l.post_id AND p.tenant_id = l.tenant_id
+			WHERE l.tenant_id = $1 AND p.status <> $2 AND p.is_approved = true
+			ORDER BY p.number
+		`, tenant.ID, enum.PostDeleted)
+		if err != nil {
+			return errors.Wrap(err, "failed to list linear issue links")
+		}
+		q.Result = rows
 		return nil
 	})
 }

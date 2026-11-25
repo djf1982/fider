@@ -222,6 +222,7 @@ func routes(r *web.Engine) *web.Engine {
 		publicApi.Get("/api/v1/posts/:number/comments/:id", apiv1.GetComment())
 		publicApi.Get("/api/v1/taggable-users", apiv1.ListTaggableUsers())
 		publicApi.Get("/api/v1/posts/:number/votes", apiv1.ListVotes())
+		publicApi.Get("/api/v1/linear/links", apiv1.ListLinearIssueLinks())
 	}
 
 	// Operations used to manage the content of a site
@@ -288,6 +289,7 @@ func routes(r *web.Engine) *web.Engine {
 
 		adminApi.Use(middlewares.BlockLockedTenants())
 		adminApi.Delete("/api/v1/posts/:number", apiv1.DeletePost())
+		adminApi.Put("/api/v1/posts/:number/linear", apiv1.LinkPostToLinearIssue())
 	}
 
 	return r

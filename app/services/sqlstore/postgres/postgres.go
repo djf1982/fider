@@ -141,6 +141,7 @@ func (s Service) Init() {
 	bus.AddHandler(setLinearCustomerNeedID)
 	bus.AddHandler(deleteLinearCustomerNeed)
 	bus.AddHandler(listPostIDsWithLinearIssue)
+	bus.AddHandler(listLinearIssueLinks)
 
 	bus.AddHandler(getWebhook)
 	bus.AddHandler(listAllWebhooks)
