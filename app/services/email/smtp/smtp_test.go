@@ -4,6 +4,7 @@ import (
 	"context"
 	gosmtp "net/smtp"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/getfider/fider/app"
@@ -73,6 +74,26 @@ func TestSend_Success(t *testing.T) {
 	var validID = regexp.MustCompile(`.*Message-ID: <[a-z0-9\-].*\.[0-9].*@.*>.*`)
 	Expect(validID.MatchString(string(requests[0].body))).IsTrue()
 }
+func TestSend_WritesExtraHeadersIntoTheHeaderSection(t *testing.T) {
+	RegisterT(t)
+	reset()
+
+	for _, value := range []string{`"123456"; origin="https://a.example"`, `"908172"; origin="https://b.example"`} {
+		requests = make([]request, 0)
+		bus.Publish(ctx, &cmd.SendMail{
+			From:         dto.Recipient{Name: "Fider Test"},
+			To:           []dto.Recipient{{Name: "Jon Sow", Address: "jon.snow@got.com"}},
+			TemplateName: "echo_test",
+			Props:        dto.Props{"name": "Hello"},
+			Headers:      map[string]string{"OTP-Token": value},
+		})
+
+		Expect(requests).HasLen(1)
+		head := strings.SplitN(string(requests[0].body), "\r\n\r\n", 2)[0]
+		Expect(head).ContainsSubstring("\r\nOTP-Token: " + value)
+	}
+}
+
 func TestSend_SkipEmptyAddress(t *testing.T) {
 	RegisterT(t)
 	reset()

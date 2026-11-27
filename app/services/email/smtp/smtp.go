@@ -95,6 +95,9 @@ func sendMail(ctx context.Context, c *cmd.SendMail) {
 		b.Set("Content-Type", "text/html; charset=\"UTF-8\"")
 		b.Set("Date", time.Now().Format(time.RFC1123Z))
 		b.Set("Message-ID", generateMessageID(localname))
+		for key, value := range c.Headers {
+			b.Set(key, value)
+		}
 		b.Body(message.Body)
 
 		smtpConfig := env.Config.Email.SMTP
