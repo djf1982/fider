@@ -44,3 +44,33 @@ func TestSendSignInEmailTask(t *testing.T) {
 		},
 	})
 }
+
+func TestSendSignInEmailTask_CarriesTheCodeInAnOTPTokenHeader(t *testing.T) {
+	RegisterT(t)
+
+	for _, code := range []string{"123456", "908172"} {
+		bus.Init(emailmock.Service{})
+		err := mock.NewWorker().
+			OnTenant(mock.DemoTenant).
+			WithBaseURL("https://feedback.example.com").
+			Execute(tasks.SendSignInEmail("jon@got.com", code))
+
+		Expect(err).IsNil()
+		sent := emailmock.MessageHistory[len(emailmock.MessageHistory)-1]
+		Expect(sent.Headers["OTP-Token"]).Equals(`"` + code + `"; origin="https://feedback.example.com"`)
+	}
+}
+
+func TestSendSignInEmailTask_SendsNoOTPTokenFromAnInsecureSite(t *testing.T) {
+	RegisterT(t)
+	bus.Init(emailmock.Service{})
+
+	err := mock.NewWorker().
+		OnTenant(mock.DemoTenant).
+		WithBaseURL("http://domain.com").
+		Execute(tasks.SendSignInEmail("jon@got.com", "123456"))
+
+	Expect(err).IsNil()
+	_, present := emailmock.MessageHistory[len(emailmock.MessageHistory)-1].Headers["OTP-Token"]
+	Expect(present).IsFalse()
+}

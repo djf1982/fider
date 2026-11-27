@@ -50,6 +50,9 @@ func sendMail(ctx context.Context, c *cmd.SendMail) {
 	form := url.Values{}
 	form.Add("from", c.From.String())
 	form.Add("h:Reply-To", c.From.Address)
+	for key, value := range c.Headers {
+		form.Add("h:"+key, value)
+	}
 	form.Add("subject", email.EncodeSubject(message.Subject))
 	form.Add("html", message.Body)
 	form.Add("o:tag", fmt.Sprintf("template:%s", c.TemplateName))

@@ -19,6 +19,7 @@ type HistoryItem struct {
 	To           []dto.Recipient
 	TemplateName string
 	Props        dto.Props
+	Headers      map[string]string
 	Tenant       *entity.Tenant
 }
 
@@ -60,6 +61,7 @@ func sendMail(ctx context.Context, c *cmd.SendMail) {
 		To:           c.To,
 		TemplateName: c.TemplateName,
 		Props:        c.Props,
+		Headers:      c.Headers,
 	}
 
 	tenant, ok := ctx.Value(app.TenantCtxKey).(*entity.Tenant)
